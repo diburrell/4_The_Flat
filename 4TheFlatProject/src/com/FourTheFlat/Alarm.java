@@ -1,4 +1,4 @@
-package com.stocktake;
+package com.FourTheFlat;
 import java.util.Calendar;
 
 import android.app.AlarmManager;

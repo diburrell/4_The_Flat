@@ -1,4 +1,4 @@
-package com.stocktake.activities;
+package com.stocktake.FourTheFlat.activities;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -9,7 +9,8 @@ import java.util.Locale;
 
 import org.json.JSONException;
 
-import com.stocktake.*;
+import com.FourTheFlat.*;
+import com.stocktake.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -38,7 +39,6 @@ public class ShoppingListActivity extends Activity {
 	TableRow.LayoutParams params;
 
 	Button toggleView;
-	boolean byValue = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,13 +52,10 @@ public class ShoppingListActivity extends Activity {
 
 	public void summaryTable(Activity contextActivity) {
 
-		table = (TableLayout) contextActivity.findViewById(R.id.tableLayout1); // Find
-		
-Log.w("MY EGGS",table.toString());
+		table = (TableLayout) contextActivity.findViewById(R.id.tableLayout1); // Find	
 
 		int productCount = 4;
 		
-
 		TableRow[] rowProduct = new TableRow[productCount];
 	 
 		TextView[] productName = new TextView[productCount];

@@ -1,8 +1,8 @@
-package com.stocktake.activities;
+package com.stocktake.FourTheFlat.activities;
 
 import java.util.Collections;
 
-import com.stocktake.*;
+import com.FourTheFlat.*;
 
 import android.app.Activity;
 import android.graphics.Typeface;

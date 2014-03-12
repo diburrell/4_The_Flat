@@ -1,9 +1,9 @@
-package com.stocktake;
+package com.FourTheFlat;
 
 import com.stocktake.R;
-import com.stocktake.activities.AccountActivity;
-import com.stocktake.activities.ShoppingListActivity;
-import com.stocktake.activities.ProductsActivity;
+import com.stocktake.FourTheFlat.activities.AccountActivity;
+import com.stocktake.FourTheFlat.activities.ProductsActivity;
+import com.stocktake.FourTheFlat.activities.ShoppingListActivity;
 
 import android.app.TabActivity;
 import android.content.Intent;

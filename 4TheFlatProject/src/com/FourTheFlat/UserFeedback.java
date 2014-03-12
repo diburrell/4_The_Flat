@@ -1,4 +1,6 @@
-package com.stocktake;
+package com.FourTheFlat;
+
+import com.stocktake.R;
 
 import android.app.Notification;
 import android.app.NotificationManager;
