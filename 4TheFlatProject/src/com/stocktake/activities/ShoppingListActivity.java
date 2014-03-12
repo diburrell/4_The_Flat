@@ -28,21 +28,76 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SummaryActivity extends Activity {
-
-	/** Called when the activity is first created. */
-
-	GeneralManager myGenmanager;
+public class ShoppingListActivity extends Activity {
 
 	
+	/* Create Error Messages */
+	TableLayout table;
+	TableRow errorRow;
+	TextView error1;
+	TableRow.LayoutParams params;
+
+	Button toggleView;
+	boolean byValue = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Alarm.startRepeatingTimer(getApplicationContext());
 
+		setContentView(R.layout.shoppinglist);
+		
+		summaryTable(this);
 	}
 
+	public void summaryTable(Activity contextActivity) {
+
+		table = (TableLayout) contextActivity.findViewById(R.id.tableLayout1); // Find
+		
+Log.w("MY EGGS",table.toString());
+
+		int productCount = 4;
+		
+
+		TableRow[] rowProduct = new TableRow[productCount];
+	 
+		TextView[] productName = new TextView[productCount];
+		 
+			for (int i = 0; i < 4 ; i++) {
+					
+			rowProduct[i] = new TableRow(contextActivity);
+			productName[i] = new TextView(contextActivity);
+	
+			productName[i].setText("Eggs");
+			productName[i].setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+			productName[i].setTextColor(Color.rgb(255, 255, 255));
+			productName[i].setTextSize(25f);
+			productName[i].setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+
+			rowProduct[i].addView(productName[i]);
+
+			table.addView(rowProduct[i]);
+		}
+		
+		TableLayout.LayoutParams params2 = new TableLayout.LayoutParams();
+		params2.topMargin = 100;			
+	}
+
+	public void update()
+	{
+		table = (TableLayout) this.findViewById(R.id.tableLayout1);
+
+		errorRow = new TableRow(this);
+		error1 = new TextView(this);
+		params = new TableRow.LayoutParams();
+		params.span = 4;
+
+	
+	}
+
+	
+
+	
 	
 	@Override
 	public void onPause()

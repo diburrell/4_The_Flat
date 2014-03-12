@@ -20,7 +20,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 	{
 		boolean notifyChange = false;
 		
-		if (GeneralManager.checkInternetConnection(context)) {
+		if (ConnectionManager.checkInternetConnection(context)) {
 			}
 		else
 		{

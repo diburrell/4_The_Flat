@@ -14,7 +14,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class VolumeActivity extends Activity
+public class ProductsActivity extends Activity
 {
 		/** Called when the activity is first created. */
 
@@ -24,8 +24,6 @@ public class VolumeActivity extends Activity
 		{
 			super.onCreate(savedInstanceState);
 			
-		
-			setContentView(R.layout.volume);
 		}
 		
 	

@@ -1,9 +1,9 @@
 package com.stocktake;
 
 import com.stocktake.R;
-import com.stocktake.activities.RocketActivity;
-import com.stocktake.activities.SummaryActivity;
-import com.stocktake.activities.VolumeActivity;
+import com.stocktake.activities.AccountActivity;
+import com.stocktake.activities.ShoppingListActivity;
+import com.stocktake.activities.ProductsActivity;
 
 import android.app.TabActivity;
 import android.content.Intent;
@@ -14,7 +14,7 @@ import android.widget.TabHost;
 /*
  * This class creates the tabs for the app, and draws them to screen.
  */
-public class AgileProjectActivity extends TabActivity
+public class TabCreator extends TabActivity
 {	
 	
 	public void onCreate(Bundle savedInstanceState)
@@ -28,7 +28,7 @@ public class AgileProjectActivity extends TabActivity
 	    Intent intent;  // Reusable Intent for each tab
 
 	    // Create an Intent to launch an Activity for the tab (to be reused)
-	    intent = new Intent().setClass(this, SummaryActivity.class);
+	    intent = new Intent().setClass(this, ShoppingListActivity.class);
 
 	    // Initialize a TabSpec for each tab and add it to the TabHost
 	    spec = tabHost.newTabSpec("Shopping List").setIndicator("Shopping List",
@@ -37,7 +37,7 @@ public class AgileProjectActivity extends TabActivity
 	    tabHost.addTab(spec);
 	    
 	 // Create an Intent to launch an Activity for the tab (to be reused)
-	    intent = new Intent().setClass(this, VolumeActivity.class);
+	    intent = new Intent().setClass(this, ProductsActivity.class);
 
 	    // Initialize a TabSpec for each tab and add it to the TabHost
 	    spec = tabHost.newTabSpec("Products").setIndicator("Products",
@@ -46,7 +46,7 @@ public class AgileProjectActivity extends TabActivity
 	    tabHost.addTab(spec);
 	    
 		 // Create an Intent to launch an Activity for the tab (to be reused)
-	    intent = new Intent().setClass(this, RocketActivity.class);
+	    intent = new Intent().setClass(this, AccountActivity.class);
 
 	    // Initialize a TabSpec for each tab and add it to the TabHost
 	    spec = tabHost.newTabSpec("Account").setIndicator("Account",

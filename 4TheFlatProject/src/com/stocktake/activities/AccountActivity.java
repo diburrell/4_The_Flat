@@ -17,7 +17,7 @@ import android.widget.TextView;
 /*
  * Creates the rocket activity tab. Called initially AgileProjectActivity.
  */
-public class RocketActivity extends Activity
+public class AccountActivity extends Activity
 {
 		/** Called when the activity is first created. */
 
@@ -27,21 +27,7 @@ public class RocketActivity extends Activity
 		{
 			super.onCreate(savedInstanceState);
 			
-			
-			setContentView(R.layout.rocket);
+	
 		}	
-		
-		
-		@Override
-		public void onPause()
-		{
-		    super.onPause();  // Always call the superclass method first
-		    Log.w("Pause", "Activity Paused");
-		}
-		
-		@Override
-		public void onResume() {
-		    super.onResume();  // Always call the superclass method first
-		    Log.w("Resume", "Activity Resumed");
-		}
+
 	}

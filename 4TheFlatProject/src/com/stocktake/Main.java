@@ -25,7 +25,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class StockManager extends Application
+public class Main extends Application
 {
 	// private Finance stockObj;
 	static List<String> stockCodes = new ArrayList<String>();
