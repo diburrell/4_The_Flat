@@ -16,7 +16,6 @@ import android.widget.TabHost;
  */
 public class AgileProjectActivity extends TabActivity
 {	
-	StockManager myStockmanager = new StockManager();
 	
 	public void onCreate(Bundle savedInstanceState)
 	{	

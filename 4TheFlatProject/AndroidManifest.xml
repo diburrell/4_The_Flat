@@ -1,27 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.theflatproject"
-    android:versionCode="1"
-    android:versionName="1.0" >
+      package="com.stocktake"
+      android:versionCode="1"
+      android:versionName="1.0"
+      android:installLocation="auto"
+      >
+    <uses-sdk android:minSdkVersion="11" />
 
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="18" />
-
-    <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name="com.example.theflatproject.MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" android:name="com.stocktake.StockManager"  >
+    <activity android:name="com.stocktake.activities.SplashScreen"
+                  android:label="@string/app_name">
+         
+        </activity>
+        
+		<activity android:name="com.stocktake.AgileProjectActivity"
+		    android:label="@string/app_name">
+		       <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-    </application>
+		</activity>
+		
+		<receiver android:name="com.stocktake.BootCompletedReceiver" android:label="BootCompletedReceiver" android:exported="true" android:enabled="true">-<intent-filter><action android:name="android.intent.action.BOOT_COMPLETED"/></intent-filter></receiver>
+		<receiver android:name="com.stocktake.AlarmManagerBroadcastReceiver"></receiver>
+		
+		<activity android:name="com.stocktake.activities.SummaryActivity"
+			android:label="@string/app_name">
+		</activity>
 
+		<activity android:name="com.stocktake.activities.VolumeActivity"
+			android:label="@string/app_name">
+		</activity>
+		
+		<activity android:name="com.stocktake.activities.RocketActivity"
+			android:label="@string/app_name">
+		</activity>
+		
+		<activity android:name="com.stocktake.activities.SettingActivity"
+			android:label="@string/app_name">
+		</activity>
+        
+            <uses-library android:name="android.test.runner" /> 
+            
+
+    </application>
+    
+
+        
+       <instrumentation 
+        android:name="android.test.InstrumentationTestRunner" 
+        android:targetPackage="com.stocktake" 
+        android:label="stocktake" /> 
+
+    <uses-permission
+        android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 </manifest>
