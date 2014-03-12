@@ -2,7 +2,7 @@ package com.FourTheFlat;
 
 import java.util.Locale;
 
-import com.stocktake.R;
+import com.FourTheFlat.R;
 
 import android.app.Activity;
 import android.app.Notification;

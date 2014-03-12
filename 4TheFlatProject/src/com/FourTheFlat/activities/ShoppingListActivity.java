@@ -1,4 +1,4 @@
-package com.stocktake.FourTheFlat.activities;
+package com.FourTheFlat.activities;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -10,7 +10,8 @@ import java.util.Locale;
 import org.json.JSONException;
 
 import com.FourTheFlat.*;
-import com.stocktake.R;
+import com.FourTheFlat.R;
+import com.FourTheFlat.activities.ShoppingListActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -29,7 +30,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ShoppingListActivity extends Activity {
+public class ShoppingListActivity extends Activity implements View.OnClickListener {
 
 	
 	/* Create Error Messages */
@@ -38,14 +39,17 @@ public class ShoppingListActivity extends Activity {
 	TextView error1;
 	TableRow.LayoutParams params;
 
-	Button toggleView;
-
+	Button startShop;
+	boolean byValue;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Alarm.startRepeatingTimer(getApplicationContext());
 
 		setContentView(R.layout.shoppinglist);
+		
+		startShop = new Button(this);
 		
 		summaryTable(this);
 	}
@@ -59,6 +63,11 @@ public class ShoppingListActivity extends Activity {
 		TableRow[] rowProduct = new TableRow[productCount];
 	 
 		TextView[] productName = new TextView[productCount];
+		
+				
+		startShop.setOnClickListener(this);
+		table.addView(startShop);
+		
 		 
 			for (int i = 0; i < 4 ; i++) {
 					
@@ -76,8 +85,6 @@ public class ShoppingListActivity extends Activity {
 			table.addView(rowProduct[i]);
 		}
 		
-		TableLayout.LayoutParams params2 = new TableLayout.LayoutParams();
-		params2.topMargin = 100;			
 	}
 
 	public void update()
@@ -93,7 +100,23 @@ public class ShoppingListActivity extends Activity {
 	}
 
 	
-
+	@Override
+	public void onClick(View v)
+	{
+		if (v instanceof Button)
+		{
+			if (byValue)
+			{
+				startShop.setText("321...");
+				byValue = false;
+			}
+			else
+			{
+				startShop.setText("ABC...");
+				byValue = true;
+			}
+		}
+	}
 	
 	
 	@Override

@@ -1,7 +1,7 @@
-package com.stocktake.FourTheFlat.activities;
+package com.FourTheFlat.activities;
 
 import com.FourTheFlat.*;
-import com.stocktake.R;
+import com.FourTheFlat.R;
 
 import android.app.Activity;
 import android.graphics.Color;

@@ -1,6 +1,6 @@
 package com.FourTheFlat;
 
-import com.stocktake.R;
+import com.FourTheFlat.R;
 
 import android.app.Notification;
 import android.app.NotificationManager;

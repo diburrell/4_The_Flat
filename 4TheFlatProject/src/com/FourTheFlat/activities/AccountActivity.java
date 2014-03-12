@@ -1,4 +1,4 @@
-package com.stocktake.FourTheFlat.activities;
+package com.FourTheFlat.activities;
 
 import java.util.Collections;
 
