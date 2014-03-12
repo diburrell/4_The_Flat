@@ -20,14 +20,12 @@ import android.widget.TextView;
 public class AccountActivity extends Activity
 {
 		/** Called when the activity is first created. */
+	
+		ConnectionManager connectionManager;
 
-		
 		@Override
 		public void onCreate(Bundle savedInstanceState)
 		{
-			super.onCreate(savedInstanceState);
-			
-	
+			super.onCreate(savedInstanceState);	
 		}	
-
 	}
