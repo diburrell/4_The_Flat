@@ -19,11 +19,23 @@ public class SplashScreen extends Activity {
          public void run() {
                finish();
                Intent i = new Intent();
-               i.setClassName("com.stocktake",
-                              "com.stocktake.AgileProjectActivity");
+               if(!loggedIn())
+               {
+            	   i.setClassName("com.FourTheFlat", "com.FourTheFlat.LoginActivity");
+               }
+               else
+               {
+            	   i.setClassName("com.FourTheFlat",
+                              "com.FourTheFlat.AgileProjectActivity");
+               }
                startActivity(i);
          }
       };
       splashThread.start();
+   }
+   
+   public boolean loggedIn()
+   {
+	   return false;
    }
 }
