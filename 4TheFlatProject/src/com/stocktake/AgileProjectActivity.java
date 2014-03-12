@@ -31,8 +31,8 @@ public class AgileProjectActivity extends TabActivity
 	    intent = new Intent().setClass(this, SummaryActivity.class);
 
 	    // Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("Summary").setIndicator("Summary",
-	                      res.getDrawable(R.drawable.ic_tab_summary))
+	    spec = tabHost.newTabSpec("Shopping List").setIndicator("Shopping List",
+	                      res.getDrawable(R.drawable.ic_tab_shoppinglist))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 	    
@@ -40,8 +40,8 @@ public class AgileProjectActivity extends TabActivity
 	    intent = new Intent().setClass(this, VolumeActivity.class);
 
 	    // Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("Trade Volume").setIndicator("Trade Volume",
-	                      res.getDrawable(R.drawable.ic_tab_volume))
+	    spec = tabHost.newTabSpec("Products").setIndicator("Products",
+	                      res.getDrawable(R.drawable.ic_tab_products))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 	    
@@ -49,8 +49,8 @@ public class AgileProjectActivity extends TabActivity
 	    intent = new Intent().setClass(this, RocketActivity.class);
 
 	    // Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("Alerts").setIndicator("Alerts",
-	                      res.getDrawable(R.drawable.ic_tab_alerts))
+	    spec = tabHost.newTabSpec("Account").setIndicator("Account",
+	                      res.getDrawable(R.drawable.ic_tab_account))
 	                  .setContent(intent);
 	    tabHost.addTab(spec);
 

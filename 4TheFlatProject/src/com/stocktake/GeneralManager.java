@@ -33,7 +33,7 @@ public final class GeneralManager extends Activity
 				new Intent(context, AgileProjectActivity.class), 0);
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				context).setSmallIcon(R.drawable.ic_tab_alerts_on)
+				context).setSmallIcon(R.drawable.ic_tab_account_on)
 				.setContentTitle("Shares")
 				.setContentText(message);
 		mBuilder.setContentIntent(contentIntent);
@@ -43,28 +43,5 @@ public final class GeneralManager extends Activity
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.notify(1, mBuilder.build());
 	}
-	
-	public static int volCharToInt(String amount) {
-		float convertedVal = 0;
-		int multiplier = 1;
-		int returnValue = 0;
-		try {
-			amount = amount.replaceAll(",", "");
-			String valComponent = amount.substring(0, amount.length() - 1);
-			String multComponent = amount.substring(amount.length() - 1);
-			convertedVal = Float.parseFloat(valComponent);
-			multComponent = multComponent.toUpperCase();
-			if (multComponent.equals("M")) {
-				multiplier = 1000000;
-			}
-			if (multComponent.equals("K")) {
-				multiplier = 1000;
-			}
-			convertedVal = convertedVal * (float) multiplier;
-			returnValue = (int) convertedVal;
-		} catch (Exception e) {
-			returnValue = 0;
-		}
-		return returnValue;
-	}
+
 }
