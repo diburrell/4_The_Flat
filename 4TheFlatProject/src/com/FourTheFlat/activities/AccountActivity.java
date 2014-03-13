@@ -59,6 +59,9 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		accountInfo.setText("Account Information");
 		accountInfo.setId(0);
 		accountInfo.setOnClickListener(this);
+		TableLayout.LayoutParams params0 = new TableLayout.LayoutParams();
+		params0.setMargins(0, 50, 0, 50);
+		accountInfo.setLayoutParams(params0);
 		layout.addView(accountInfo);		
 		
 		Button modifyFlatDetails = new Button(contextActivity);
@@ -71,6 +74,9 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		changePassword.setText("Change Password");
 		changePassword.setId(2);
 		changePassword.setOnClickListener(this);
+		TableLayout.LayoutParams params2 = new TableLayout.LayoutParams();
+		params2.setMargins(0, 50, 0, 50);
+		changePassword.setLayoutParams(params2);
 		layout.addView(changePassword);
 		
 		Button logout = new Button(contextActivity);
@@ -210,18 +216,19 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		save.setText("Save");
 		save.setId(5);
 		save.setOnClickListener(this);
-		TableLayout.LayoutParams params1 = new TableLayout.LayoutParams();
-		params1.setMargins(0, 50, 0, 0);
-		save.setLayoutParams(params1);
+		TableLayout.LayoutParams params5 = new TableLayout.LayoutParams();
+		params5.setMargins(0, 50, 0, 0);
+		save.setLayoutParams(params5);
+		save.setTextColor(Color.GREEN);
 		layout.addView(save);
 		
 		Button leave = new Button(contextActivity);
 		leave.setText("Leave this flat");
 		leave.setId(6);
 		leave.setOnClickListener(this);
-		TableLayout.LayoutParams params2 = new TableLayout.LayoutParams();
-		params2.setMargins(0, 50, 0, 50);
-		leave.setLayoutParams(params2);
+		TableLayout.LayoutParams params6 = new TableLayout.LayoutParams();
+		params6.setMargins(0, 50, 0, 50);
+		leave.setLayoutParams(params6);
 		leave.setTextColor(Color.RED);
 		layout.addView(leave);
 		
@@ -284,8 +291,9 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		save.setId(7);
 		save.setOnClickListener(this);
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-		params.setMargins(0, 50, 0, 0);
+		params.setMargins(0, 40, 0, 30);
 		save.setLayoutParams(params);
+		save.setTextColor(Color.GREEN);
 		layout.addView(save);
 		
 		Button cancel = new Button(contextActivity);
