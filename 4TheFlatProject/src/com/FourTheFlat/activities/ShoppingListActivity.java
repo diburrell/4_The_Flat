@@ -60,7 +60,7 @@ public class ShoppingListActivity extends Activity implements
 
 			productName[i].setText("Eggs");
 			productName[i].setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-			productName[i].setTextColor(Color.rgb(255, 255, 255));
+			productName[i].setTextColor(Color.BLACK);
 			productName[i].setTextSize(25f);
 			productName[i].setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 
@@ -68,7 +68,6 @@ public class ShoppingListActivity extends Activity implements
 
 			list.addView(rowProduct[i]);
 		}
-
 	}
 
 	@Override
