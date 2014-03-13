@@ -87,7 +87,7 @@ public class TabCreator extends TabActivity
 		for (int i=0; i<tabHost.getTabWidget().getTabCount(); i++)
     	{
 			TextView tv = (TextView)tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
-	        tv.setTextSize(20);
+	        tv.setTextSize(20f);
 			
     		if (tabHost.getTabWidget().getChildAt(i).isSelected()) //if this tab is currently selected
     		{

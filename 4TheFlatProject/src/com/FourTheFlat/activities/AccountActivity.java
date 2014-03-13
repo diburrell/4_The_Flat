@@ -2,6 +2,7 @@ package com.FourTheFlat.activities;
 
 import com.FourTheFlat.R;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,8 +10,11 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -82,13 +86,16 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	private void createAccountInformation(Activity contextActivity)
 	{
 		TextView header = new TextView(contextActivity);
-		SpannableString content = new SpannableString("Account Information");
-		content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-		header.setText(content);
+		header.setText("Account Information");
 		header.setGravity(Gravity.CENTER);
 		header.setTextSize(20f);
 		header.setTextColor(Color.BLACK);
+		header.setPadding(0, 30, 0, 30);
 		layout.addView(header);
+		
+		View ruler = new View(contextActivity); 
+		ruler.setBackgroundColor(Color.WHITE);
+		layout.addView(ruler, LayoutParams.FILL_PARENT, 5);
 		
 		String[] users = new String[5];
 		users[0] = "Adam";
@@ -104,24 +111,31 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		
 		//HEADER ROW
 		row[0] = new TableRow(contextActivity);
+		row[0].setPadding(0, 30, 0, 0);
 		
 		name[0] = new TextView(contextActivity);
-		name[0].setText("Name");
-		name[0].setTextAppearance(contextActivity, android.R.style.TextAppearance_DeviceDefault_Widget_ActionBar_Title);
+		SpannableString nameContent = new SpannableString("Name");
+		nameContent.setSpan(new UnderlineSpan(), 0, nameContent.length(), 0);
+		name[0].setText(nameContent);
+		name[0].setTextSize(18f);
 		name[0].setTextColor(Color.BLACK);
 		row[0].addView(name[0]);
 		
 		theyOwe[0] = new TextView(contextActivity);
-		theyOwe[0].setText("They Owe");
+		SpannableString theyOweContent = new SpannableString("They Owe");
+		theyOweContent.setSpan(new UnderlineSpan(), 0, theyOweContent.length(), 0);
+		theyOwe[0].setText(theyOweContent);
 		theyOwe[0].setGravity(Gravity.RIGHT);
-		theyOwe[0].setTextAppearance(contextActivity, android.R.style.TextAppearance_DeviceDefault_Widget_ActionBar_Title);
+		theyOwe[0].setTextSize(18f);
 		theyOwe[0].setTextColor(Color.BLACK);
 		row[0].addView(theyOwe[0]);
 		
 		youOwe[0] = new TextView(contextActivity);
-		youOwe[0].setText("You Owe");
+		SpannableString youOweContent = new SpannableString("You Owe");
+		youOweContent.setSpan(new UnderlineSpan(), 0, youOweContent.length(), 0);
+		youOwe[0].setText(youOweContent);
 		youOwe[0].setGravity(Gravity.RIGHT);
-		youOwe[0].setTextAppearance(contextActivity, android.R.style.TextAppearance_DeviceDefault_Widget_ActionBar_Title);
+		youOwe[0].setTextSize(18f);
 		youOwe[0].setTextColor(Color.BLACK);
 		row[0].addView(youOwe[0]);
 		
@@ -134,18 +148,21 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			
 			name[i] = new TextView(contextActivity);
 			name[i].setText(users[i-1]);
+			name[i].setTextSize(18f);
 			name[i].setTextColor(Color.BLACK);
 			row[i].addView(name[i]);
 			
 			theyOwe[i] = new TextView(contextActivity);
 			theyOwe[i].setText("£0");
 			theyOwe[i].setGravity(Gravity.RIGHT);
+			theyOwe[i].setTextSize(18f);
 			theyOwe[i].setTextColor(Color.BLACK);
 			row[i].addView(theyOwe[i]);
 			
 			youOwe[i] = new TextView(contextActivity);
 			youOwe[i].setText("£0");
 			youOwe[i].setGravity(Gravity.RIGHT);
+			youOwe[i].setTextSize(18f);
 			youOwe[i].setTextColor(Color.BLACK);
 			row[i].addView(youOwe[i]);
 			
@@ -176,10 +193,60 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	{
 		TextView header = new TextView(contextActivity);
 		header.setText("Change Password");
+		header.setGravity(Gravity.CENTER);
+		header.setTextSize(20f);
+		header.setTextColor(Color.BLACK);
+		header.setPadding(0, 30, 0, 30);
 		layout.addView(header);
 		
+		View ruler = new View(contextActivity); 
+		ruler.setBackgroundColor(Color.WHITE);
+		layout.addView(ruler, LayoutParams.FILL_PARENT, 5);
+		
+		TextView currentPassword = new TextView(contextActivity);
+		currentPassword.setText("Current Password:");
+		currentPassword.setTextSize(18f);
+		currentPassword.setTextColor(Color.BLACK);
+		currentPassword.setPadding(0, 50, 0, 0);
+		layout.addView(currentPassword);
+		
+		EditText currentEdit = new EditText(contextActivity);
+		currentEdit.setTextSize(18f);
+		layout.addView(currentEdit);
+		
+		TextView newPassword = new TextView(contextActivity);
+		newPassword.setText("New Password:");
+		newPassword.setTextSize(18f);
+		newPassword.setTextColor(Color.BLACK);
+		newPassword.setPadding(0, 50, 0, 0);
+		layout.addView(newPassword);
+		
+		EditText newEdit = new EditText(contextActivity);
+		newEdit.setTextSize(18f);
+		layout.addView(newEdit);
+		
+		TextView confirmPassword = new TextView(contextActivity);
+		confirmPassword.setText("Confirm Password:");
+		confirmPassword.setTextSize(18f);
+		confirmPassword.setTextColor(Color.BLACK);
+		confirmPassword.setPadding(0, 50, 0, 0);
+		layout.addView(confirmPassword);	
+		
+		EditText confirmEdit = new EditText(contextActivity);
+		confirmEdit.setTextSize(18f);
+		layout.addView(confirmEdit);
+		
+		Button save = new Button(contextActivity);
+		save.setText("Save");
+		save.setId(5);
+		save.setOnClickListener(this);
+		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+		params.setMargins(0, 50, 0, 0);
+		save.setLayoutParams(params);
+		layout.addView(save);
+		
 		Button back = new Button(contextActivity);
-		back.setText("Back to menu");
+		back.setText("Cancel");
 		back.setId(4);
 		back.setOnClickListener(this);
 		layout.addView(back);
@@ -190,7 +257,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	 * @see android.view.View.OnClickListener#onClick(android.view.View)
 	 */
 	public void onClick(View view)
-	{
+	{		
 		layout.removeAllViews();
 		
 		switch (view.getId())
@@ -212,13 +279,20 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			
 			case 3:
 				//log out of the app
-				Toast toast = Toast.makeText(getApplicationContext(), "TO DO: LOGOUT", Toast.LENGTH_SHORT);
-				toast.show();
+				Toast toast3 = Toast.makeText(getApplicationContext(), "TO DO: LOGOUT", Toast.LENGTH_SHORT);
+				toast3.show();
 				createMainMenu(this);
 				break;
 				
 			case 4:
 				//back to main menu
+				createMainMenu(this);
+				break;
+				
+			case 5:
+				//save new password
+				Toast toast5 = Toast.makeText(getApplicationContext(), "TO DO: SAVE NEW PASSWORD", Toast.LENGTH_SHORT);
+				toast5.show();
 				createMainMenu(this);
 				break;
 				
