@@ -22,12 +22,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 
 	TableLayout buttonHolder;
 
-	/* Create Error Messages */
-	TableRow errorRow;
-	TextView error1;
-
 	Button moreProducts;
-	boolean byValue;
 
 	TableLayout list;
 

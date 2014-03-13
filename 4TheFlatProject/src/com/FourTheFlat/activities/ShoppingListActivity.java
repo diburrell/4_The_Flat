@@ -21,12 +21,7 @@ public class ShoppingListActivity extends Activity implements
 
 	TableLayout buttonHolder;
 
-	/* Create Error Messages */
-	TableRow errorRow;
-	TextView error1;
-
 	Button startShop;
-	boolean byValue;
 
 	TableLayout list;
 
