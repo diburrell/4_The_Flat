@@ -8,11 +8,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -173,6 +170,9 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		back.setText("Back to menu");
 		back.setId(4);
 		back.setOnClickListener(this);
+		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+		params.setMargins(0, 50, 0, 50);
+		back.setLayoutParams(params);
 		layout.addView(back);
 	}
 	
@@ -180,13 +180,56 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	{
 		TextView header = new TextView(contextActivity);
 		header.setText("Modify Flat Details");
+		header.setGravity(Gravity.CENTER);
+		header.setTextSize(20f);
+		header.setTextColor(Color.BLACK);
+		header.setPadding(0, 30, 0, 30);
 		layout.addView(header);
 		
-		Button back = new Button(contextActivity);
-		back.setText("Back to menu");
-		back.setId(4);
-		back.setOnClickListener(this);
-		layout.addView(back);
+		View ruler = new View(contextActivity); 
+		ruler.setBackgroundColor(Color.WHITE);
+		layout.addView(ruler, LayoutParams.FILL_PARENT, 5);
+		
+		TextView address = new TextView(contextActivity);
+		address.setText("Address:");
+		address.setTextSize(18f);
+		address.setTextColor(Color.BLACK);
+		address.setPadding(0, 50, 0, 0);
+		layout.addView(address);
+		
+		String currentAddress = "123 Fake Street, Neverland";
+		
+		EditText addressEdit = new EditText(contextActivity);
+		addressEdit.setTextSize(18f);
+		addressEdit.setHeight(180);
+		addressEdit.setText(currentAddress);
+		addressEdit.setGravity(Gravity.TOP | Gravity.LEFT);
+		layout.addView(addressEdit);
+		
+		Button save = new Button(contextActivity);
+		save.setText("Save");
+		save.setId(5);
+		save.setOnClickListener(this);
+		TableLayout.LayoutParams params1 = new TableLayout.LayoutParams();
+		params1.setMargins(0, 50, 0, 0);
+		save.setLayoutParams(params1);
+		layout.addView(save);
+		
+		Button leave = new Button(contextActivity);
+		leave.setText("Leave this flat");
+		leave.setId(6);
+		leave.setOnClickListener(this);
+		TableLayout.LayoutParams params2 = new TableLayout.LayoutParams();
+		params2.setMargins(0, 50, 0, 50);
+		leave.setLayoutParams(params2);
+		leave.setTextColor(Color.RED);
+		layout.addView(leave);
+		
+		Button cancel = new Button(contextActivity);
+		cancel.setText("Cancel");
+		cancel.setId(4);
+		cancel.setOnClickListener(this);
+		layout.addView(cancel);
 	}
 	
 	private void createChangePassword(Activity contextActivity)
@@ -238,18 +281,18 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		
 		Button save = new Button(contextActivity);
 		save.setText("Save");
-		save.setId(5);
+		save.setId(7);
 		save.setOnClickListener(this);
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(0, 50, 0, 0);
 		save.setLayoutParams(params);
 		layout.addView(save);
 		
-		Button back = new Button(contextActivity);
-		back.setText("Cancel");
-		back.setId(4);
-		back.setOnClickListener(this);
-		layout.addView(back);
+		Button cancel = new Button(contextActivity);
+		cancel.setText("Cancel");
+		cancel.setId(4);
+		cancel.setOnClickListener(this);
+		layout.addView(cancel);
 	}
 	
 	/*
@@ -290,9 +333,23 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				break;
 				
 			case 5:
-				//save new password
-				Toast toast5 = Toast.makeText(getApplicationContext(), "TO DO: SAVE NEW PASSWORD", Toast.LENGTH_SHORT);
+				//save new address
+				Toast toast5 = Toast.makeText(getApplicationContext(), "TO DO: SAVE NEW ADDRESS", Toast.LENGTH_SHORT);
 				toast5.show();
+				createMainMenu(this);
+				break;			
+				
+			case 6:
+				//leave the flat
+				Toast toast6 = Toast.makeText(getApplicationContext(), "TO DO: LEAVE THE FLAT", Toast.LENGTH_SHORT);
+				toast6.show();
+				createMainMenu(this);
+				break;
+				
+			case 7:
+				//save new password
+				Toast toast7 = Toast.makeText(getApplicationContext(), "TO DO: SAVE NEW PASSWORD", Toast.LENGTH_SHORT);
+				toast7.show();
 				createMainMenu(this);
 				break;
 				
