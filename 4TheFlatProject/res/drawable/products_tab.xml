@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- Icons by http://dryicons.com/ -->
+
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- When selected, use grey -->
-    <item android:drawable="@drawable/ic_tab_products_on"
+    <item android:drawable="@drawable/products_on"
           android:state_selected="true" />
     <!-- When not selected, use white-->
-    <item android:drawable="@drawable/ic_tab_products_off" />
+    <item android:drawable="@drawable/products_off" />
 </selector>

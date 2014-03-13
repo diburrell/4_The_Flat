@@ -3,7 +3,10 @@ package com.FourTheFlat.activities;
 import com.FourTheFlat.R;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -28,13 +31,29 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		createMainMenu(this);
 	}	
 	
+	@Override
+	public void onPause()
+	{
+	    super.onPause();
+	    layout.removeAllViews();
+	}
+	
+	@Override
+	public void onResume()
+	{
+	    super.onResume();  
+	    createMainMenu(this);
+	}
+	
 	/*
 	 * Set up the account tab main display section
 	 */
 	private void createMainMenu(Activity contextActivity)
 	{		
 		layout = (TableLayout)contextActivity.findViewById(R.id.layout);
-
+		
+		layout.removeAllViews();
+		
 		Button accountInfo = new Button(contextActivity);
 		accountInfo.setText("Account Information");
 		accountInfo.setId(0);
@@ -63,14 +82,20 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	private void createAccountInformation(Activity contextActivity)
 	{
 		TextView header = new TextView(contextActivity);
-		header.setText("Account Information");
+		SpannableString content = new SpannableString("Account Information");
+		content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+		header.setText(content);
+		header.setGravity(Gravity.CENTER);
 		header.setTextSize(20f);
+		header.setTextColor(Color.BLACK);
 		layout.addView(header);
 		
-		String[] users = new String[3];
+		String[] users = new String[5];
 		users[0] = "Adam";
 		users[1] = "Brian";
 		users[2] = "Claire";
+		users[3] = "Denise";
+		users[4] = "Eddie";
 		
 		TableRow[] row = new TableRow[users.length+1];
 		TextView[] name = new TextView[users.length+1];
@@ -83,18 +108,21 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		name[0] = new TextView(contextActivity);
 		name[0].setText("Name");
 		name[0].setTextAppearance(contextActivity, android.R.style.TextAppearance_DeviceDefault_Widget_ActionBar_Title);
+		name[0].setTextColor(Color.BLACK);
 		row[0].addView(name[0]);
 		
 		theyOwe[0] = new TextView(contextActivity);
 		theyOwe[0].setText("They Owe");
 		theyOwe[0].setGravity(Gravity.RIGHT);
 		theyOwe[0].setTextAppearance(contextActivity, android.R.style.TextAppearance_DeviceDefault_Widget_ActionBar_Title);
+		theyOwe[0].setTextColor(Color.BLACK);
 		row[0].addView(theyOwe[0]);
 		
 		youOwe[0] = new TextView(contextActivity);
 		youOwe[0].setText("You Owe");
 		youOwe[0].setGravity(Gravity.RIGHT);
 		youOwe[0].setTextAppearance(contextActivity, android.R.style.TextAppearance_DeviceDefault_Widget_ActionBar_Title);
+		youOwe[0].setTextColor(Color.BLACK);
 		row[0].addView(youOwe[0]);
 		
 		layout.addView(row[0]);
@@ -106,16 +134,19 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			
 			name[i] = new TextView(contextActivity);
 			name[i].setText(users[i-1]);
+			name[i].setTextColor(Color.BLACK);
 			row[i].addView(name[i]);
 			
 			theyOwe[i] = new TextView(contextActivity);
 			theyOwe[i].setText("£0");
 			theyOwe[i].setGravity(Gravity.RIGHT);
+			theyOwe[i].setTextColor(Color.BLACK);
 			row[i].addView(theyOwe[i]);
 			
 			youOwe[i] = new TextView(contextActivity);
 			youOwe[i].setText("£0");
 			youOwe[i].setGravity(Gravity.RIGHT);
+			youOwe[i].setTextColor(Color.BLACK);
 			row[i].addView(youOwe[i]);
 			
 			layout.addView(row[i]);
@@ -155,7 +186,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	}
 	
 	/*
-	 * The onClick handler for the main menu buttons
+	 * The onClick handler for the account buttons
 	 * @see android.view.View.OnClickListener#onClick(android.view.View)
 	 */
 	public void onClick(View view)
@@ -181,8 +212,8 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			
 			case 3:
 				//log out of the app
-				Toast toast3 = Toast.makeText(getApplicationContext(), "TO DO: LOGOUT", Toast.LENGTH_SHORT);
-				toast3.show();
+				Toast toast = Toast.makeText(getApplicationContext(), "TO DO: LOGOUT", Toast.LENGTH_SHORT);
+				toast.show();
 				createMainMenu(this);
 				break;
 				
