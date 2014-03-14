@@ -16,8 +16,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ShoppingListActivity extends Activity implements
-		View.OnClickListener {
+public class ShoppingListActivity extends Activity implements View.OnClickListener 
+{
 
 	TableLayout buttonHolder;
 
@@ -33,7 +33,7 @@ public class ShoppingListActivity extends Activity implements
 		setContentView(R.layout.shoppinglist);
 
 		startShop = new Button(this);
-		startShop.setText("Find a Shop!");
+		startShop.setText("Find a Tesco");
 
 		listTable(this);
 	}
@@ -72,24 +72,23 @@ public class ShoppingListActivity extends Activity implements
 
 	@Override
 	public void onClick(View v) 
-	{
-		Toast.makeText(this, "TO DO: SHOW A SHOP!", Toast.LENGTH_SHORT).show();
-		
-		Intent newSettingIntent = new Intent(this, MapActivity.class);
-		newSettingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(newSettingIntent);
+	{		
+		Intent mapIntent = new Intent(this, MapActivity.class);
+		mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(mapIntent);
 	}
 
 	@Override
-	public void onPause() {
-		super.onPause(); // Always call the superclass method first
+	public void onPause() 
+	{
+		super.onPause(); //always call the superclass method first
 		Log.w("Pause", "Activity Paused");
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume(); // Always call the superclass method first
-
+	public void onResume() 
+	{
+		super.onResume(); //always call the superclass method first
 		Log.w("Resume", "Activity Resumed");
 	}
 }
