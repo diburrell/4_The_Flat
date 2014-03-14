@@ -1,9 +1,9 @@
 package com.FourTheFlat.activities;
 
 import com.FourTheFlat.*;
-import com.FourTheFlat.activities.ShoppingListActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -71,8 +71,13 @@ public class ShoppingListActivity extends Activity implements
 	}
 
 	@Override
-	public void onClick(View v) {
+	public void onClick(View v) 
+	{
 		Toast.makeText(this, "TO DO: SHOW A SHOP!", Toast.LENGTH_SHORT).show();
+		
+		Intent newSettingIntent = new Intent(this, MapActivity.class);
+		newSettingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(newSettingIntent);
 	}
 
 	@Override
