@@ -342,6 +342,7 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f060013;
+        public static final int db_url=0x7f06001b;
     }
     public static final class styleable {
         /** Attributes that can be used with a AdsAttrs.

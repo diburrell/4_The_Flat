@@ -1,56 +1,41 @@
 package com.FourTheFlat;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.text.NumberFormat;
 
-import org.json.JSONException;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.json.JSONObject;
 
-import android.content.Context;
-import android.app.Activity;
+import com.FourTheFlat.stores.User;
+
 import android.app.Application;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.text.Html;
 import android.util.Log;
-import android.view.Gravity;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 public class Main extends Application
 {
-	// private Finance stockObj;
-	static List<String> stockCodes = new ArrayList<String>();
-	static List<String> displayNames = new LinkedList<String>();
+	private static String username = "test";
+	private static String password = "test";
 
-	//not currently used
-	private static String myState;
-
-	public static String getState()
-	{
-		return myState;
-	}
-
-	public static void setState(String s)
-	{
-		myState = s;
-	}
-		
-	public static List<String> getStockCodes()
-	{
-		return stockCodes;
-	}
-
-
+	public static String getUsername() { return username; }
+	public static String getPassword() { return password; }
 	
+	public Main() throws JsonMappingException, JsonParseException, IOException
+	{
+		JSONObject jObject;
+		String jsonText = "";
+		Boolean error = false;
+		
+		try
+		{
+			jsonText = new JSONGetter().execute("http://group1.cloudapp.net:8080/ServerSide/user/test/test").get();
+		}
+		catch(Exception e)
+		{
+			error = true;			
+		}
+		
+		User user = (User)PojoMapper.fromJson(jsonText, User.class);
+		
+		Log.w("jason", user.getUsername());
+	}
 }
-
-

@@ -1,32 +1,20 @@
 package com.FourTheFlat;
 
-import java.util.Locale;
-
-import com.FourTheFlat.R;
-
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.support.v4.app.NotificationCompat;
 
-//new class to handle general things
+//new class to handle internet connection
 public final class ConnectionManager extends Activity
 {
-	public static boolean checkInternetConnection(Context c) 
+	public static boolean checkInternetConnection(Context context) 
 	{	
-		ConnectivityManager conMgr = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager conMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 	
-		// ARE WE CONNECTED TO THE INTERNET
+		//is the user connected to the internet?
 		if (conMgr.getActiveNetworkInfo() != null && conMgr.getActiveNetworkInfo().isAvailable() && conMgr.getActiveNetworkInfo().isConnected()) 
 			return true;
 	    else
 			return false;
 	}
-	
-
-
 }
