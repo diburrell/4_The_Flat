@@ -1,9 +1,13 @@
 package com.FourTheFlat.activities;
 
+import java.text.DecimalFormat;
+
 import com.FourTheFlat.R;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -100,74 +104,62 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		ruler.setBackgroundColor(Color.WHITE);
 		layout.addView(ruler, LayoutParams.FILL_PARENT, 5);
 		
-		String[] users = new String[5];
+		int USERS = 5;
+		
+		String[] users = new String[USERS];
 		users[0] = "Adam";
 		users[1] = "Brian";
 		users[2] = "Claire";
 		users[3] = "Denise";
 		users[4] = "Eddie";
 		
-		TableRow[] row = new TableRow[users.length+1];
-		TextView[] name = new TextView[users.length+1];
-		TextView[] theyOwe = new TextView[users.length+1];
-		TextView[] youOwe = new TextView[users.length+1];
+		double[] money = new double[USERS];
+		money[0] = -14.59;
+		money[1] = -0.01;
+		money[2] = 0.00;
+		money[3] = 0.01;
+		money[4] = 19.31;
 		
-		//HEADER ROW
-		row[0] = new TableRow(contextActivity);
-		row[0].setPadding(0, 30, 0, 0);
+		TableRow[] row = new TableRow[USERS];
+		TextView[] name = new TextView[USERS];
+		TextView[] owe = new TextView[USERS];
 		
-		name[0] = new TextView(contextActivity);
-		SpannableString nameContent = new SpannableString("Name");
-		nameContent.setSpan(new UnderlineSpan(), 0, nameContent.length(), 0);
-		name[0].setText(nameContent);
-		name[0].setTextSize(18f);
-		name[0].setTextColor(Color.BLACK);
-		row[0].addView(name[0]);
-		
-		theyOwe[0] = new TextView(contextActivity);
-		SpannableString theyOweContent = new SpannableString("They Owe");
-		theyOweContent.setSpan(new UnderlineSpan(), 0, theyOweContent.length(), 0);
-		theyOwe[0].setText(theyOweContent);
-		theyOwe[0].setGravity(Gravity.RIGHT);
-		theyOwe[0].setTextSize(18f);
-		theyOwe[0].setTextColor(Color.BLACK);
-		row[0].addView(theyOwe[0]);
-		
-		youOwe[0] = new TextView(contextActivity);
-		SpannableString youOweContent = new SpannableString("You Owe");
-		youOweContent.setSpan(new UnderlineSpan(), 0, youOweContent.length(), 0);
-		youOwe[0].setText(youOweContent);
-		youOwe[0].setGravity(Gravity.RIGHT);
-		youOwe[0].setTextSize(18f);
-		youOwe[0].setTextColor(Color.BLACK);
-		row[0].addView(youOwe[0]);
-		
-		layout.addView(row[0]);
-
 		//USER ROWS
-		for (int i=1; i<users.length+1; i++)
+		for (int i=0; i<USERS; i++)
 		{
 			row[i] = new TableRow(contextActivity);
 			
 			name[i] = new TextView(contextActivity);
-			name[i].setText(users[i-1]);
-			name[i].setTextSize(18f);
+			name[i].setText(users[i]);
+			name[i].setTextSize(24f);
 			name[i].setTextColor(Color.BLACK);
+			if (i == 0)
+				name[i].setPadding(0, 60, 0, 0);				
+			
+			owe[i] = new TextView(contextActivity);		
+			if (money[i] < 0.00)
+			{
+				owe[i].setText(String.format("-£%.2f", Math.abs(money[i])));
+				owe[i].setTextColor(Color.RED);
+			}
+			else if (money[i] == 0.00)
+			{
+				owe[i].setText(String.format("£%.2f", money[i]));
+				owe[i].setTextColor(Color.BLACK);
+			}
+			else
+			{
+				owe[i].setText(String.format("£%.2f", money[i]));
+				owe[i].setTextColor(Color.GREEN);
+				name[i].setOnClickListener(this);
+			}
+			owe[i].setGravity(Gravity.RIGHT);
+			owe[i].setTextSize(24f);
+			if (i == 0)
+				owe[i].setPadding(0, 60, 0, 0);
+			
 			row[i].addView(name[i]);
-			
-			theyOwe[i] = new TextView(contextActivity);
-			theyOwe[i].setText("£0");
-			theyOwe[i].setGravity(Gravity.RIGHT);
-			theyOwe[i].setTextSize(18f);
-			theyOwe[i].setTextColor(Color.BLACK);
-			row[i].addView(theyOwe[i]);
-			
-			youOwe[i] = new TextView(contextActivity);
-			youOwe[i].setText("£0");
-			youOwe[i].setGravity(Gravity.RIGHT);
-			youOwe[i].setTextSize(18f);
-			youOwe[i].setTextColor(Color.BLACK);
-			row[i].addView(youOwe[i]);
+			row[i].addView(owe[i]);
 			
 			layout.addView(row[i]);
 		}
@@ -309,6 +301,18 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	 */
 	public void onClick(View view)
 	{		
+		if (view instanceof Button)
+		{		
+			buttonClick(view);
+		}
+		else if (view instanceof TextView)
+		{
+			textViewClick(view);
+		}
+	}
+	
+	private void buttonClick(View view)
+	{
 		layout.removeAllViews();
 		
 		switch (view.getId())
@@ -364,5 +368,34 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			default:
 				break;
 		}
+	}
+
+	private void textViewClick(View view)
+	{
+		String username = ((TextView)view).getText().toString();
+		
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+		alertDialogBuilder.setTitle("Do you want to clear " + username + "'s debt?");
+
+		alertDialogBuilder.setCancelable(false)
+			.setPositiveButton("Yes", new DialogInterface.OnClickListener() 
+			{
+				public void onClick(DialogInterface dialog,int id) 
+				{					
+					Toast.makeText(AccountActivity.this, "TO DO: CLEAR DEBT", Toast.LENGTH_LONG).show();
+				}
+			})
+			.setNegativeButton("No", new DialogInterface.OnClickListener() 
+			{
+				public void onClick(DialogInterface dialog,int id) 
+				{
+					dialog.cancel();
+				}
+			});
+		
+			AlertDialog alertDialog = alertDialogBuilder.create();
+
+			alertDialog.show();
 	}
 }
