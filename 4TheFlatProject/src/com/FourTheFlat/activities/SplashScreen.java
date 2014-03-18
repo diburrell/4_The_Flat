@@ -1,11 +1,11 @@
 package com.FourTheFlat.activities;
 
 import com.FourTheFlat.*;
-import com.FourTheFlat.R;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
  
 public class SplashScreen extends Activity {
    /** Called when the activity is first created. */
@@ -19,6 +19,9 @@ public class SplashScreen extends Activity {
          public void run() {
                finish();
                Intent i = new Intent();
+               StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+               StrictMode.setThreadPolicy(policy); 
                if(!loggedIn())
                {
             	   i.setClassName("com.FourTheFlat", "com.FourTheFlat.LoginActivity");
@@ -29,6 +32,7 @@ public class SplashScreen extends Activity {
                               "com.FourTheFlat.AgileProjectActivity");
                }
                startActivity(i);
+
          }
       };
       splashThread.start();

@@ -39,6 +39,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 
 	public void productTable(Activity contextActivity) {
 
+		
 		buttonHolder = (TableLayout) contextActivity
 				.findViewById(R.id.tableLayout1);
 		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
@@ -86,7 +87,9 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View v)
 	{
-			
+		HttpRequests http = new HttpRequests();
+		http.execute("http://group1.cloudapp.net:8080/ServerSide/user/test/test","delete");
+		/*
 		if (v instanceof Button)
 		{
 			Toast.makeText(this, "TO DO: SHOW MORE PRODUCTS!", Toast.LENGTH_SHORT).show();
@@ -127,5 +130,6 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 				// show it
 				alertDialog.show();
 		}
+		*/
 	}
 }

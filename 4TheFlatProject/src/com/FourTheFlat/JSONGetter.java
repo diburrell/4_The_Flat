@@ -24,23 +24,23 @@ public class JSONGetter extends AsyncTask<String, Void, String>
    		try
    		{
 			url = new URL(params[0]);
-			   
+
 			int cp;
 			is = url.openStream();
 			rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 			sb = new StringBuilder();
-			
+
 			while ((cp = rd.read()) != -1)
 			{
 				sb.append((char) cp);
 			}
-			
+
 			if (sb != null)
 			{
 				returnedString = sb.toString();
-				
+
 			}
-			
+
 			is.close();
    		} 
    		catch (MalformedURLException e)
