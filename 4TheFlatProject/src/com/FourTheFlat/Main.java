@@ -13,6 +13,7 @@ import android.util.Log;
 
 public class Main extends Application
 {
+	public static final String PREFS_NAME = "MyPrefsFile";
 	private static String username = "test";
 	private static String password = "test";
 
@@ -27,7 +28,7 @@ public class Main extends Application
 		
 		try
 		{
-			jsonText = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/test/test","get").get();
+			jsonText = new JSONGetter().execute("http://group1.cloudapp.net:8080/ServerSide/user/test/test").get();
 		}
 		catch(Exception e)
 		{
