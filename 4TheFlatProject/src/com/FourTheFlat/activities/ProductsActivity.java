@@ -87,7 +87,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View v)
 	{
-		HttpRequests http = new HttpRequests();
+		HttpRequest http = new HttpRequest();
 		http.execute("http://group1.cloudapp.net:8080/ServerSide/user/test/test","delete");
 		/*
 		if (v instanceof Button)

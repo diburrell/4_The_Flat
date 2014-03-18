@@ -13,7 +13,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class HttpRequests extends AsyncTask<String, Void, String>{
+public class HttpRequest extends AsyncTask<String, Void, String>{
 
 	
 	@Override
