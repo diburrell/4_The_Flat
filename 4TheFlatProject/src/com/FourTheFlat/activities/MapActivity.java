@@ -1,15 +1,16 @@
 package com.FourTheFlat.activities;
 	
 import com.FourTheFlat.R;
-//import com.google.android.gms.maps.*;
-//import com.google.android.gms.maps.model.*;
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.Activity;
 import android.os.Bundle;
 
 public class MapActivity extends Activity
 {
-    /*@Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
@@ -54,5 +55,5 @@ public class MapActivity extends Activity
         
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(tescos[3], 12));
         map.setMyLocationEnabled(true); //show user current location
-    }*/
+    }
 }
