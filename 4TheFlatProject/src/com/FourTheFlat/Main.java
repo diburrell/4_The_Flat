@@ -27,7 +27,7 @@ public class Main extends Application
 		
 		try
 		{
-			jsonText = new JSONGetter().execute("http://group1.cloudapp.net:8080/ServerSide/user/test/test").get();
+			jsonText = new HttpRequests().execute("http://group1.cloudapp.net:8080/ServerSide/user/test/test","get").get();
 		}
 		catch(Exception e)
 		{
