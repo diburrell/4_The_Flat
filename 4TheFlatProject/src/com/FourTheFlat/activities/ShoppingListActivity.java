@@ -14,16 +14,16 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ShoppingListActivity extends Activity implements View.OnClickListener 
 {
 
 	TableLayout buttonHolder;
-
+	TableLayout list;
+	
 	Button startShop;
 
-	TableLayout list;
+	String[] shoppingList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,10 +31,12 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		Alarm.startRepeatingTimer(getApplicationContext());
 
 		setContentView(R.layout.shoppinglist);
-
+		
 		startShop = new Button(this);
 		startShop.setText("Find a Tesco");
 
+		shoppingList = getShoppingList();
+			
 		listTable(this);
 	}
 
@@ -44,21 +46,22 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 				.findViewById(R.id.tableLayout1);
 		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
 
-		int productCount = 100;
-
+		
+		onPause();
+		
 		startShop.setOnClickListener(this);
 		buttonHolder.addView(startShop);
 
-		TableRow[] rowProduct = new TableRow[productCount];
-		TextView[] productName = new TextView[productCount];
+		TableRow[] rowProduct = new TableRow[shoppingList.length];
+		TextView[] productName = new TextView[shoppingList.length];
 
 		// FILL THE LIST WITH PRODUCTS ON THE LIST!!!!!!
-		for (int i = 0; i < productCount - 1; i++) {
+		for (int i = 0; i < shoppingList.length; i++) {
 
 			rowProduct[i] = new TableRow(contextActivity);
 			productName[i] = new TextView(contextActivity);
 
-			productName[i].setText("Eggs");
+			productName[i].setText(shoppingList[i]);
 			productName[i].setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 			productName[i].setTextColor(Color.BLACK);
 			productName[i].setTextSize(25f);
@@ -70,6 +73,29 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		}
 	}
 
+	private String[] getShoppingList() {
+		try {
+			String list = new HttpRequest()
+					.execute("http://group1.cloudapp.net:8080/ServerSide/shoppinglist/cc4bcc90-ad52-11e3-a13d-74e543b5285b")
+					.get();
+
+			String[] shoppingList = list.split("\n");
+
+			return shoppingList;
+		} catch (Exception e) {
+			Log.w("ALL_PROD", "FAILED TO GET shopping list!");
+			return null;
+		}
+	}
+	
+	
+	public void update()
+	{
+		list = (TableLayout) this.findViewById(R.id.tableLayout2);
+		shoppingList = getShoppingList();
+		listTable(this);
+	}
+	
 	@Override
 	public void onClick(View v) 
 	{		
@@ -82,6 +108,10 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	public void onPause() 
 	{
 		super.onPause(); //always call the superclass method first
+		
+		list.removeAllViews();
+		buttonHolder.removeAllViews();
+		
 		Log.w("Pause", "Activity Paused");
 	}
 
@@ -89,6 +119,9 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	public void onResume() 
 	{
 		super.onResume(); //always call the superclass method first
+
+		update();
+		
 		Log.w("Resume", "Activity Resumed");
 	}
 }

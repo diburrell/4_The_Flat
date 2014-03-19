@@ -39,10 +39,9 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 
 		moreProducts = new Button(this);
 		moreProducts.setText("Add more products!");
-		
 
 		allowedProducts = getAllowedProducts();
-		
+
 		productTable(this);
 	}
 
@@ -52,14 +51,14 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 				.findViewById(R.id.tableLayout1);
 		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
 
-
 		moreProducts.setOnClickListener(this);
 		buttonHolder.addView(moreProducts);
 
-		TableRow[] rowProduct = new TableRow[allowedProducts.length];
-		TextView[] productName = new TextView[allowedProducts.length];
-
 		if (!allProds) {
+
+			TableRow[] rowProduct = new TableRow[allowedProducts.length];
+			TextView[] productName = new TextView[allowedProducts.length];
+
 			// FILL THE LIST WITH PRODUCTS ON THE LIST!!!!!!
 			for (int i = 0; i < allowedProducts.length; i++) {
 
@@ -79,47 +78,41 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 				list.addView(rowProduct[i]);
 			}
 		} else {
+			String[] allProducts = null;
+
 			try {
 				String products = new HttpRequest()
 						.execute(
 								"http://group1.cloudapp.net:8080/ServerSide/allproducts")
 						.get();
-
-				String[] allProducts = products.split("\n");
-
-				for (int i = 0; i < allProducts.length; i++) {
-					boolean display = true;
-
-					for (int j = 0; j < allowedProducts.length; j++) {
-						if (allProducts[i].equals(allowedProducts[j])) {
-							display = false;
-							break;
-						}
-					}
-
-					if (display) {
-						rowProduct[i] = new TableRow(contextActivity);
-						productName[i] = new TextView(contextActivity);
-
-						productName[i].setText(allProducts[i]);
-						productName[i].setTypeface(Typeface.DEFAULT,
-								Typeface.BOLD);
-						productName[i].setTextColor(Color.BLACK);
-						productName[i].setTextSize(25f);
-						productName[i].setGravity(Gravity.LEFT
-								| Gravity.CENTER_VERTICAL);
-
-						rowProduct[i].addView(productName[i]);
-						rowProduct[i].setOnClickListener(this);
-
-						list.addView(rowProduct[i]);
-					}
-				}
+				allProducts = products.split("\n");
 
 			} catch (Exception e) {
 				Log.w("ALL_PROD", "Could not retrieve products!");
 			}
+
+			TableRow[] rowProduct = new TableRow[allProducts.length];
+			TextView[] productName = new TextView[allProducts.length];
+
+			for (int i = 0; i < allProducts.length; i++) {
+				rowProduct[i] = new TableRow(contextActivity);
+				productName[i] = new TextView(contextActivity);
+
+				productName[i].setText(allProducts[i]);
+				productName[i].setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+				productName[i].setTextColor(Color.BLACK);
+				productName[i].setTextSize(25f);
+				productName[i].setGravity(Gravity.LEFT
+						| Gravity.CENTER_VERTICAL);
+
+				rowProduct[i].addView(productName[i]);
+				rowProduct[i].setOnClickListener(this);
+
+				list.addView(rowProduct[i]);
+				// }
+			}
 		}
+
 	}
 
 	private String[] getAllowedProducts() {
@@ -140,9 +133,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 
 	public void update() {
 		list = (TableLayout) this.findViewById(R.id.tableLayout2);
-
 		productTable(this);
-
 	}
 
 	@Override
@@ -162,14 +153,11 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 			if (!allProds) {
 				allProds = true;
 				moreProducts.setText("Allowed Products!");
-				Log.w("ALL_PRODS", "WENT FALSE");
 			} else {
 				allProds = false;
 				moreProducts.setText("Add more products!");
-				Log.w("ALL_PRODS", "WENT TRUE");
 			}
 
-			Log.w("ALL_PRODS", "BOOL: " + allProds);
 			onRestart();
 
 			// if a table row passed in
@@ -178,7 +166,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 			TextView child = (TextView) tR.getChildAt(0);
 
 			final String product = child.getText().toString();
-			
+
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 					this);
 
@@ -204,25 +192,26 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 									// /POSITIVE INPUT!
 
 									if (!allProds) {
-										Toast.makeText(
-												ProductsActivity.this,
+										Toast.makeText(ProductsActivity.this,
 												"ITEM ADDED TO SHOPPING LIST!",
 												Toast.LENGTH_LONG).show();
-												
-												
-												try {				
-													String completed = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/shoppinglist/cc4bcc90-ad52-11e3-a13d-74e543b5285b/"+product, "put").get();
-													Log.w("PUT COMPLETE", completed);
-													
-												} catch (InterruptedException e) {
-													// TODO Auto-generated catch block
-													e.printStackTrace();
-												} catch (ExecutionException e) {
-													// TODO Auto-generated catch block
-													e.printStackTrace();
-												}
-											
-												
+
+										try {
+											String completed = new HttpRequest()
+													.execute(
+															"http://group1.cloudapp.net:8080/ServerSide/shoppinglist/cc4bcc90-ad52-11e3-a13d-74e543b5285b/"
+																	+ product,
+															"put").get();
+											Log.w("PUT COMPLETE", completed);
+
+										} catch (InterruptedException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										} catch (ExecutionException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+
 									} else {
 										Toast.makeText(
 												ProductsActivity.this,
