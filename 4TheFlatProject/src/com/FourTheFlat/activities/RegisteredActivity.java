@@ -58,4 +58,5 @@ public class RegisteredActivity extends Activity {
         });
 
 
-    }}
+    } 
+}
