@@ -7,6 +7,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -75,9 +76,9 @@ public class HttpRequest extends AsyncTask<String, Void, String>{
 		try
 		{
 			 HttpClient httpclient = new DefaultHttpClient();
-			 HttpDelete httpDelete = new HttpDelete(url);
+			 HttpPut httpPut = new HttpPut(url);
 			 ResponseHandler<String> responseHandler = new BasicResponseHandler();
-			 String response = httpclient.execute(httpDelete, responseHandler);
+			 String response = httpclient.execute(httpPut, responseHandler);
 			 Log.w("succeed!!!","http response: "+response);
 			 return response;
 			}
