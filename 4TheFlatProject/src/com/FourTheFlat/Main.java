@@ -14,6 +14,7 @@ import android.util.Log;
 public class Main extends Application
 {
 	public static final String PREFS_NAME = "MyPrefsFile";
+	public static final String URL = "http://group1.cloudapp.net:8080/ServerSide";
 	private static String username = "test";
 	private static String password = "test";
 
@@ -22,13 +23,12 @@ public class Main extends Application
 	
 	public Main() throws JsonMappingException, JsonParseException, IOException
 	{
-		JSONObject jObject;
 		String jsonText = "";
 		Boolean error = false;
 		
 		try
 		{
-			jsonText = new JSONGetter().execute("http://group1.cloudapp.net:8080/ServerSide/user/test/test").get();
+
 		}
 		catch(Exception e)
 		{

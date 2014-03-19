@@ -1,7 +1,5 @@
 package com.FourTheFlat.activities;
 
-import java.text.DecimalFormat;
-
 import com.FourTheFlat.R;
 
 import android.app.ActionBar.LayoutParams;
@@ -10,8 +8,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -340,7 +336,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				break;
 				
 			case 4:
-				//back to main menu
+				//back/cancel to main menu
 				createMainMenu(this);
 				break;
 				
