@@ -35,21 +35,14 @@ public class RegisterActivity extends Activity {
 
     private static String KEY_SUCCESS = "success";
     private static String KEY_UID = "uid";
-    private static String KEY_FIRSTNAME = "fname";
-    private static String KEY_LASTNAME = "lname";
     private static String KEY_USERNAME = "uname";
-    private static String KEY_EMAIL = "email";
     private static String KEY_CREATED_AT = "created_at";
     private static String KEY_ERROR = "error";
 
     /**
      * Defining layout items.
      **/
-
-    EditText inputFirstName;
-    EditText inputLastName;
     EditText inputUsername;
-    EditText inputEmail;
     EditText inputPassword;
     Button btnRegister;
     TextView registerErrorMsg;
@@ -66,10 +59,7 @@ public class RegisterActivity extends Activity {
     /**
      * Defining all layout items
      **/
-        inputFirstName = (EditText) findViewById(R.id.fname);
-        inputLastName = (EditText) findViewById(R.id.lname);
         inputUsername = (EditText) findViewById(R.id.uname);
-        inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.pword);
         btnRegister = (Button) findViewById(R.id.register);
         registerErrorMsg = (TextView) findViewById(R.id.register_error);
@@ -100,7 +90,7 @@ public class RegisterActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                if (  ( !inputUsername.getText().toString().equals("")) && ( !inputPassword.getText().toString().equals("")) && ( !inputFirstName.getText().toString().equals("")) && ( !inputLastName.getText().toString().equals("")) && ( !inputEmail.getText().toString().equals("")) )
+                if (  ( !inputUsername.getText().toString().equals("")) && ( !inputPassword.getText().toString().equals("")))
                 {
                     if ( inputUsername.getText().toString().length() > 4 ){
                     NetAsync(view);
@@ -199,9 +189,6 @@ public class RegisterActivity extends Activity {
             super.onPreExecute();
             inputUsername = (EditText) findViewById(R.id.uname);
             inputPassword = (EditText) findViewById(R.id.pword);
-               fname = inputFirstName.getText().toString();
-               lname = inputLastName.getText().toString();
-                email = inputEmail.getText().toString();
                 uname= inputUsername.getText().toString();
                 password = inputPassword.getText().toString();
             pDialog = new ProgressDialog(RegisterActivity.this);

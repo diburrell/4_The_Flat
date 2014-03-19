@@ -20,16 +20,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.FourTheFlat.ConnectionManager;
+import com.FourTheFlat.HttpRequest;
 import com.FourTheFlat.Main;
+import com.FourTheFlat.PojoMapper;
 import com.FourTheFlat.R;
 import com.FourTheFlat.TabCreator;
 import com.FourTheFlat.R.id;
 import com.FourTheFlat.R.layout;
+import com.FourTheFlat.stores.User;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends Activity {
 
@@ -67,6 +72,7 @@ public class LoginActivity extends Activity {
             **/
             registered.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(registered);
+            finish();
         }
 
         setContentView(R.layout.login);
@@ -148,29 +154,8 @@ public class LoginActivity extends Activity {
         **/
         @Override
         protected Boolean doInBackground(String... args){
-
-
-
-            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = cm.getActiveNetworkInfo();
-            if (netInfo != null && netInfo.isConnected()) {
-                try {
-                    URL url = new URL("http://www.google.com");
-                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-                    urlc.setConnectTimeout(3000);
-                    urlc.connect();
-                    if (urlc.getResponseCode() == 200) {
-                        return true;
-                    }
-                } catch (MalformedURLException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            return false;
+        	
+            return ConnectionManager.checkInternetConnection(getApplicationContext());
 
         }
         @Override
@@ -219,14 +204,34 @@ public class LoginActivity extends Activity {
             //UserFunctions userFunction = new UserFunctions();
             //JSONObject json = userFunction.loginUser(email, password);
         	//TODO: LOGIN LOGIC HERE
-        	
-            JSONObject json = new JSONObject();
-            try{
-            	json.put(KEY_SUCCESS, "1");
-            }
-            catch(JSONException e){            	
-            }
-            return json;
+        	String httpResponse = "";
+        	User user = new User();
+			try {
+				httpResponse = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+email+"/"+password+"/").get();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ExecutionException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try{
+				user = (User) PojoMapper.fromJson(httpResponse, User.class);
+			}
+			catch (Exception e)
+			{
+				
+			}
+			JSONObject json = new JSONObject();
+			if(user.getUsername()!=null)
+			{            
+				try{
+					json.put(KEY_SUCCESS, "1");
+				}
+				catch(JSONException e){            	
+				}
+			}	
+            return json;            
         }
 
         @Override

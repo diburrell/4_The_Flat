@@ -38,8 +38,8 @@ public class Main extends Application
 		Log.w("json", jsonText);
 		
 		
-		User user = (User)PojoMapper.fromJson(jsonText, User.class);
+		//User user = (User)PojoMapper.fromJson(jsonText, User.class);
 		
-		Log.w("json", user.getUsername());
+		//Log.w("json", user.getUsername());
 	}
 }
