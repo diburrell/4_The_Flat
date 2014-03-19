@@ -174,7 +174,7 @@ public class LoginActivity extends Activity {
     }
 
     /**
-     * Async Task to get and send data to My Sql database through JSON respone.
+     * Async Task to get and send data to cassandra database.
      **/
     private class ProcessLogin extends AsyncTask<String, String, JSONObject> {
 
@@ -217,29 +217,13 @@ public class LoginActivity extends Activity {
 				e1.printStackTrace();
 			}
 			try{
-				Toast.makeText(getApplicationContext(), httpResponse, Toast.LENGTH_LONG).show();
-				if(httpResponse.equals("Invalid username or password."))
-				{
-					Toast.makeText(getApplicationContext(), "Incorrect username and/or password entered.", Toast.LENGTH_LONG).show();
-					return null;
-				}
-				else if(httpResponse.equals("Incorrect URL format."))
-				{
-					Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_LONG).show();
-					return null;
-				}
-				else
-				{
 					user = (User) PojoMapper.fromJson(httpResponse, User.class);
 					SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
 					editor.putString("activeUser", httpResponse);
 					editor.commit();
-					
-				}
 			}
-			catch (Exception e)
+			catch(Exception e)
 			{
-				
 			}
 			JSONObject json = new JSONObject();
 			if(user.getUsername()!=null)
@@ -275,7 +259,6 @@ public class LoginActivity extends Activity {
                         startActivity(mainScreen);
                         finish();
                     }else{
-
                         pDialog.dismiss();
                         loginErrorMsg.setText("Incorrect username/password");
                     }
