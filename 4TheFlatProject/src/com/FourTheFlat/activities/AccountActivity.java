@@ -1,11 +1,14 @@
 package com.FourTheFlat.activities;
 
 import com.FourTheFlat.R;
+import com.FourTheFlat.Settings;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -332,7 +335,12 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				//log out of the app
 				Toast toast3 = Toast.makeText(getApplicationContext(), "TO DO: LOGOUT", Toast.LENGTH_SHORT);
 				toast3.show();
-				createMainMenu(this);
+				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
+                editor.putBoolean("hasLoggedIn", false);
+                // Commit the edits!	
+                editor.commit();
+            	Intent registered = new Intent(getApplicationContext(), com.FourTheFlat.activities.LoginActivity.class);
+                startActivity(registered);
 				break;
 				
 			case 4:

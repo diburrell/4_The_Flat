@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +26,7 @@ import com.FourTheFlat.HttpRequest;
 import com.FourTheFlat.Main;
 import com.FourTheFlat.PojoMapper;
 import com.FourTheFlat.R;
+import com.FourTheFlat.Settings;
 import com.FourTheFlat.TabCreator;
 import com.FourTheFlat.R.id;
 import com.FourTheFlat.R.layout;
@@ -59,9 +61,8 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences settings = getSharedPreferences(com.FourTheFlat.Main.PREFS_NAME, 0);
         //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
-        boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", false);
+        boolean hasLoggedIn = Settings.getSharedPreferences(this.getApplicationContext()).getBoolean("hasLoggedIn", false);
 
         if(hasLoggedIn)
         {
@@ -216,7 +217,25 @@ public class LoginActivity extends Activity {
 				e1.printStackTrace();
 			}
 			try{
-				user = (User) PojoMapper.fromJson(httpResponse, User.class);
+				Toast.makeText(getApplicationContext(), httpResponse, Toast.LENGTH_LONG).show();
+				if(httpResponse.equals("Invalid username or password."))
+				{
+					Toast.makeText(getApplicationContext(), "Incorrect username and/or password entered.", Toast.LENGTH_LONG).show();
+					return null;
+				}
+				else if(httpResponse.equals("Incorrect URL format."))
+				{
+					Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_LONG).show();
+					return null;
+				}
+				else
+				{
+					user = (User) PojoMapper.fromJson(httpResponse, User.class);
+					SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
+					editor.putString("activeUser", httpResponse);
+					editor.commit();
+					
+				}
 			}
 			catch (Exception e)
 			{
@@ -237,6 +256,7 @@ public class LoginActivity extends Activity {
         @Override
         protected void onPostExecute(JSONObject json) {
             try {
+            	Log.w("test",json.toString());
                if (json.getString(KEY_SUCCESS) != null) {
 
                     String res = json.getString(KEY_SUCCESS);
@@ -244,39 +264,15 @@ public class LoginActivity extends Activity {
                     if(Integer.parseInt(res) == 1){
                         pDialog.setMessage("Loading User Space");
                         pDialog.setTitle("Getting Data");
-                        Intent registered = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
-                        SharedPreferences settings = getSharedPreferences(com.FourTheFlat.Main.PREFS_NAME, 0);
-                        SharedPreferences.Editor editor = settings.edit();
+                        Intent mainScreen = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
+                        SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
 
                         //Set "hasLoggedIn" to true
                         editor.putBoolean("hasLoggedIn", true);
-
-                        // Commit the edits!
+                        // Commit the edits!	
                         editor.commit();
-                        
-                        /**
-                         * Close all views before launching Registered screen
-                        **/
-                        registered.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         pDialog.dismiss();
-                        startActivity(registered);
-                        //DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-                        //JSONObject json_user = json.getJSONObject("user");
-                        /**
-                         * Clear all previous data in SQlite database.
-                         **/
-                        //UserFunctions logout = new UserFunctions();
-                        //logout.logoutUser(getApplicationContext());
-                        //db.addUser(json_user.getString(KEY_FIRSTNAME),json_user.getString(KEY_LASTNAME),json_user.getString(KEY_EMAIL),json_user.getString(KEY_USERNAME),json_user.getString(KEY_UID),json_user.getString(KEY_CREATED_AT));
-                       /**
-                        *If JSON array details are stored in SQlite it launches the User Panel.
-                        **/
-                        //Intent upanel = new Intent(getApplicationContext(), Main.class);
-                        //upanel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        //startActivity(upanel);
-                        /**
-                         * Close Login Screen
-                         **/
+                        startActivity(mainScreen);
                         finish();
                     }else{
 
