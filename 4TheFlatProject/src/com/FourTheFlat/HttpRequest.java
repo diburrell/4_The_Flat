@@ -25,6 +25,7 @@ public class HttpRequest extends AsyncTask<String, Void, String>{
 	protected String doInBackground(String... params) {
 		// TODO Auto-generated method stub
 		String url = params[0];
+		params[0] = params[0].replace(" ", "%20");
 		if(params.length == 1)
 		{
 			return httpGetRequest(url);
