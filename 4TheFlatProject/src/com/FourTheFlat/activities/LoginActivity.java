@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.FourTheFlat.ActiveUser;
 import com.FourTheFlat.ConnectionManager;
 import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
@@ -69,8 +70,8 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         boolean hasLoggedIn = Settings.getSharedPreferences(this.getApplicationContext()).getBoolean("hasLoggedIn", false);
-
-        if(hasLoggedIn)
+        ActiveUser.initialise(getApplicationContext());
+        if(hasLoggedIn && ActiveUser.getActiveUser() != null)
         {
         	Intent registered = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
             
@@ -142,23 +143,30 @@ public class LoginActivity extends Activity {
     	String response = "";
     	try {
 			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+inputEmail.getText().toString()+"/"+Cryptography.computeSHAHash(inputPassword.getText().toString()),"get").get();
-			processLoginResponse(response);
-			SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
-			editor.putString("user", response);
-			editor.putBoolean("hasLoggedIn", true);
-			editor.commit();
-        	Intent mainScreen = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
-            startActivity(mainScreen);
+			if(processLoginResponse(response))
+			{
+				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
+				editor.putString("user", response);
+				editor.putBoolean("hasLoggedIn", true);
+				editor.commit();
+	        	Intent mainScreen = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
+	            startActivity(mainScreen);
+	            return;
+			}
+			else
+			{
+				
+			}
     	} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
     }
     
-    public void processLoginResponse(String response)
+    public boolean processLoginResponse(String response)
     {
     	if(response.equals("Invalid username or password."))
     	{

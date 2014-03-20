@@ -1,5 +1,9 @@
 package com.FourTheFlat.activities;
 
+import java.util.concurrent.ExecutionException;
+
+import com.FourTheFlat.ActiveUser;
+import com.FourTheFlat.HttpRequest;
 import com.FourTheFlat.R;
 import com.FourTheFlat.Settings;
 
@@ -26,7 +30,9 @@ import android.widget.Toast;
 public class AccountActivity extends Activity implements View.OnClickListener
 {
 	TableLayout layout;
-
+	EditText currentPasswordEdit;
+	EditText newPasswordEdit;
+	EditText confirmPasswordEdit;
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -251,9 +257,9 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		currentPassword.setPadding(0, 50, 0, 0);
 		layout.addView(currentPassword);
 		
-		EditText currentEdit = new EditText(contextActivity);
-		currentEdit.setTextSize(18f);
-		layout.addView(currentEdit);
+		currentPasswordEdit = new EditText(contextActivity);
+		currentPasswordEdit.setTextSize(18f);
+		layout.addView(currentPasswordEdit);
 		
 		TextView newPassword = new TextView(contextActivity);
 		newPassword.setText("New Password:");
@@ -262,9 +268,9 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		newPassword.setPadding(0, 50, 0, 0);
 		layout.addView(newPassword);
 		
-		EditText newEdit = new EditText(contextActivity);
-		newEdit.setTextSize(18f);
-		layout.addView(newEdit);
+		newPasswordEdit = new EditText(contextActivity);
+		newPasswordEdit.setTextSize(18f);
+		layout.addView(newPasswordEdit);
 		
 		TextView confirmPassword = new TextView(contextActivity);
 		confirmPassword.setText("Confirm Password:");
@@ -273,14 +279,15 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		confirmPassword.setPadding(0, 50, 0, 0);
 		layout.addView(confirmPassword);	
 		
-		EditText confirmEdit = new EditText(contextActivity);
-		confirmEdit.setTextSize(18f);
-		layout.addView(confirmEdit);
+		confirmPasswordEdit = new EditText(contextActivity);
+		confirmPasswordEdit.setTextSize(18f);
+		layout.addView(confirmPasswordEdit);
 		
 		Button save = new Button(contextActivity);
 		save.setText("Save");
 		save.setId(7);
 		save.setOnClickListener(this);
+
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(0, 40, 0, 30);
 		save.setLayoutParams(params);
@@ -337,10 +344,12 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				toast3.show();
 				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
                 editor.putBoolean("hasLoggedIn", false);
+                editor.putString("user", "");
                 // Commit the edits!	
                 editor.commit();
-            	Intent registered = new Intent(getApplicationContext(), com.FourTheFlat.activities.LoginActivity.class);
-                startActivity(registered);
+            	Intent logout = new Intent(getApplicationContext(), com.FourTheFlat.activities.LoginActivity.class);
+                startActivity(logout);
+                finish();
 				break;
 				
 			case 4:
@@ -364,13 +373,54 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				
 			case 7:
 				//save new password
-				Toast toast7 = Toast.makeText(getApplicationContext(), "TO DO: SAVE NEW PASSWORD", Toast.LENGTH_SHORT);
-				toast7.show();
+				changePassword();
 				createMainMenu(this);
 				break;
 				
 			default:
 				break;
+		}
+	}
+	
+	public void changePassword()
+	{
+		String currentPassword = currentPasswordEdit.getText().toString();
+		String newPassword = newPasswordEdit.getText().toString();
+		String confirmPassword = confirmPasswordEdit.getText().toString();
+		
+		if(!newPassword.equals(confirmPassword))
+		{
+			Toast.makeText(getApplicationContext(), "Both new passwords must match!", Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		String responseCode;
+		try {
+			responseCode = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+currentPassword+"/"+newPassword,"post").get();
+			if(responseCode.equals("Incorrect username or password."))
+			{
+				Toast.makeText(getApplicationContext(), "Both new passwords must match!", Toast.LENGTH_LONG).show();
+				return;
+			}
+			else if(responseCode.equals("An error has occurred."))
+			{
+				Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_LONG).show();
+				return;
+			}
+			else if(responseCode.equals("Password changed."))
+			{
+				Toast.makeText(getApplicationContext(), "Password changed successfully.", Toast.LENGTH_LONG).show();
+				return;
+			}
+			else
+			{
+				Toast.makeText(getApplicationContext(), "An unknown error has occurred.", Toast.LENGTH_LONG).show();
+				return;
+			}
+		} catch (Exception e)
+		{
+			Toast.makeText(getApplicationContext(), "An unknown error has occurred.", Toast.LENGTH_LONG).show();
+			return;
 		}
 	}
 
