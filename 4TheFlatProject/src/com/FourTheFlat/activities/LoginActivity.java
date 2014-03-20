@@ -70,17 +70,11 @@ public class LoginActivity extends Activity {
         if(hasLoggedIn && ActiveUser.getActiveUser() != null)
         {
         	Intent registered = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
-            
-            /**
-             * Close all views before launching Registered screen
-            **/
             registered.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(registered);
             finish();
         }
-
         setContentView(R.layout.login);
-
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.pword);
         Btnregister = (Button) findViewById(R.id.registerbtn);
@@ -90,9 +84,7 @@ public class LoginActivity extends Activity {
 
         passreset.setOnClickListener(new View.OnClickListener() {
         public void onClick(View view) {
-        Intent myIntent = new Intent(view.getContext(), com.FourTheFlat.TabCreator.class);
-        startActivityForResult(myIntent, 0);
-        finish();
+        	Toast.makeText(getApplicationContext(), "Ain't no functionality for this yet!", Toast.LENGTH_LONG).show();
         }});
 
 
@@ -102,11 +94,8 @@ public class LoginActivity extends Activity {
                 startActivityForResult(myIntent, 0);
                 finish();
              }});
-
-/**
- * Login button click event
- * A Toast is set to alert when the Email and Password field is empty
- **/
+        
+        
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
@@ -134,11 +123,6 @@ public class LoginActivity extends Activity {
         });
     }
 
-
-/**
- * Async Task to check whether internet connection is working.
- **/
-
     private class NetCheck extends AsyncTask<String,String,Boolean>
     {
         private ProgressDialog nDialog;
@@ -153,9 +137,8 @@ public class LoginActivity extends Activity {
             nDialog.setCancelable(true);
             nDialog.show();
         }
-        /**
-         * Gets current device state and checks for working internet connection by trying Google.
-        **/
+
+        
         @Override
         protected Boolean doInBackground(String... args){
         	
@@ -176,9 +159,8 @@ public class LoginActivity extends Activity {
         }
     }
 
-    /**
-     * Async Task to get and send data to cassandra database.
-     **/
+    
+    //Async Task to get and send data to cassandra database.
     private class ProcessLogin extends AsyncTask<String, String, JSONObject> {
 
 
