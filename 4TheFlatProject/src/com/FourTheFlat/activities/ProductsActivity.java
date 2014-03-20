@@ -1,5 +1,6 @@
 package com.FourTheFlat.activities;
 
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import com.FourTheFlat.*;
@@ -38,7 +39,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 		setContentView(R.layout.shoppinglist);
 
 		moreProducts = new Button(this);
-		moreProducts.setText("Add more products!");
+		moreProducts.setText("See more products you can add!");
 
 		allowedProducts = getAllowedProducts();
 
@@ -91,6 +92,8 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 				Log.w("ALL_PROD", "Could not retrieve products!");
 			}
 
+			Arrays.sort(allProducts);
+			
 			TableRow[] rowProduct = new TableRow[allProducts.length];
 			TextView[] productName = new TextView[allProducts.length];
 
@@ -124,6 +127,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 
 			String[] allowedProducts = allowed.split("\n");
 
+			Arrays.sort(allowedProducts);
 			return allowedProducts;
 		} catch (Exception e) {
 			Log.w("ALL_PROD", "FAILED TO GET ALLOWED PRODUCTS!");
@@ -152,10 +156,10 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 		if (v instanceof Button) {
 			if (!allProds) {
 				allProds = true;
-				moreProducts.setText("Allowed Products!");
+				moreProducts.setText("Go back to your allowed products");
 			} else {
 				allProds = false;
-				moreProducts.setText("Add more products!");
+				moreProducts.setText("See more products you can add!");
 			}
 
 			onRestart();

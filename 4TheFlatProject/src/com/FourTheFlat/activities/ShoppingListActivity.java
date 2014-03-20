@@ -1,8 +1,13 @@
 package com.FourTheFlat.activities;
 
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+
 import com.FourTheFlat.*;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -14,6 +19,7 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ShoppingListActivity extends Activity implements View.OnClickListener 
 {
@@ -68,8 +74,10 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 			productName[i].setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 
 			rowProduct[i].addView(productName[i]);
-
+			rowProduct[i].setOnClickListener(this);
+			
 			list.addView(rowProduct[i]);
+			
 		}
 	}
 
@@ -80,7 +88,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 					.get();
 
 			String[] shoppingList = list.split("\n");
-
+			Arrays.sort(shoppingList);
 			return shoppingList;
 		} catch (Exception e) {
 			Log.w("ALL_PROD", "FAILED TO GET shopping list!");
@@ -98,20 +106,91 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	
 	@Override
 	public void onClick(View v) 
-	{		
+	{	
+		if(v instanceof Button)
+		{
 		Intent mapIntent = new Intent(this, MapActivity.class);
 		mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(mapIntent);
+		} else if (v instanceof TableRow) {
+		TableRow tR = (TableRow) v;
+		TextView child = (TextView) tR.getChildAt(0);
+
+		final String product = child.getText().toString();
+
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				this);
+
+
+			alertDialogBuilder.setTitle("Do you want to remove "
+					+ child.getText().toString()
+					+ " from the shopping list?");
+		// set dialog message
+		alertDialogBuilder
+				.setCancelable(false)
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int id) {
+								// /POSITIVE INPUT!
+								
+								try {
+									String completed = new HttpRequest()
+											.execute(
+													"http://group1.cloudapp.net:8080/ServerSide/shoppinglist/cc4bcc90-ad52-11e3-a13d-74e543b5285b/"+ product,
+													"delete").get();
+									Log.w("PUT COMPLETE", completed);
+									
+									Toast.makeText(ShoppingListActivity.this,
+											"ITEM REMOVED FROM SHOPPING LIST!",
+											Toast.LENGTH_LONG).show();
+									onRestart();
+									
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (ExecutionException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}								
+							}
+						})
+				.setNegativeButton("No",
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog,
+									int id) {
+								// if this button is clicked, just close
+								// the dialog box and do nothing
+								dialog.cancel();
+							}
+						});
+
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
+	}
 	}
 
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		list.removeAllViews();
+		buttonHolder.removeAllViews();
+		update();
+		Log.w("Resume", "Activity Resumed");
+	}
+	
 	@Override
 	public void onPause() 
 	{
-		super.onPause(); //always call the superclass method first
-		
+		super.onPause(); //always call the superclass method first		
 		list.removeAllViews();
-		buttonHolder.removeAllViews();
-		
+		buttonHolder.removeAllViews();		
 		Log.w("Pause", "Activity Paused");
 	}
 
@@ -119,9 +198,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	public void onResume() 
 	{
 		super.onResume(); //always call the superclass method first
-
 		update();
-		
 		Log.w("Resume", "Activity Resumed");
 	}
 }

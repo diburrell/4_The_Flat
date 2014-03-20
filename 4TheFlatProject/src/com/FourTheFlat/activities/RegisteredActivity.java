@@ -42,11 +42,7 @@ public class RegisteredActivity extends Activity {
         email.setText(user.get("email"));
         created_at.setText(user.get("created_at"));
 
-
-
-
-
-
+        
         Button login = (Button) findViewById(R.id.Main);
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
