@@ -153,10 +153,7 @@ public class LoginActivity extends Activity {
 	            startActivity(mainScreen);
 	            return;
 			}
-			else
-			{
-				
-			}
+			return;
     	} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -170,23 +167,25 @@ public class LoginActivity extends Activity {
     {
     	if(response.equals("Invalid username or password."))
     	{
-    		
+    		Toast.makeText(getApplicationContext(), "Invalid username and/or password", Toast.LENGTH_LONG).show();
+    		return false;
     	}
     	else if(response.equals("Incorrect URL format."))
     	{
-    		
+    		Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_LONG).show();
+    		return false;
     	}
     	else
     	{
     		User u = new User();
     		try {
 				u = (User)PojoMapper.fromJson(response, User.class);
+				return true;
 			} catch (Exception e)
 			{
 				Log.w("login", "login unsuccessful");
-				return;
+				return false;
 			}
-    		Log.w("login", "login successful");
     	}
     }
     

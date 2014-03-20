@@ -3,6 +3,7 @@ package com.FourTheFlat.activities;
 import java.util.concurrent.ExecutionException;
 
 import com.FourTheFlat.ActiveUser;
+import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
 import com.FourTheFlat.R;
 import com.FourTheFlat.Settings;
@@ -384,9 +385,10 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	
 	public void changePassword()
 	{
-		String currentPassword = currentPasswordEdit.getText().toString();
+		String currentPassword = Cryptography.computeSHAHash(currentPasswordEdit.getText().toString());
 		String newPassword = newPasswordEdit.getText().toString();
 		String confirmPassword = confirmPasswordEdit.getText().toString();
+		
 		
 		if(!newPassword.equals(confirmPassword))
 		{
@@ -399,7 +401,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			responseCode = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+currentPassword+"/"+newPassword,"post").get();
 			if(responseCode.equals("Incorrect username or password."))
 			{
-				Toast.makeText(getApplicationContext(), "Both new passwords must match!", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "The current password entered is incorrect.", Toast.LENGTH_LONG).show();
 				return;
 			}
 			else if(responseCode.equals("An error has occurred."))
