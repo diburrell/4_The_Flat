@@ -22,6 +22,7 @@ import java.security.NoSuchAlgorithmException;
 
 import com.FourTheFlat.activities.LoginActivity;
 import com.FourTheFlat.stores.User;
+import com.FourTheFlat.ConnectionManager;
 import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
 import com.FourTheFlat.PojoMapper;
@@ -40,51 +41,26 @@ import java.util.concurrent.ExecutionException;
 public class RegisterActivity extends Activity {
 
 
-    /**
-     *  JSON Response node names.
-     **/
-
-
     private static String KEY_SUCCESS = "success";
-    private static String KEY_UID = "uid";
-    private static String KEY_USERNAME = "uname";
-    private static String KEY_CREATED_AT = "created_at";
-    private static String KEY_ERROR = "error";
-    static String response = "";
+    private static String KEY_RESPONSE = "response";
 
-    /**
-     * Defining layout items.
-     **/
+    //Layout items
     EditText inputUsername;
     EditText inputPassword;
     EditText inputPasswordConfirm;
     Button btnRegister;
     TextView registerErrorMsg;
 
-
-    /**
-     * Called when the activity is first created.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        setContentView(R.layout.register);
-
-    /**
-     * Defining all layout items
-     **/
+       
         inputUsername = (EditText) findViewById(R.id.uname);
         inputPassword = (EditText) findViewById(R.id.pword);
         inputPasswordConfirm = (EditText) findViewById(R.id.pwordConfirm);
         btnRegister = (Button) findViewById(R.id.register);
         registerErrorMsg = (TextView) findViewById(R.id.register_error);
-
-
-
-/**
- * Button which Switches back to the login screen on clicked
- **/
-
         Button login = (Button) findViewById(R.id.bktologin);
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -95,19 +71,13 @@ public class RegisterActivity extends Activity {
 
         });
 
-        /**
-         * Register Button click event.
-         * A Toast is set to alert when the fields are empty.
-         * Another toast is set to alert Username must be 5 characters.
-         **/
-
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if (  ( !inputUsername.getText().toString().equals("")) && ( !inputPassword.getText().toString().equals("")))
                 {
-                    if ( inputUsername.getText().toString().length() > 4)
+                    if ( inputPassword.getText().toString().length() > 5)
                     {
                     	if(inputPassword.getText().toString().equals(inputPasswordConfirm.getText().toString()))
                     	{
@@ -122,7 +92,7 @@ public class RegisterActivity extends Activity {
                     else
                     {
                         Toast.makeText(getApplicationContext(),
-                                "Username should be minimum 5 characters", Toast.LENGTH_SHORT).show();
+                                "Password should be minimum 6 characters", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else
@@ -154,33 +124,9 @@ public class RegisterActivity extends Activity {
 
         @Override
         protected Boolean doInBackground(String... args){
-
-
-/**
- * Gets current device state and checks for working internet connection by trying Google.
- **/
-            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = cm.getActiveNetworkInfo();
-            if (netInfo != null && netInfo.isConnected()) {
-                try {
-                    URL url = new URL("http://www.google.com");
-                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-                    urlc.setConnectTimeout(3000);
-                    urlc.connect();
-                    if (urlc.getResponseCode() == 200) {
-                        return true;
-                    }
-                } catch (MalformedURLException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            return false;
-
+        	return ConnectionManager.checkInternetConnection(getApplicationContext());
         }
+        
         @Override
         protected void onPostExecute(Boolean th){
 
@@ -195,26 +141,20 @@ public class RegisterActivity extends Activity {
         }
     }
 
-
-
-
-
     private class ProcessRegister extends AsyncTask<String, String, JSONObject> {
 
-/**
- * Defining Process dialog
- **/
         private ProgressDialog pDialog;
 
-        String email,password,fname,lname,uname;
+        String password = "";
+        String uname = "";
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             inputUsername = (EditText) findViewById(R.id.uname);
             inputPassword = (EditText) findViewById(R.id.pword);
-                uname= inputUsername.getText().toString();
-                password = inputPassword.getText().toString();
-                password = Cryptography.computeSHAHash(password);                
+            uname= inputUsername.getText().toString();
+            password = inputPassword.getText().toString();
+            password = Cryptography.computeSHAHash(password);                
             pDialog = new ProgressDialog(RegisterActivity.this);
             pDialog.setTitle("Contacting Servers");
             pDialog.setMessage("Registering ...");
@@ -228,10 +168,17 @@ public class RegisterActivity extends Activity {
         	//TODO: REGISTRATION LOGIC HERE
         	String httpResponse = "";
         	JSONObject json = new JSONObject();
+        	
         	User user = new User();
 			try {
 				httpResponse = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+uname+"/"+password+"/", "put").get();
-				response = httpResponse;
+				try{
+	        		json.put(KEY_SUCCESS, "0");
+	        		json.put(KEY_RESPONSE, httpResponse);
+	        	}
+	        	catch(JSONException e)
+	        	{        		
+	        	}
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -239,21 +186,24 @@ public class RegisterActivity extends Activity {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			try{
-					user.setUsername(uname);
-					SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
-					editor.putString("activeUser", httpResponse);
-					editor.putBoolean("hasLoggedIn", true);
-					editor.commit();
-					try{
-		            	json.put(KEY_SUCCESS, "1");
-		            }
-		            catch(JSONException e){            	
-		            }
-			}
-			catch(Exception e)
+			if(httpResponse.contains("isShopping"))
 			{
-			}      	
+				try{
+						user.setUsername(uname);
+						SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
+						editor.putString("activeUser", httpResponse);
+						editor.putBoolean("hasLoggedIn", true);
+						editor.commit();
+						try{
+			            	json.put(KEY_SUCCESS, "1");
+			            }
+			            catch(JSONException e){            	
+			            }
+				}
+				catch(Exception e)
+				{
+				} 
+			}
             return json;
         }
        @Override
@@ -262,48 +212,25 @@ public class RegisterActivity extends Activity {
         * Checks for success message.
         **/
                 try {
-                    if (json.getString(KEY_SUCCESS) != null) {
-                        String res = "1";
-
-                        //String red = json.getString(KEY_ERROR);
-
-                        if(Integer.parseInt(res) == 1){
-                            pDialog.setTitle("Getting Data");
-                            pDialog.setMessage("Loading Info");
-
-                            registerErrorMsg.setText("Successfully Registered");
-
-                            Intent registered = new Intent(getApplicationContext(), RegisteredActivity.class);
-
-                            /**
-                             * Close all views before launching Registered screen
-                            **/
-                            registered.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            pDialog.dismiss();
-                            startActivity(registered);
-
-
-                              finish();
-                        }
-
-                        else if (response.equals("Username already registered")){
-                            pDialog.dismiss();
-                            registerErrorMsg.setText("User already exists");
-                        }
-
-                    }
-
-
-                        else{
+                    if (json.getString(KEY_SUCCESS) == "1") {
+                        registerErrorMsg.setText("Successfully Registered");
+                        Intent registered = new Intent(getApplicationContext(), RegisteredActivity.class);
+                        registered.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         pDialog.dismiss();
-
-                            registerErrorMsg.setText("Error occured in registration");
-                        }
+                        startActivity(registered);
+                        finish();                        
+                    }
+                    else if (json.getString(KEY_RESPONSE).equals("Username already registered.")){
+                        pDialog.dismiss();
+                        registerErrorMsg.setText("That Username already exists, please try a new one!");
+                    }
+                    else{
+                        pDialog.dismiss();
+                        registerErrorMsg.setText("Error occured in registration");
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-
-
                 }
             }}
     

@@ -30,22 +30,10 @@ public class RegisteredActivity extends Activity {
         /**
          * Displays the registration details in Text view
          **/
-
-        final TextView fname = (TextView)findViewById(R.id.fname);
-        final TextView lname = (TextView)findViewById(R.id.lname);
         final TextView uname = (TextView)findViewById(R.id.uname);
         final TextView email = (TextView)findViewById(R.id.email);
-        final TextView created_at = (TextView)findViewById(R.id.regat);
-        fname.setText(user.get("fname"));
-        lname.setText(user.get("lname"));
         uname.setText(user.get("uname"));
         email.setText(user.get("email"));
-        created_at.setText(user.get("created_at"));
-
-
-
-
-
 
         Button login = (Button) findViewById(R.id.Main);
         login.setOnClickListener(new View.OnClickListener() {

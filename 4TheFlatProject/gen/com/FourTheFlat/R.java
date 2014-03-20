@@ -222,15 +222,14 @@ containing a value of this type.
         public static final int splash1=0x7f020027;
     }
     public static final class id {
-        public static final int ImageView01=0x7f050026;
-        public static final int Main=0x7f050021;
+        public static final int ImageView01=0x7f050023;
+        public static final int Main=0x7f05001e;
         public static final int bktologin=0x7f050017;
         public static final int email=0x7f050007;
-        public static final int fname=0x7f05001a;
         public static final int headerView=0x7f050010;
         public static final int hybrid=0x7f050004;
         public static final int layout=0x7f050005;
-        public static final int lname=0x7f05001c;
+        public static final int lname=0x7f05001d;
         public static final int login=0x7f050008;
         public static final int loginErrorMsg=0x7f05000b;
         public static final int map=0x7f05000f;
@@ -242,23 +241,21 @@ containing a value of this type.
         public static final int pwordConfirmText=0x7f050015;
         public static final int pwordText=0x7f050013;
         public static final int pworda=0x7f05000e;
-        public static final int regat=0x7f050020;
+        public static final int regat=0x7f05001c;
         public static final int register=0x7f050016;
         public static final int register_error=0x7f050018;
         public static final int registerbtn=0x7f050009;
         public static final int satellite=0x7f050002;
-        public static final int tableLayout1=0x7f050024;
-        public static final int tableLayout10=0x7f050022;
-        public static final int tableLayout2=0x7f050025;
-        public static final int tableRow1=0x7f050023;
+        public static final int tableLayout1=0x7f050021;
+        public static final int tableLayout10=0x7f05001f;
+        public static final int tableLayout2=0x7f050022;
+        public static final int tableRow1=0x7f050020;
         public static final int terrain=0x7f050003;
         public static final int textView=0x7f050006;
-        public static final int textView11=0x7f05001f;
+        public static final int textView11=0x7f05001b;
         public static final int textView2=0x7f05000d;
-        public static final int textView3=0x7f050019;
-        public static final int textView5=0x7f05001b;
-        public static final int textView7=0x7f05001d;
-        public static final int textView9=0x7f05001e;
+        public static final int textView7=0x7f05001a;
+        public static final int textView9=0x7f050019;
         public static final int uname=0x7f050012;
         public static final int unameText=0x7f050011;
     }
