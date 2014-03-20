@@ -8,7 +8,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Register for 4TheFlat!"
-            android:id="@+id/textView" android:layout_gravity="center"
+            android:id="@+id/headerView" 
+            android:layout_gravity="center"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:textColor="#000000"/>
@@ -20,9 +21,9 @@
             android:layout_height="40dp"
             android:textColor="#000000"
             android:text="Username"
-            android:id="@+id/textView5"
-            android:layout_below="@+id/textView"
-            android:layout_alignParentLeft="@+id/textView"
+            android:id="@+id/unameText"
+            android:layout_below="@+id/headerView"
+            android:layout_alignParentLeft="@+id/headerView"
             android:textSize="15dp"/>
 
     <EditText
@@ -31,7 +32,7 @@
             android:textColor="#000000"
             android:id="@+id/uname"
             android:hint="Username"
-            android:layout_alignTop="@+id/textView5"
+            android:layout_alignTop="@+id/unameText"
             android:layout_alignParentRight="true"
             android:textSize="15dp"/>
 
@@ -44,7 +45,7 @@
             android:id="@+id/pword"
             android:hint="Password"
             android:layout_alignLeft="@+id/uname"
-            android:layout_below="@+id/textView5"
+            android:layout_below="@+id/unameText"
             android:textSize="15dp"/>
 
     <TextView
@@ -52,9 +53,31 @@
             android:layout_height="40dp"
             android:textColor="#000000"
             android:text="Password"
-            android:id="@+id/textView6"
+            android:id="@+id/pwordText"
             android:layout_alignTop="@+id/pword"
-            android:layout_alignRight="@+id/textView5"
+            android:layout_alignRight="@+id/unameText"
+            android:textSize="15dp"/>
+    
+    <EditText
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:textColor="#000000"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/pwordConfirm"
+            android:hint="Confirm Password"
+            android:layout_alignLeft="@+id/pword"
+            android:layout_below="@+id/pword"
+            android:textSize="15dp"/>
+
+    <TextView
+            android:layout_width="125dp"
+            android:layout_height="40dp"
+            android:textColor="#000000"
+            android:text="Confirm Password"
+            android:id="@+id/pwordConfirmText"
+            android:layout_alignTop="@+id/pwordConfirm"
+            android:layout_alignRight="@+id/pwordText"
             android:textSize="15dp"/>
 
     <Button
@@ -63,8 +86,8 @@
             android:textColor="#000000"
             android:text="Register"
             android:id="@+id/register"
-            android:layout_below="@+id/textView6"
-            android:layout_alignRight="@+id/textView2"
+            android:layout_below="@+id/pwordConfirmText"
+            android:layout_alignRight="@+id/pwordConfirmText"
             android:textSize="13dp"/>
 
     <Button
@@ -73,7 +96,7 @@
             android:textColor="#000000"
             android:text="Back To Login"
             android:id="@+id/bktologin"
-            android:layout_below="@+id/pword"
+            android:layout_below="@+id/pwordConfirm"
             android:layout_alignParentRight="true"
             android:textSize="13dp"/>
 

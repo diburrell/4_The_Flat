@@ -8,8 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -56,13 +54,11 @@ public class LoginActivity extends Activity {
     /**
      * Called when the activity is first created.
      */
-    private static String KEY_SUCCESS = "success";
+    private static String SUCCESS = "success";
     private static String KEY_UID = "uid";
     private static String KEY_USERNAME = "uname";
-    private static String KEY_FIRSTNAME = "fname";
-    private static String KEY_LASTNAME = "lname";
-    private static String KEY_EMAIL = "email";
     private static String KEY_CREATED_AT = "created_at";
+    private Boolean loggedIn=false;
 
 
     @Override
@@ -117,7 +113,7 @@ public class LoginActivity extends Activity {
 
                 if (  ( !inputEmail.getText().toString().equals("")) && ( !inputPassword.getText().toString().equals("")) )
                 {
-                	doLogin();
+                	NetAsync(view);
                 }
                 else if ( ( !inputEmail.getText().toString().equals("")) )
                 {
@@ -137,57 +133,143 @@ public class LoginActivity extends Activity {
             }
         });
     }
-    
-    public void doLogin()
+
+
+/**
+ * Async Task to check whether internet connection is working.
+ **/
+
+    private class NetCheck extends AsyncTask<String,String,Boolean>
     {
-    	String response = "";
-    	try {
-			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+inputEmail.getText().toString()+"/"+Cryptography.computeSHAHash(inputPassword.getText().toString()),"get").get();
-			if(processLoginResponse(response))
-			{
-				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
-				editor.putString("user", response);
-				editor.putBoolean("hasLoggedIn", true);
-				editor.commit();
-	        	Intent mainScreen = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
-	            startActivity(mainScreen);
-	            return;
+        private ProgressDialog nDialog;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            nDialog = new ProgressDialog(LoginActivity.this);
+            nDialog.setTitle("Checking Network");
+            nDialog.setMessage("Loading..");
+            nDialog.setIndeterminate(false);
+            nDialog.setCancelable(true);
+            nDialog.show();
+        }
+        /**
+         * Gets current device state and checks for working internet connection by trying Google.
+        **/
+        @Override
+        protected Boolean doInBackground(String... args){
+        	
+            return ConnectionManager.checkInternetConnection(getApplicationContext());
+
+        }
+        @Override
+        protected void onPostExecute(Boolean th){
+
+            if(th == true){
+                nDialog.dismiss();
+                new ProcessLogin().execute();
+            }
+            else{
+                nDialog.dismiss();
+                loginErrorMsg.setText("Error in Network Connection");
+            }
+        }
+    }
+
+    /**
+     * Async Task to get and send data to cassandra database.
+     **/
+    private class ProcessLogin extends AsyncTask<String, String, JSONObject> {
+
+
+        private ProgressDialog pDialog;
+
+        String email,password;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            inputEmail = (EditText) findViewById(R.id.email);
+            inputPassword = (EditText) findViewById(R.id.pword);
+            email = inputEmail.getText().toString();
+            password = inputPassword.getText().toString();
+            pDialog = new ProgressDialog(LoginActivity.this);
+            pDialog.setTitle("Contacting Servers");
+            pDialog.setMessage("Logging in ...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... args) {
+        	//TODO: LOGIN LOGIC HERE
+        	String httpResponse = "";
+        	password=Cryptography.computeSHAHash(password);
+        	User user = new User();
+			try {
+				httpResponse = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+email+"/"+password+"/").get();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ExecutionException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			return;
-    	} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+			try{
+					user = (User) PojoMapper.fromJson(httpResponse, User.class);
+					SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
+					editor.putString("user", httpResponse);
+					editor.commit();
+			}
+			catch(Exception e)
+			{
+			}
+			JSONObject json = new JSONObject();
+			if(user.getUsername()!=null)
+			{            
+				try{
+					json.put(SUCCESS, "1");
+				}
+				catch(JSONException e){            	
+				}
+			}
+			return json;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            try {
+            	Log.w("test",json.toString());
+               if (json.getString(SUCCESS) != null) {
+                    String res = json.getString(SUCCESS);
+                    if(Integer.parseInt(res) == 1)
+                    {
+                        pDialog.setMessage("Loading User Space");
+                        pDialog.setTitle("Getting Data");
+                        Intent mainScreen = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
+                        SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
+
+                        //Set "hasLoggedIn" to true
+                        editor.putBoolean("hasLoggedIn", true);
+                        // Commit the edits!	
+                        editor.commit();
+                        pDialog.dismiss();
+                        startActivity(mainScreen);
+                        finish();
+                    }else{
+                        pDialog.dismiss();
+                        loginErrorMsg.setText("Incorrect username/password");
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+       }
     }
     
-    public boolean processLoginResponse(String response)
-    {
-    	if(response.equals("Invalid username or password."))
-    	{
-    		Toast.makeText(getApplicationContext(), "Invalid username and/or password", Toast.LENGTH_LONG).show();
-    		return false;
-    	}
-    	else if(response.equals("Incorrect URL format."))
-    	{
-    		Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_LONG).show();
-    		return false;
-    	}
-    	else
-    	{
-    		User u = new User();
-    		try {
-				u = (User)PojoMapper.fromJson(response, User.class);
-				return true;
-			} catch (Exception e)
-			{
-				Log.w("login", "login unsuccessful");
-				return false;
-			}
-    	}
-    }
-    
-    
+    public void NetAsync(View view){
+        new NetCheck().execute();
+    }    
 }
