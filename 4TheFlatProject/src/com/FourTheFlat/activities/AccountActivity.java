@@ -320,27 +320,30 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	
 	private void buttonClick(View view)
 	{
-		layout.removeAllViews();
 		
 		switch (view.getId())
 		{
 			case 0:
 				//move to account information screen
+				layout.removeAllViews();
 				createAccountInformation(this);
 				break;	
 				
 			case 1:
 				//move to modify flat details screen
+				layout.removeAllViews();
 				createModifyFlatDetails(this);
 				break;
 				
 			case 2:
 				//move to change password screen
+				layout.removeAllViews();
 				createChangePassword(this);
 				break;
 			
 			case 3:
 				//log out of the app
+				layout.removeAllViews();
 				Toast toast3 = Toast.makeText(getApplicationContext(), "TO DO: LOGOUT", Toast.LENGTH_SHORT);
 				toast3.show();
 				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
@@ -355,11 +358,13 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				
 			case 4:
 				//back/cancel to main menu
+				layout.removeAllViews();
 				createMainMenu(this);
 				break;
 				
 			case 5:
 				//save new address
+				layout.removeAllViews();
 				Toast toast5 = Toast.makeText(getApplicationContext(), "TO DO: SAVE NEW ADDRESS", Toast.LENGTH_SHORT);
 				toast5.show();
 				createMainMenu(this);
@@ -367,6 +372,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				
 			case 6:
 				//leave the flat
+				layout.removeAllViews();
 				Toast toast6 = Toast.makeText(getApplicationContext(), "TO DO: LEAVE THE FLAT", Toast.LENGTH_SHORT);
 				toast6.show();
 				createMainMenu(this);
@@ -374,8 +380,11 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				
 			case 7:
 				//save new password
-				changePassword();
-				createMainMenu(this);
+				if(changePassword())
+				{
+					layout.removeAllViews();
+					createMainMenu(this);
+				}
 				break;
 				
 			default:
@@ -383,17 +392,17 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		}
 	}
 	
-	public void changePassword()
+	public boolean changePassword()
 	{
 		String currentPassword = Cryptography.computeSHAHash(currentPasswordEdit.getText().toString());
-		String newPassword = newPasswordEdit.getText().toString();
-		String confirmPassword = confirmPasswordEdit.getText().toString();
+		String newPassword = Cryptography.computeSHAHash(newPasswordEdit.getText().toString());
+		String confirmPassword = Cryptography.computeSHAHash(confirmPasswordEdit.getText().toString());
 		
 		
 		if(!newPassword.equals(confirmPassword))
 		{
 			Toast.makeText(getApplicationContext(), "Both new passwords must match!", Toast.LENGTH_LONG).show();
-			return;
+			return false;
 		}
 		
 		String responseCode;
@@ -402,27 +411,27 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			if(responseCode.equals("Incorrect username or password."))
 			{
 				Toast.makeText(getApplicationContext(), "The current password entered is incorrect.", Toast.LENGTH_LONG).show();
-				return;
+				return false;
 			}
 			else if(responseCode.equals("An error has occurred."))
 			{
 				Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_LONG).show();
-				return;
+				return false;
 			}
 			else if(responseCode.equals("Password changed."))
 			{
 				Toast.makeText(getApplicationContext(), "Password changed successfully.", Toast.LENGTH_LONG).show();
-				return;
+				return true;
 			}
 			else
 			{
 				Toast.makeText(getApplicationContext(), "An unknown error has occurred.", Toast.LENGTH_LONG).show();
-				return;
+				return false;
 			}
 		} catch (Exception e)
 		{
 			Toast.makeText(getApplicationContext(), "An unknown error has occurred.", Toast.LENGTH_LONG).show();
-			return;
+			return false;
 		}
 	}
 
