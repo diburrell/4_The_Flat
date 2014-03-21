@@ -83,6 +83,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 
 	private String[] getShoppingList() {
 		try {
+			Log.w("GROUP_ID", ActiveUser.getActiveUser().getGroupID().toString());
 			String list = new HttpRequest()
 					.execute("http://group1.cloudapp.net:8080/ServerSide/shoppinglist/"+ActiveUser.getActiveUser().getGroupID())
 					.get();

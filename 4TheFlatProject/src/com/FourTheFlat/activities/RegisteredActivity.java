@@ -7,8 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.FourTheFlat.ActiveUser;
 import com.FourTheFlat.R;
 import com.FourTheFlat.TabCreator;
+import com.FourTheFlat.stores.User;
 
 import java.util.HashMap;
 
@@ -23,17 +25,10 @@ public class RegisteredActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registered);
-
-        HashMap<String,String> user = new HashMap<String, String>();
-        //db.getUserDetails();
-
-        /**
-         * Displays the registration details in Text view
-         **/
+        User current = ActiveUser.getActiveUser();
+        String username = current.getUsername();
         final TextView uname = (TextView)findViewById(R.id.uname);
-        final TextView email = (TextView)findViewById(R.id.email);
-        uname.setText(user.get("uname"));
-        email.setText(user.get("email"));
+        uname.setText(username);
 
         Button login = (Button) findViewById(R.id.Main);
         login.setOnClickListener(new View.OnClickListener() {

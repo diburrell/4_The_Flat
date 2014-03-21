@@ -22,6 +22,7 @@ import java.security.NoSuchAlgorithmException;
 
 import com.FourTheFlat.activities.LoginActivity;
 import com.FourTheFlat.stores.User;
+import com.FourTheFlat.ActiveUser;
 import com.FourTheFlat.ConnectionManager;
 import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
@@ -103,10 +104,7 @@ public class RegisterActivity extends Activity {
             }
         });
        }
-    /**
-     * Async Task to check whether internet connection is working
-     **/
-
+    
     private class NetCheck extends AsyncTask<String,String,Boolean>
     {
         private ProgressDialog nDialog;
@@ -186,12 +184,13 @@ public class RegisterActivity extends Activity {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			if(httpResponse.contains("isShopping"))
+			if(httpResponse.contains("groupID"))
 			{
 				try{
 						user.setUsername(uname);
 						SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
-						editor.putString("activeUser", httpResponse);
+						editor.putString("user", httpResponse);
+						ActiveUser.initialise(getApplicationContext());
 						editor.putBoolean("hasLoggedIn", true);
 						editor.commit();
 						try{
@@ -216,13 +215,14 @@ public class RegisterActivity extends Activity {
                         registerErrorMsg.setText("Successfully Registered");
                         Intent registered = new Intent(getApplicationContext(), RegisteredActivity.class);
                         registered.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        ActiveUser.initialise(getApplicationContext());
                         pDialog.dismiss();
                         startActivity(registered);
                         finish();                        
                     }
                     else if (json.getString(KEY_RESPONSE).equals("Username already registered.")){
                         pDialog.dismiss();
-                        registerErrorMsg.setText("That Username already exists, please try a new one!");
+                        Toast.makeText(getApplicationContext(), "That Username already exists, please try a new one!", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         pDialog.dismiss();

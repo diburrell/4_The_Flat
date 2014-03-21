@@ -207,6 +207,7 @@ public class LoginActivity extends Activity {
 			}
 			catch(Exception e)
 			{
+				Log.d("Error", e.toString());
 			}
 			JSONObject json = new JSONObject();
 			if(user.getUsername()!=null)
@@ -216,6 +217,14 @@ public class LoginActivity extends Activity {
 				}
 				catch(JSONException e){            	
 				}
+			}
+			else{
+				try {
+					json.put(SUCCESS, "0");
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
 			}
 			return json;
         }
@@ -232,8 +241,7 @@ public class LoginActivity extends Activity {
                         pDialog.setTitle("Getting Data");
                         Intent mainScreen = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
                         SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
-
-                        //Set "hasLoggedIn" to true
+                        ActiveUser.initialise(getApplicationContext());
                         editor.putBoolean("hasLoggedIn", true);
                         // Commit the edits!	
                         editor.commit();
