@@ -29,7 +29,7 @@ public class RegisteredActivity extends Activity {
         String username = current.getUsername();
         final TextView uname = (TextView)findViewById(R.id.uname);
         uname.setText(username);
-
+        
         Button login = (Button) findViewById(R.id.Main);
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

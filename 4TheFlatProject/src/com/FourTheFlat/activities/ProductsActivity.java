@@ -93,7 +93,6 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 			}
 
 			Arrays.sort(allProducts);
-
 			TableRow[] rowProduct = new TableRow[allProducts.length];
 			TextView[] productName = new TextView[allProducts.length];
 
