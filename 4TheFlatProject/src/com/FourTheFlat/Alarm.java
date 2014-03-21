@@ -31,14 +31,7 @@ public class Alarm {
 			// starting from tomorrow.
 			//Set the alarm to go off 15 minutes before the end of the trading day at 4:15
 			Calendar c = Calendar.getInstance();
-			c.set(c.HOUR_OF_DAY, 16); // 16
-			c.set(c.MINUTE, 15); // 15
-			c.set(c.SECOND,0);
-			if ((c.getTimeInMillis()) - System.currentTimeMillis() > 0) {
-				am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), am.INTERVAL_DAY, pi);
-			} else {
-				am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis() + am.INTERVAL_DAY, am.INTERVAL_DAY, pi);
-			}
+			am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60000, pi);
 
 	}
 
