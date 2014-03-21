@@ -22,7 +22,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.FourTheFlat.ActiveUser;
 import com.FourTheFlat.ConnectionManager;
+import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
 import com.FourTheFlat.Main;
 import com.FourTheFlat.PojoMapper;
@@ -52,13 +54,11 @@ public class LoginActivity extends Activity {
     /**
      * Called when the activity is first created.
      */
-    private static String KEY_SUCCESS = "success";
+    private static String SUCCESS = "success";
     private static String KEY_UID = "uid";
     private static String KEY_USERNAME = "uname";
-    private static String KEY_FIRSTNAME = "fname";
-    private static String KEY_LASTNAME = "lname";
-    private static String KEY_EMAIL = "email";
     private static String KEY_CREATED_AT = "created_at";
+    private Boolean loggedIn=false;
 
 
     @Override
@@ -66,21 +66,15 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         boolean hasLoggedIn = Settings.getSharedPreferences(this.getApplicationContext()).getBoolean("hasLoggedIn", false);
-
-        if(hasLoggedIn)
+        ActiveUser.initialise(getApplicationContext());
+        if(hasLoggedIn && ActiveUser.getActiveUser() != null)
         {
         	Intent registered = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
-            
-            /**
-             * Close all views before launching Registered screen
-            **/
             registered.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(registered);
             finish();
         }
-
         setContentView(R.layout.login);
-
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.pword);
         Btnregister = (Button) findViewById(R.id.registerbtn);
@@ -90,9 +84,7 @@ public class LoginActivity extends Activity {
 
         passreset.setOnClickListener(new View.OnClickListener() {
         public void onClick(View view) {
-        Intent myIntent = new Intent(view.getContext(), com.FourTheFlat.TabCreator.class);
-        startActivityForResult(myIntent, 0);
-        finish();
+        	Toast.makeText(getApplicationContext(), "Ain't no functionality for this yet!", Toast.LENGTH_LONG).show();
         }});
 
 
@@ -102,11 +94,8 @@ public class LoginActivity extends Activity {
                 startActivityForResult(myIntent, 0);
                 finish();
              }});
-
-/**
- * Login button click event
- * A Toast is set to alert when the Email and Password field is empty
- **/
+        
+        
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
@@ -134,11 +123,6 @@ public class LoginActivity extends Activity {
         });
     }
 
-
-/**
- * Async Task to check whether internet connection is working.
- **/
-
     private class NetCheck extends AsyncTask<String,String,Boolean>
     {
         private ProgressDialog nDialog;
@@ -153,9 +137,8 @@ public class LoginActivity extends Activity {
             nDialog.setCancelable(true);
             nDialog.show();
         }
-        /**
-         * Gets current device state and checks for working internet connection by trying Google.
-        **/
+
+        
         @Override
         protected Boolean doInBackground(String... args){
         	
@@ -176,9 +159,8 @@ public class LoginActivity extends Activity {
         }
     }
 
-    /**
-     * Async Task to get and send data to cassandra database.
-     **/
+    
+    //Async Task to get and send data to cassandra database.
     private class ProcessLogin extends AsyncTask<String, String, JSONObject> {
 
 
@@ -204,12 +186,9 @@ public class LoginActivity extends Activity {
 
         @Override
         protected JSONObject doInBackground(String... args) {
-
-            //UserFunctions userFunction = new UserFunctions();
-            //JSONObject json = userFunction.loginUser(email, password);
         	//TODO: LOGIN LOGIC HERE
         	String httpResponse = "";
-        	password=computeSHAHash(password);
+        	password=Cryptography.computeSHAHash(password);
         	User user = new User();
 			try {
 				httpResponse = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+email+"/"+password+"/").get();
@@ -223,39 +202,46 @@ public class LoginActivity extends Activity {
 			try{
 					user = (User) PojoMapper.fromJson(httpResponse, User.class);
 					SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
-					editor.putString("activeUser", httpResponse);
+					editor.putString("user", httpResponse);
 					editor.commit();
 			}
 			catch(Exception e)
 			{
+				Log.d("Error", e.toString());
 			}
 			JSONObject json = new JSONObject();
 			if(user.getUsername()!=null)
 			{            
 				try{
-					json.put(KEY_SUCCESS, "1");
+					json.put(SUCCESS, "1");
 				}
 				catch(JSONException e){            	
 				}
-			}	
-            return json;            
+			}
+			else{
+				try {
+					json.put(SUCCESS, "0");
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+			}
+			return json;
         }
 
         @Override
         protected void onPostExecute(JSONObject json) {
             try {
             	Log.w("test",json.toString());
-               if (json.getString(KEY_SUCCESS) != null) {
-
-                    String res = json.getString(KEY_SUCCESS);
-
-                    if(Integer.parseInt(res) == 1){
+               if (json.getString(SUCCESS) != null) {
+                    String res = json.getString(SUCCESS);
+                    if(Integer.parseInt(res) == 1)
+                    {
                         pDialog.setMessage("Loading User Space");
                         pDialog.setTitle("Getting Data");
                         Intent mainScreen = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
                         SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
-
-                        //Set "hasLoggedIn" to true
+                        ActiveUser.initialise(getApplicationContext());
                         editor.putBoolean("hasLoggedIn", true);
                         // Commit the edits!	
                         editor.commit();
@@ -272,56 +258,8 @@ public class LoginActivity extends Activity {
             }
        }
     }
+    
     public void NetAsync(View view){
         new NetCheck().execute();
-    }
-    
-    public String convertToHex(byte[] data) throws java.io.IOException
-    {
-    	StringBuffer sb = new StringBuffer();
-    	String hex = null;
-    	hex = Base64.encodeToString(data, 0, data.length, 0);
-    	sb.append(hex);
-    	return sb.toString();        	
-    }
-    
-    public String computeSHAHash(String input)
-    {
-    	StringBuffer output = new StringBuffer();
-    	MessageDigest mdSha256 = null;
-        try{
-        	mdSha256 = MessageDigest.getInstance("SHA-256");
-        }
-        catch(NoSuchAlgorithmException e){
-        	Log.e("myapp", "SHA-256 ERROR!");
-        }
-        try{
-        	mdSha256.update(input.getBytes("ASCII"));
-        }
-        catch(Exception e)
-        {
-        	
-        }
-        byte[] data = mdSha256.digest();
-        output.append(byteArrayToString(data));
-        return output.toString();
-    	
-    }
-    
-    /**
-	 * Taken from http://stackoverflow.com/questions/4895523/java-string-to-sha1
-	 * Allows us to convert a SHA-1 Byte Array into a Hex String
-	 */
-	public static String byteArrayToString(byte[] b) 
-	{
-		String result = "";
-
-		for (int i=0; i < b.length; i++) 
-		{
-			result += Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
-		}
-
-		return result;
-	}
-    
+    }    
 }

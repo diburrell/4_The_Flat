@@ -54,8 +54,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	 */
 	private void createMainMenu(Activity contextActivity)
 	{		
-		layout = (TableLayout)contextActivity.findViewById(R.id.layout);
-		
+		layout = (TableLayout)contextActivity.findViewById(R.id.layout);		
 		layout.removeAllViews();
 		
 		Button accountInfo = new Button(contextActivity);
