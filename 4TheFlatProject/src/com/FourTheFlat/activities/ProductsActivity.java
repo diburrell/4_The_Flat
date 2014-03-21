@@ -37,9 +37,14 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.shoppinglist);
+		
+		if(ActiveUser.getActiveUser().getGroupID() != null)
+		{
+			moreProducts = new Button(this);
+			moreProducts.setText("See more products you can add!");
+		}
 
-		moreProducts = new Button(this);
-		moreProducts.setText("See more products you can add!");
+
 
 		allowedProducts = getAllowedProducts();
 
@@ -51,9 +56,11 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 		buttonHolder = (TableLayout) contextActivity
 				.findViewById(R.id.tableLayout1);
 		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
-
-		moreProducts.setOnClickListener(this);
-		buttonHolder.addView(moreProducts);
+		if(ActiveUser.getActiveUser().getGroupID() != null)
+		{
+			moreProducts.setOnClickListener(this);
+			buttonHolder.addView(moreProducts);
+		}
 
 		if (!allProds) {
 
@@ -118,6 +125,10 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 	}
 
 	private String[] getAllowedProducts() {
+		if(ActiveUser.getActiveUser().getGroupID() == null)
+		{
+			return new String[] { "You are not in a group."};
+		}
 		try {
 			String allowed = new HttpRequest()
 					.execute(

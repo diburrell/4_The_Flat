@@ -37,10 +37,11 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		Alarm.startRepeatingTimer(getApplicationContext());
 
 		setContentView(R.layout.shoppinglist);
-
-		startShop = new Button(this);
-		startShop.setText("Find a Tesco");
-
+		if(ActiveUser.getActiveUser().getGroupID() != null)
+		{
+			startShop = new Button(this);
+			startShop.setText("Find a Tesco");
+		}
 		shoppingList = getShoppingList();
 
 		listTable(this);
@@ -54,9 +55,12 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 
 
 		onPause();
+		if(ActiveUser.getActiveUser().getGroupID() != null)
+		{
+			startShop.setOnClickListener(this);
+			buttonHolder.addView(startShop);
+		}
 
-		startShop.setOnClickListener(this);
-		buttonHolder.addView(startShop);
 
 		TableRow[] rowProduct = new TableRow[shoppingList.length];
 		TextView[] productName = new TextView[shoppingList.length];
@@ -82,6 +86,10 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	}
 
 	private String[] getShoppingList() {
+		if(ActiveUser.getActiveUser().getGroupID() == null)
+		{
+			return new String[] { "You are not in a group."};
+		}
 		try {
 			Log.w("GROUP_ID", ActiveUser.getActiveUser().getGroupID().toString());
 			String list = new HttpRequest()
@@ -116,8 +124,13 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		} else if (v instanceof TableRow) {
 		TableRow tR = (TableRow) v;
 		TextView child = (TextView) tR.getChildAt(0);
-
+		
 		final String product = child.getText().toString();
+		
+		if(product.equals("You are not in a group."))
+		{
+			return;
+		}
 
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				this);
