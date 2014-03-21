@@ -219,6 +219,21 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 												ProductsActivity.this,
 												"Product will be added if all other users agree!",
 												Toast.LENGTH_LONG).show();
+										
+										try {
+											String completed = new HttpRequest()
+													.execute(
+															"http://group1.cloudapp.net:8080/ServerSide/newsuggestion/test1/0/"+ product,
+															"post").get();
+											Log.w("POST COMPLETE", completed);
+
+										} catch (InterruptedException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										} catch (ExecutionException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
 									}
 								}
 							})
