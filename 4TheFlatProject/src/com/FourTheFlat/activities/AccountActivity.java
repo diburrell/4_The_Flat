@@ -71,6 +71,13 @@ public class AccountActivity extends Activity implements View.OnClickListener
 
 		layout.removeAllViews();
 		
+		Button messages = new Button(contextActivity);
+		messages.setText("Messages");
+		messages.setId(12);
+		messages.setOnClickListener(this);;
+		layout.addView(messages);	
+		
+		
 		if(ActiveUser.getActiveUser().getGroupID() != null)
 		{
 			Button accountInfo = new Button(contextActivity);
@@ -549,6 +556,15 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				break;
 			}
 
+			case 12:
+			{
+				onPause();
+				Intent newSettingIntent = new Intent(this, MessageActivity.class);
+
+				newSettingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(newSettingIntent);
+				break;	
+			}
 			default:
 				break;
 		}

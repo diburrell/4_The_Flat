@@ -74,5 +74,9 @@
 		<activity android:name="com.FourTheFlat.activities.SettingActivity"
 			android:label="@string/app_name">
 		</activity>
-    </application>
+
+				<activity android:name="com.FourTheFlat.activities.MessageActivity"
+			android:label="@string/app_name">
+		</activity>
+		</application>
 </manifest>
