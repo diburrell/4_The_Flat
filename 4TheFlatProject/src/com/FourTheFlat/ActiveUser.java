@@ -1,6 +1,7 @@
 package com.FourTheFlat;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -37,6 +38,36 @@ public class ActiveUser {
 	public static User getActiveUser()
 	{
 		return user;
+	}
+	
+	public static boolean leaveFlat(Context context)
+	{
+		String response;
+		UUID groupID = ActiveUser.getActiveUser().getGroupID();
+		String username = ActiveUser.getActiveUser().getUsername();
+		
+		try {
+			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+groupID+"/"+username,"delete").get();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		String userJSON;
+		SharedPreferences sp = Settings.getSharedPreferences(context);
+		String hashedPassword = sp.getString("hashedPassword", "");
+		try {
+			userJSON = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword).get();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		SharedPreferences.Editor Editor = Settings.getSharedPreferencesEditor(context);
+		Editor.putString("activeUser", userJSON);
+		Editor.commit();
+		ActiveUser.getActiveUser().setGroupID(null);
+		return true;
 	}
 
 }

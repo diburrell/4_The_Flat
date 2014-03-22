@@ -203,6 +203,7 @@ public class LoginActivity extends Activity {
 					user = (User) PojoMapper.fromJson(httpResponse, User.class);
 					SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
 					editor.putString("user", httpResponse);
+					editor.putString("hashedPassword", password);
 					editor.commit();
 			}
 			catch(Exception e)
