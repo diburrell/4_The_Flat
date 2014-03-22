@@ -63,9 +63,9 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 		goBack.setOnClickListener(this);
 		buttonHolder.addView(goBack);
 
-		LinkedList[] messageGroups = new LinkedList[3];
+		LinkedList[] messageGroups = new LinkedList[4];
 
-		TextView[] groupTitle = new TextView[3];
+		TextView[] groupTitle = new TextView[4];
 
 		groupTitle[0] = new TextView(this);
 		groupTitle[0].setText("Products");
@@ -85,7 +85,14 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 		groupTitle[2].setTextColor(Color.BLACK);
 		groupTitle[2].setTextSize(24f);
 
-		for (int i = 0; i < 3; i++) {
+		
+		groupTitle[3] = new TextView(this);
+		groupTitle[3].setText("Suggestion Outcomes");
+		groupTitle[3].setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+		groupTitle[3].setTextColor(Color.BLACK);
+		groupTitle[3].setTextSize(24f);
+
+		for (int i = 0; i < 4; i++) {
 			messageGroups[i] = new LinkedList<Message>();
 
 			TableRow tr = new TableRow(this);
@@ -114,7 +121,7 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 		}
 
 		// ADD ALL ROWS
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 4; i++) {
 			for (Object tr : messageGroups[i])
 
 			{
@@ -166,6 +173,23 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 
 	}
 
+	
+	public void update() {
+		list = (TableLayout) this.findViewById(R.id.tableLayout2);
+		displayMessages(this);
+	}
+
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		list.removeAllViews();
+		buttonHolder.removeAllViews();
+		update();
+		Log.w("Resume", "Activity Resumed");
+
+	}
+	
+	
 	@Override
 	public void onClick(View v) {
 		if(v instanceof Button)
@@ -177,12 +201,59 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 
 		final String subject = child.getText().toString();
 
+		Message findMessage = null;
+		
+		Message[] newList = new Message[MessageActivity.this.messages.length - 1];
+		
+		int i = 0;
+		for(Message m : MessageActivity.this.messages)
+		{
+			if(m.getMessage().equals(subject))
+			{
+			  findMessage = m; 
+			}
+			else
+			{
+				newList[i] = m;
+				i++;
+			}
+		}
+		
+		MessageActivity.this.messages = newList;
+		
+		//MESSAGE BEING REFERED TO IN TEXT
+		final Message thisMessage = findMessage;
+		final int type = thisMessage.getType();
+		
+		//CREATE DIALOGUE BOX
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				this);
 
-			alertDialogBuilder.setTitle("Do you want to aprove "
+		if(type == 0)
+		{
+			alertDialogBuilder.setTitle("Do you want "
 					+ subject
-					+ "?");
+					+ " to  be an aproved product?");
+		}
+		else if (type == 1)
+		{
+			alertDialogBuilder.setTitle("Do you want to "
+					+ subject
+					+ " to be added to the group?");
+		}
+		else if(type == 2)
+		{
+			alertDialogBuilder.setTitle("Do you want to "
+					+ subject
+					+ " to be the group address?");
+		}
+		else if(type == 3)
+		{
+			alertDialogBuilder.setTitle(thisMessage.getMessage());
+		}
+		
+		if(type != 3)
+		{
 		// set dialog message
 		alertDialogBuilder
 				.setCancelable(false)
@@ -192,16 +263,13 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 							public void onClick(DialogInterface dialog,
 									int id) {
 								//POSITIVE INPUT!
-								for(Message m : MessageActivity.this.messages)
-								{
-									if(m.getMessage().equals(subject))
-									{
+
 										String completed = null;
 										try {
-						Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+m.getMessageID()+"/yes");
+						Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/yes");
 											completed = new HttpRequest()
 											.execute(
-											"http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+m.getMessageID()+"/yes",
+											"http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/yes",
 											"post").get();
 										}
 											catch (ExecutionException e) {
@@ -212,9 +280,6 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 												e.printStackTrace();
 											}
 						Log.w("ACCOUNT_ACTIVITY","POSITIVE SEND: "+ completed);
-										break;
-									}
-								}
 													
 							}
 						})
@@ -223,11 +288,56 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 
 							public void onClick(DialogInterface dialog,
 									int id) {
-								// if this button is clicked, just close
-								// the dialog box and do nothing
-								dialog.cancel();
+								//NEGITIVE INPUT!
+										String completed = null;
+										try {
+						Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/no");
+											completed = new HttpRequest()
+											.execute(
+											"http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/no",
+											"post").get();
+										}
+											catch (ExecutionException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										} catch (InterruptedException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											}
+						Log.w("ACCOUNT_ACTIVITY","NEGITIVE SEND: "+ completed);
 							}
 						});
+		}
+		else
+		{
+			// set dialog message
+			alertDialogBuilder
+					.setCancelable(false)
+					.setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+
+								public void onClick(DialogInterface dialog,
+										int id) {
+											String completed = null;
+											try {
+							Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID());
+												completed = new HttpRequest()
+												.execute(
+												"http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID(),
+												"delete").get();
+											}
+												catch (ExecutionException e) {
+												// TODO Auto-generated catch block
+												e.printStackTrace();
+											} catch (InterruptedException e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+							Log.w("ACCOUNT_ACTIVITY","POSITIVE SEND: "+ completed);
+														
+								}
+							});	
+		}
 
 		// create alert dialog
 		AlertDialog alertDialog = alertDialogBuilder.create();
@@ -235,7 +345,7 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 		// show it
 		alertDialog.show();
 	}
-
+		onRestart();
 	}
-
+	
 }
