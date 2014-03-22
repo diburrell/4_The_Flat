@@ -38,6 +38,8 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	EditText newPasswordEdit;
 	EditText confirmPasswordEdit;
 	EditText createGroupAddressEdit;
+	EditText userToAddEdit;
+	EditText modifyFlatAddressEdit;
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -236,12 +238,12 @@ public class AccountActivity extends Activity implements View.OnClickListener
 
 		String currentAddress = grp.getAddress();
 
-		EditText addressEdit = new EditText(contextActivity);
-		addressEdit.setTextSize(18f);
-		addressEdit.setHeight(180);
-		addressEdit.setText(currentAddress);
-		addressEdit.setGravity(Gravity.TOP | Gravity.LEFT);
-		layout.addView(addressEdit);
+		modifyFlatAddressEdit = new EditText(contextActivity);
+		modifyFlatAddressEdit.setTextSize(18f);
+		modifyFlatAddressEdit.setHeight(180);
+		modifyFlatAddressEdit.setText(currentAddress);
+		modifyFlatAddressEdit.setGravity(Gravity.TOP | Gravity.LEFT);
+		layout.addView(modifyFlatAddressEdit);
 
 		Button save = new Button(contextActivity);
 		save.setText("Request Address Change");
@@ -330,6 +332,49 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		Button save = new Button(contextActivity);
 		save.setText("Save");
 		save.setId(7);
+		save.setOnClickListener(this);
+
+		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+		params.setMargins(0, 40, 0, 30);
+		save.setLayoutParams(params);
+		save.setTextColor(Color.BLACK);
+		layout.addView(save);
+
+		Button cancel = new Button(contextActivity);
+		cancel.setText("Cancel");
+		cancel.setId(4);
+		cancel.setOnClickListener(this);
+		layout.addView(cancel);
+	}
+	
+	public void loadAddUserToFlatLayout(Activity contextActivity)
+	{
+		TextView header = new TextView(contextActivity);
+		header.setText("Request User to Add");
+		header.setGravity(Gravity.CENTER);
+		header.setTextSize(20f);
+		header.setTextColor(Color.BLACK);
+		header.setPadding(0, 30, 0, 30);
+		layout.addView(header);
+
+		View ruler = new View(contextActivity); 
+		ruler.setBackgroundColor(Color.WHITE);
+		layout.addView(ruler, LayoutParams.FILL_PARENT, 5);
+
+		TextView userToAdd = new TextView(contextActivity);
+		userToAdd.setText("User to add:");
+		userToAdd.setTextSize(18f);
+		userToAdd.setTextColor(Color.BLACK);
+		userToAdd.setPadding(0, 50, 0, 0);
+		layout.addView(userToAdd);
+
+		userToAddEdit = new EditText(contextActivity);
+		userToAddEdit.setTextSize(18f);
+		layout.addView(userToAddEdit);
+
+		Button save = new Button(contextActivity);
+		save.setText("Send Request");
+		save.setId(11);
 		save.setOnClickListener(this);
 
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
@@ -449,9 +494,9 @@ public class AccountActivity extends Activity implements View.OnClickListener
 
 			case 5:
 				//save new address
+				
+				requestChangeAddress(modifyFlatAddressEdit.getText().toString());
 				layout.removeAllViews();
-				Button b = (Button)view;
-				requestChangeAddress(b.getText().toString());
 				createMainMenu(this);
 				break;			
 
@@ -473,33 +518,61 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				
 			case 8:
 			{
-				//Add user to flat
+				//Load add user to flat layout
 				layout.removeAllViews();
-				loadAddUserToFlatLayout();
+				loadAddUserToFlatLayout(this);
 				break;
 			}
 			case 9:
 			{
-				//Create group
+				//Create group layout
 				layout.removeAllViews();
 				createGroupLayout(this);
 				break;
 			}
 			case 10:
 			{
+				//Click create group
 				ActiveUser.createGroup(this,createGroupAddressEdit.getText().toString());
 				layout.removeAllViews();
 				createMainMenu(this);
+				break;
+			}
+			case 11:
+			{
+				if(!requestAddUser(userToAddEdit.getText().toString()))
+				{
+					Toast.makeText(this, "Unable to request this user to add", Toast.LENGTH_LONG).show();
+				}
+				layout.removeAllViews();
+				createMainMenu(this);
+				break;
 			}
 
 			default:
 				break;
 		}
 	}
-	
-	public void loadAddUserToFlatLayout()
+
+	public boolean requestAddUser(String newUser)
 	{
-		
+		String response;
+		try {
+			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/1/"+newUser,"post").get();
+			if(response.equals("User does not exist."))
+			{
+				Toast.makeText(this, "User does not exist.", Toast.LENGTH_LONG).show();
+				return false;
+			}
+			if(response.equals("User is already in a group."))
+			{
+				
+			}
+		} catch (Exception e)
+		{
+			return false;
+		}
+		return true;
 	}
 	
 	public boolean requestChangeAddress(String newAddress)
