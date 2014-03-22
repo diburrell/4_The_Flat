@@ -37,6 +37,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	EditText currentPasswordEdit;
 	EditText newPasswordEdit;
 	EditText confirmPasswordEdit;
+	EditText createGroupAddressEdit;
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -346,19 +347,6 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	
 	public void createGroupLayout(Activity contextActivity)
 	{
-
-		String response;
-		Group grp;
-		try {
-			grp = (Group)PojoMapper.fromJson(new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername()).get(), Group.class);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			layout.removeAllViews();
-			createMainMenu(this);
-			Toast.makeText(this, "Unable to get details from server.", Toast.LENGTH_LONG).show();
-			return;
-		}
 		
 		TextView header = new TextView(contextActivity);
 		header.setText("Setup Flat Details");
@@ -379,14 +367,18 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		address.setPadding(0, 50, 0, 0);
 		layout.addView(address);
 
-		String currentAddress = grp.getAddress();
-
-		EditText addressEdit = new EditText(contextActivity);
-		addressEdit.setTextSize(18f);
-		addressEdit.setHeight(180);
-		addressEdit.setText(currentAddress);
-		addressEdit.setGravity(Gravity.TOP | Gravity.LEFT);
-		layout.addView(addressEdit);
+		createGroupAddressEdit = new EditText(contextActivity);
+		createGroupAddressEdit.setTextSize(18f);
+		createGroupAddressEdit.setHeight(180);
+		createGroupAddressEdit.setText("");
+		createGroupAddressEdit.setGravity(Gravity.TOP | Gravity.LEFT);
+		layout.addView(createGroupAddressEdit);
+		
+		Button createGroup = new Button(contextActivity);
+		createGroup.setText("Create Group");
+		createGroup.setId(10);
+		createGroup.setOnClickListener(this);
+		layout.addView(createGroup);
 
 		Button cancel = new Button(contextActivity);
 		cancel.setText("Cancel");
@@ -466,7 +458,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			case 6:
 				//leave the flat
 				layout.removeAllViews();
-				ActiveUser.leaveFlat(this);
+				ActiveUser.leaveGroup(this);
 				createMainMenu(this);
 				break;
 
@@ -482,8 +474,22 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			case 8:
 			{
 				//Add user to flat
+				layout.removeAllViews();
 				loadAddUserToFlatLayout();
 				break;
+			}
+			case 9:
+			{
+				//Create group
+				layout.removeAllViews();
+				createGroupLayout(this);
+				break;
+			}
+			case 10:
+			{
+				ActiveUser.createGroup(this,createGroupAddressEdit.getText().toString());
+				layout.removeAllViews();
+				createMainMenu(this);
 			}
 
 			default:
@@ -539,6 +545,9 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			else if(responseCode.equals("Password changed."))
 			{
 				Toast.makeText(getApplicationContext(), "Password changed successfully.", Toast.LENGTH_LONG).show();
+				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(this);
+				editor.putString("hashedPassword", newPassword);
+				editor.commit();
 				return true;
 			}
 			else
