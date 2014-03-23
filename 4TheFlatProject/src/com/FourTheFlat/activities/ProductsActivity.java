@@ -29,7 +29,6 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 	TableLayout list;
 
 	Button moreProducts;
-	boolean allProds = false;
 
 	String[] allowedProducts;
 
@@ -62,7 +61,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 			buttonHolder.addView(moreProducts);
 		}
 
-		if (!allProds) {
+		if (moreProducts.getText().equals("See more products you can add!")) {
 
 			TableRow[] rowProduct = new TableRow[allowedProducts.length];
 			TextView[] productName = new TextView[allowedProducts.length];
@@ -172,11 +171,9 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 	public void onClick(View v) {
 		// if a button is passed in
 		if (v instanceof Button) {
-			if (!allProds) {
-				allProds = true;
+			if (moreProducts.getText().equals("See more products you can add!")) {
 				moreProducts.setText("Go back to your allowed products");
 			} else {
-				allProds = false;
 				allowedProducts = getAllowedProducts();
 				moreProducts.setText("See more products you can add!");
 			}
@@ -193,7 +190,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 					this);
 
-			if (!allProds) {
+			if (moreProducts.getText().equals("See more products you can add!")) {
 				// set title
 				alertDialogBuilder.setTitle("Do you want to add "
 						+ child.getText().toString()
@@ -214,7 +211,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 										int id) {
 									// /POSITIVE INPUT!
 
-									if (!allProds) {
+									if (moreProducts.getText().equals("See more products you can add!")) {
 										Toast.makeText(ProductsActivity.this,
 												"Item added to shopping list.",
 												Toast.LENGTH_LONG).show();
