@@ -42,13 +42,13 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 		{
 			moreProducts = new Button(this);
 			moreProducts.setText("See more products you can add!");
+			allowedProducts = getAllowedProducts();
+			productTable(this);
 		}
-
-
-
-		allowedProducts = getAllowedProducts();
-
-		productTable(this);
+		else
+		{
+			emptyDisplay(this);
+		}
 	}
 
 	public void productTable(Activity contextActivity) {
@@ -125,17 +125,27 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 				rowProduct[i].setOnClickListener(this);
 
 				list.addView(rowProduct[i]);
-				// }
 			}
 		}
 
 	}
+	
+	private void emptyDisplay(Activity contextActivity)
+	{
+		buttonHolder = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout1);
+		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+
+		TextView error = new TextView(contextActivity);
+		error.setText("You are not in a group");
+		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+		error.setTextColor(Color.BLACK);
+		error.setTextSize(25f);
+		error.setGravity(Gravity.CENTER);
+		list.addView(error);
+	}
 
 	private String[] getAllowedProducts() {
-		if(ActiveUser.getActiveUser().getGroupID() == null)
-		{
-			return new String[] { "You are not in a group."};
-		}
 		try {
 			String allowed = new HttpRequest()
 					.execute(
@@ -154,7 +164,14 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 
 	public void update() {
 		list = (TableLayout) this.findViewById(R.id.tableLayout2);
-		productTable(this);
+		if(ActiveUser.getActiveUser().getGroupID() != null)
+		{
+			productTable(this);
+		}
+		else
+		{
+			emptyDisplay(this);
+		}
 	}
 
 	@Override
