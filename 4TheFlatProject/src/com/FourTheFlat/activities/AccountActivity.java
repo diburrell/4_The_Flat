@@ -59,7 +59,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	public void onResume()
 	{
 	    super.onResume();  
-
+	    createMainMenu(this);
 	}
 
 	/*
@@ -70,14 +70,14 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		layout = (TableLayout)contextActivity.findViewById(R.id.layout);
 
 		layout.removeAllViews();
-
+		
 		Button messages = new Button(contextActivity);
 		messages.setText("Messages");
 		messages.setId(12);
 		messages.setOnClickListener(this);;
 		layout.addView(messages);	
-
-
+		
+		
 		if(ActiveUser.getActiveUser().getGroupID() != null)
 		{
 			Button accountInfo = new Button(contextActivity);
@@ -89,8 +89,8 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			accountInfo.setLayoutParams(params0);
 			layout.addView(accountInfo);	
 		}
-
-
+		
+		
 		if(ActiveUser.getActiveUser().getGroupID() != null)
 		{
 			Button modifyFlatDetails = new Button(contextActivity);
@@ -210,7 +210,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 
 	private void createModifyFlatDetails(Activity contextActivity)
 	{
-
+		
 		String response;
 		Group grp;
 		try {
@@ -223,7 +223,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			Toast.makeText(this, "Unable to get details from server.", Toast.LENGTH_LONG).show();
 			return;
 		}
-
+		
 		TextView header = new TextView(contextActivity);
 		header.setText("Modify Flat Details");
 		header.setGravity(Gravity.CENTER);
@@ -261,7 +261,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		save.setLayoutParams(params5);
 		save.setTextColor(Color.BLACK);
 		layout.addView(save);
-
+		
 		Button addUser = new Button(contextActivity);
 		addUser.setText("Add User to Flat");
 		addUser.setId(8);
@@ -353,7 +353,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		cancel.setOnClickListener(this);
 		layout.addView(cancel);
 	}
-
+	
 	public void loadAddUserToFlatLayout(Activity contextActivity)
 	{
 		TextView header = new TextView(contextActivity);
@@ -396,10 +396,10 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		cancel.setOnClickListener(this);
 		layout.addView(cancel);
 	}
-
+	
 	public void createGroupLayout(Activity contextActivity)
 	{
-
+		
 		TextView header = new TextView(contextActivity);
 		header.setText("Setup Flat Details");
 		header.setGravity(Gravity.CENTER);
@@ -425,7 +425,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		createGroupAddressEdit.setText("");
 		createGroupAddressEdit.setGravity(Gravity.TOP | Gravity.LEFT);
 		layout.addView(createGroupAddressEdit);
-
+		
 		Button createGroup = new Button(contextActivity);
 		createGroup.setText("Create Group");
 		createGroup.setId(10);
@@ -481,6 +481,8 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			case 3:
 				//log out of the app
 				layout.removeAllViews();
+				Toast toast3 = Toast.makeText(getApplicationContext(), "TO DO: LOGOUT", Toast.LENGTH_SHORT);
+				toast3.show();
 				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
                 editor.putBoolean("hasLoggedIn", false);
                 editor.putString("user", "");
@@ -499,7 +501,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 
 			case 5:
 				//save new address
-
+				
 				requestChangeAddress(modifyFlatAddressEdit.getText().toString());
 				layout.removeAllViews();
 				createMainMenu(this);
@@ -520,7 +522,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 					createMainMenu(this);
 				}
 				break;
-
+				
 			case 8:
 			{
 				//Load add user to flat layout
@@ -580,7 +582,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			}
 			if(response.equals("User is already in a group."))
 			{
-
+				
 			}
 		} catch (Exception e)
 		{
@@ -588,7 +590,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		}
 		return true;
 	}
-
+	
 	public boolean requestChangeAddress(String newAddress)
 	{
 		String response;
@@ -600,7 +602,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		}
 		return true;
 	}
-
+	
 
 
 	public boolean changePassword()
