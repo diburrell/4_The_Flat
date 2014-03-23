@@ -59,7 +59,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	public void onResume()
 	{
 	    super.onResume();  
-	    createMainMenu(this);
+
 	}
 
 	/*
