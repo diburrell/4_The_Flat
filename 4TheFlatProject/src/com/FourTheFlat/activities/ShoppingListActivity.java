@@ -4,14 +4,22 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import com.FourTheFlat.*;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.maps.model.LatLng;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,8 +31,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ShoppingListActivity extends Activity implements View.OnClickListener 
-{
+public class ShoppingListActivity extends Activity implements View.OnClickListener
+{	
 	TableLayout buttonLayout;
 	TableLayout listLayout;
 
@@ -37,9 +45,13 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		setContentView(R.layout.shoppinglist);
 		
 		if(ActiveUser.getActiveUser().getGroupID() != null)
+		{
 			createDisplay(this);
+		}
 		else
-			emptyDisplay(this);			
+		{
+			emptyDisplay(this);		
+		}
 	}
 	
 	@Override
@@ -97,7 +109,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	{
 		try 
 		{
-			String list = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/shoppinglist/"+ActiveUser.getActiveUser().getGroupID()).get();
+			String list = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/shoppinglist/" + ActiveUser.getActiveUser().getGroupID()).get();
 
 			String[] shoppingList = list.split("\n");
 			Arrays.sort(shoppingList);
@@ -105,7 +117,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		} 
 		catch (Exception e) 
 		{
-			Log.w("ALL_PROD", "FAILED TO GET shopping list!");
+			Log.w("ALL_PROD", "FAILED TO GET shopping list");
 			return null;
 		}
 	}
@@ -197,9 +209,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	    @Override
 	    protected Boolean doInBackground(String... args) 
 	    {
-	    	//check location against tescos
-	    	
-	    	return true;
+	    	return nearTesco();
 	    }
 	
 	    @Override
@@ -224,4 +234,30 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
     {
         new ProcessLocation().execute();
     }   
+	
+	public boolean nearTesco()
+	{			
+	    double earthRadius = 3958.75;
+	    int meterConversion = 1609;
+	    
+	    LatLng current = new LatLng(56.459782,-2.979114); //point near hawkhill tesco
+	    
+	    for (int i=0; i<Main.STORES; i++)
+	    {
+		    double dLat = Math.toRadians(current.latitude - Main.locations[0][i]);
+		    double dLng = Math.toRadians(current.longitude - Main.locations[1][i]);
+		    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+		               Math.cos(Math.toRadians(Main.locations[0][i])) * Math.cos(Math.toRadians(current.latitude)) *
+		               Math.sin(dLng/2) * Math.sin(dLng/2);
+		    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		    double dist = earthRadius * c;
+	
+		    Log.w("DISTANCE", i + ": " + dist * meterConversion + "m");
+		    
+		    if ((dist * meterConversion) <= 250) //if within 250m of a tesco
+		    	return true;
+	    }
+		
+		return false;
+	}
 }
