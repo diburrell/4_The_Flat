@@ -68,29 +68,33 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 		TextView[] groupTitle = new TextView[4];
 
 		groupTitle[0] = new TextView(this);
-		groupTitle[0].setText("Products");
+		groupTitle[0].setText("Product Requests");
+		groupTitle[0].setGravity(Gravity.CENTER);
 		groupTitle[0].setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		groupTitle[0].setTextColor(Color.BLACK);
-		groupTitle[0].setTextSize(24f);
+		groupTitle[0].setTextSize(30f);
 
 		groupTitle[1] = new TextView(this);
-		groupTitle[1].setText("Users");
+		groupTitle[1].setText("New User Requests");
+		groupTitle[1].setGravity(Gravity.CENTER);
 		groupTitle[1].setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		groupTitle[1].setTextColor(Color.BLACK);
-		groupTitle[1].setTextSize(24f);
+		groupTitle[1].setTextSize(30f);
 
 		groupTitle[2] = new TextView(this);
-		groupTitle[2].setText("Address");
+		groupTitle[2].setText("Address Change Requests");
+		groupTitle[2].setGravity(Gravity.CENTER);
 		groupTitle[2].setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		groupTitle[2].setTextColor(Color.BLACK);
-		groupTitle[2].setTextSize(24f);
+		groupTitle[2].setTextSize(30f);
 
 		
 		groupTitle[3] = new TextView(this);
 		groupTitle[3].setText("Suggestion Outcomes");
+		groupTitle[3].setGravity(Gravity.CENTER);
 		groupTitle[3].setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		groupTitle[3].setTextColor(Color.BLACK);
-		groupTitle[3].setTextSize(24f);
+		groupTitle[3].setTextSize(30f);
 
 		for (int i = 0; i < 4; i++) {
 			messageGroups[i] = new LinkedList<Message>();
@@ -120,15 +124,30 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 			messageGroups[messages[i].getType()].add(tr);
 		}
 
+		boolean newMessages = false;
+		
 		// ADD ALL ROWS
 		for (int i = 0; i < 4; i++) {
-			for (Object tr : messageGroups[i])
-
+			if (messageGroups[i].size() > 1)
 			{
-				list.addView((View) tr);
-
+				for (Object tr : messageGroups[i])
+				{
+					list.addView((View) tr);
+					newMessages = true;
+				}
 			}
 
+		}
+		if(!newMessages)
+		{
+			TextView noMessages = new TextView(this);
+			noMessages.setText("No new messages!");
+			noMessages.setGravity(Gravity.CENTER);
+			noMessages.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+			noMessages.setTextColor(Color.BLACK);
+			noMessages.setTextSize(24f);
+			list.addView((View)noMessages);
+			
 		}
 
 	}
@@ -233,17 +252,17 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 		{
 			alertDialogBuilder.setTitle("Do you want "
 					+ subject
-					+ " to  be an aproved product?");
+					+ " to be an approved product?");
 		}
 		else if (type == 1)
 		{
-			alertDialogBuilder.setTitle("Do you want to "
+			alertDialogBuilder.setTitle("Do you want "
 					+ subject
 					+ " to be added to the group?");
 		}
 		else if(type == 2)
 		{
-			alertDialogBuilder.setTitle("Do you want to "
+			alertDialogBuilder.setTitle("Do you want "
 					+ subject
 					+ " to be the group address?");
 		}
