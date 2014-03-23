@@ -37,18 +37,18 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.shoppinglist);
-		
+
 		if(ActiveUser.getActiveUser().getGroupID() != null)
 		{
 			moreProducts = new Button(this);
 			moreProducts.setText("See more products you can add!");
-			allowedProducts = getAllowedProducts();
-			productTable(this);
 		}
-		else
-		{
-			emptyDisplay(this);
-		}
+
+
+
+		allowedProducts = getAllowedProducts();
+
+		productTable(this);
 	}
 
 	public void productTable(Activity contextActivity) {
@@ -102,6 +102,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 			Arrays.sort(allProducts);
 			TableRow[] rowProduct = new TableRow[allProducts.length];
 			TextView[] productName = new TextView[allProducts.length];
+
 			outerloop:
 			for (int i = 0; i < allProducts.length; i++) {
 				for(int j = 0; j < allowedProducts.length; j++)
@@ -125,27 +126,17 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 				rowProduct[i].setOnClickListener(this);
 
 				list.addView(rowProduct[i]);
+				// }
 			}
 		}
 
 	}
-	
-	private void emptyDisplay(Activity contextActivity)
-	{
-		buttonHolder = (TableLayout) contextActivity
-				.findViewById(R.id.tableLayout1);
-		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
-
-		TextView error = new TextView(contextActivity);
-		error.setText("You are not in a group");
-		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-		error.setTextColor(Color.BLACK);
-		error.setTextSize(25f);
-		error.setGravity(Gravity.CENTER);
-		list.addView(error);
-	}
 
 	private String[] getAllowedProducts() {
+		if(ActiveUser.getActiveUser().getGroupID() == null)
+		{
+			return new String[] { "You are not in a group."};
+		}
 		try {
 			String allowed = new HttpRequest()
 					.execute(
@@ -164,14 +155,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 
 	public void update() {
 		list = (TableLayout) this.findViewById(R.id.tableLayout2);
-		if(ActiveUser.getActiveUser().getGroupID() != null)
-		{
-			productTable(this);
-		}
-		else
-		{
-			emptyDisplay(this);
-		}
+		productTable(this);
 	}
 
 	@Override
@@ -193,6 +177,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 				moreProducts.setText("Go back to your allowed products");
 			} else {
 				allProds = false;
+				allowedProducts = getAllowedProducts();
 				moreProducts.setText("See more products you can add!");
 			}
 
@@ -212,11 +197,11 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 				// set title
 				alertDialogBuilder.setTitle("Do you want to add "
 						+ child.getText().toString()
-						+ " product to the shopping list?");
+						+ " to the shopping list?");
 			} else {
 				alertDialogBuilder.setTitle("Do you want to suggest "
 						+ child.getText().toString()
-						+ " be added to allowed products?");
+						+ " to be added to allowed products?");
 			}
 
 			// set dialog message
@@ -231,7 +216,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 
 									if (!allProds) {
 										Toast.makeText(ProductsActivity.this,
-												"ITEM ADDED TO SHOPPING LIST!",
+												"Item added to shopping list.",
 												Toast.LENGTH_LONG).show();
 
 										try {
@@ -254,11 +239,11 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 												ProductsActivity.this,
 												"Product will be added if all other users agree!",
 												Toast.LENGTH_LONG).show();
-										
+
 										try {
 											String completed = new HttpRequest()
 													.execute(
-															"http://group1.cloudapp.net:8080/ServerSide/newsuggestion/test1/0/"+ product,
+															"http://group1.cloudapp.net:8080/ServerSide/newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/0/"+ product,
 															"post").get();
 											Log.w("POST COMPLETE", completed);
 
