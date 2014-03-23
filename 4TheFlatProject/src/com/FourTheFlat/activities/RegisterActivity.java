@@ -192,6 +192,7 @@ public class RegisterActivity extends Activity {
 						editor.putString("user", httpResponse);
 						ActiveUser.initialise(getApplicationContext());
 						editor.putBoolean("hasLoggedIn", true);
+						editor.putString("hashedPassword", Cryptography.computeSHAHash(inputPassword.getText().toString()));
 						editor.commit();
 						try{
 			            	json.put(KEY_SUCCESS, "1");
