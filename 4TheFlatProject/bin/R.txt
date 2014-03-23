@@ -108,7 +108,8 @@ int layout products 0x7f030006
 int layout register 0x7f030007
 int layout registered 0x7f030008
 int layout settings 0x7f030009
-int layout shoppinglist 0x7f03000a
+int layout shop 0x7f03000a
+int layout shoppinglist 0x7f03000b
 int string app_name 0x7f06001a
 int string auth_client_needs_enabling_title 0x7f060015
 int string auth_client_needs_installation_title 0x7f060016

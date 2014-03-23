@@ -1,29 +1,30 @@
 package com.FourTheFlat.activities;
 
-import java.util.concurrent.ExecutionException;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-
-import com.FourTheFlat.ActiveUser;
-import com.FourTheFlat.Cryptography;
-import com.FourTheFlat.HttpRequest;
-import com.FourTheFlat.PojoMapper;
 import com.FourTheFlat.R;
-import com.FourTheFlat.Settings;
-import com.FourTheFlat.stores.User;
 
-public class ShopActivity 
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TableLayout;
+
+public class ShopActivity extends Activity
 {
-	public void ShopActivity() { }	
+	TableLayout layout;
 	
+	@Override
+	public void onCreate(Bundle savedInstanceState) 
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.shop);
+		createDisplay(this);
+	}
 	
+	private void createDisplay(Activity contextActivity)
+	{
+		layout = (TableLayout) contextActivity.findViewById(R.id.layout);
+		
+		Button msg = new Button(contextActivity);
+		msg.setText("into shop activity");
+		layout.addView(msg);
+	}
 }

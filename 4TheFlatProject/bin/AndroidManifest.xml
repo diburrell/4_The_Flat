@@ -41,6 +41,10 @@
 			android:label="@string/app_name">
 		</activity>
 		
+		<activity android:name="com.FourTheFlat.activities.ShopActivity"
+			android:label="@string/app_name">
+		</activity>
+		
 		<activity android:name="com.FourTheFlat.activities.PasswordChangeActivity"
 			android:label="@string/app_name">
 		</activity>
@@ -78,5 +82,5 @@
 				<activity android:name="com.FourTheFlat.activities.MessageActivity"
 			android:label="@string/app_name">
 		</activity>
-		</application>
+	</application>
 </manifest>

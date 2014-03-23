@@ -25,51 +25,58 @@ import android.widget.Toast;
 
 public class ShoppingListActivity extends Activity implements View.OnClickListener 
 {
-
-	TableLayout buttonHolder;
-	TableLayout list;
-
-	Button startShop;
+	TableLayout buttonLayout;
+	TableLayout listLayout;
 
 	String[] shoppingList;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
-		Alarm.startRepeatingTimer(getApplicationContext());
-
 		setContentView(R.layout.shoppinglist);
+		
 		if(ActiveUser.getActiveUser().getGroupID() != null)
-		{
-			startShop = new Button(this);
-			startShop.setText("Find a Tesco");
-		}
-		shoppingList = getShoppingList();
-
-		listTable(this);
+			createDisplay(this);
+		else
+			emptyDisplay(this);			
+	}
+	
+	@Override
+	public void onPause() 
+	{
+		super.onPause();
+		buttonLayout.removeAllViews();
+		listLayout.removeAllViews();		
 	}
 
-	public void listTable(Activity contextActivity) {
+	@Override
+	public void onResume() 
+	{
+		super.onResume();
+		createDisplay(this);
+	}
 
-		buttonHolder = (TableLayout) contextActivity
-				.findViewById(R.id.tableLayout1);
-		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+	public void createDisplay(Activity contextActivity) 
+	{
+		shoppingList = getShoppingList();
+		
+		buttonLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
+		buttonLayout.removeAllViews();
+		
+		listLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+		listLayout.removeAllViews();
 
-
-		onPause();
-		if(ActiveUser.getActiveUser().getGroupID() != null)
-		{
-			startShop.setOnClickListener(this);
-			buttonHolder.addView(startShop);
-		}
-
+		Button shop = new Button(this);
+		shop.setText("Go Shop");
+		shop.setOnClickListener(this);
+		buttonLayout.addView(shop);
 
 		TableRow[] rowProduct = new TableRow[shoppingList.length];
 		TextView[] productName = new TextView[shoppingList.length];
 
-		// FILL THE LIST WITH PRODUCTS ON THE LIST!!!!!!
-		for (int i = 0; i < shoppingList.length; i++) {
-
+		for (int i = 0; i < shoppingList.length; i++) 
+		{
 			rowProduct[i] = new TableRow(contextActivity);
 			productName[i] = new TextView(contextActivity);
 
@@ -78,151 +85,102 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 			productName[i].setTextColor(Color.BLACK);
 			productName[i].setTextSize(25f);
 			productName[i].setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+			productName[i].setOnClickListener(this);
 
 			rowProduct[i].addView(productName[i]);
-			rowProduct[i].setOnClickListener(this);
 
-			list.addView(rowProduct[i]);
-
+			listLayout.addView(rowProduct[i]);
 		}
 	}
-
-	private String[] getShoppingList() {
-		if(ActiveUser.getActiveUser().getGroupID() == null)
+	
+	private String[] getShoppingList() 
+	{
+		try 
 		{
-			return new String[] { "You are not in a group."};
-		}
-		try {
-			Log.w("GROUP_ID", ActiveUser.getActiveUser().getGroupID().toString());
-			String list = new HttpRequest()
-					.execute("http://group1.cloudapp.net:8080/ServerSide/shoppinglist/"+ActiveUser.getActiveUser().getGroupID())
-					.get();
+			String list = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/shoppinglist/"+ActiveUser.getActiveUser().getGroupID()).get();
 
 			String[] shoppingList = list.split("\n");
 			Arrays.sort(shoppingList);
 			return shoppingList;
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			Log.w("ALL_PROD", "FAILED TO GET shopping list!");
 			return null;
 		}
 	}
-
-
-	public void update()
+	
+	private void emptyDisplay(Activity contextActivity)
 	{
-		list = (TableLayout) this.findViewById(R.id.tableLayout2);
-		shoppingList = getShoppingList();
-		listTable(this);
+		buttonLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
+		buttonLayout.removeAllViews();
+
+		TextView error = new TextView(contextActivity);
+		error.setText("You are not the member of any group");
+		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+		error.setTextColor(Color.BLACK);
+		error.setTextSize(25f);
+		error.setGravity(Gravity.CENTER);
+		buttonLayout.addView(error);
 	}
 
 	@Override
-	public void onClick(View v) 
+	public void onClick(View view) 
 	{	
-		if(v instanceof Button)
+		if(view instanceof Button)
 		{
-		Intent mapIntent = new Intent(this, MapActivity.class);
-		mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(mapIntent);
-		} else if (v instanceof TableRow) {
-		TableRow tR = (TableRow) v;
-		TextView child = (TextView) tR.getChildAt(0);
-		
-		final String product = child.getText().toString();
-		
-		if(product.equals("You are not in a group."))
+			LocationAsync(view);
+		} 
+		else if (view instanceof TextView) 
 		{
-			return;
+			final String product = ((TextView)view).getText().toString();
+
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+			alertDialogBuilder.setTitle("Do you want to remove " + product + " from the shopping list?");
+			
+			alertDialogBuilder.setCancelable(false)
+				.setPositiveButton("Yes", new DialogInterface.OnClickListener() 
+				{
+					public void onClick(DialogInterface dialog, int id) 
+					{
+						try 
+						{
+							String completed = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/shoppinglist/"+ActiveUser.getActiveUser().getGroupID()+"/" + product, "delete").get();
+							
+							Log.w("DELETE COMPLETE", completed);
+
+							Toast.makeText(ShoppingListActivity.this, product + "removed from shopping list", Toast.LENGTH_LONG).show();
+
+							onRestart();
+						} 
+						catch (InterruptedException e) 
+						{
+							e.printStackTrace();
+						}
+						catch (ExecutionException e) 
+						{
+							e.printStackTrace();
+						}								
+					}
+				})
+				.setNegativeButton("No", new DialogInterface.OnClickListener() 
+				{
+					public void onClick(DialogInterface dialog,	int id) 
+					{
+						dialog.cancel();
+					}
+				});
+
+			AlertDialog alertDialog = alertDialogBuilder.create();
+
+			alertDialog.show();
 		}
-
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-				this);
-
-
-			alertDialogBuilder.setTitle("Do you want to remove "
-					+ child.getText().toString()
-					+ " from the shopping list?");
-		// set dialog message
-		alertDialogBuilder
-				.setCancelable(false)
-				.setPositiveButton("Yes",
-						new DialogInterface.OnClickListener() {
-
-							public void onClick(DialogInterface dialog,
-									int id) {
-								// /POSITIVE INPUT!
-
-								try {
-									String completed = new HttpRequest()
-											.execute(
-													"http://group1.cloudapp.net:8080/ServerSide/shoppinglist/"+ActiveUser.getActiveUser().getGroupID()+"/"+ product,
-													"delete").get();
-									Log.w("DELETE COMPLETE", completed);
-
-									Toast.makeText(ShoppingListActivity.this,
-											"ITEM REMOVED FROM SHOPPING LIST!",
-											Toast.LENGTH_LONG).show();
-									onRestart();
-
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								} catch (ExecutionException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}								
-							}
-						})
-				.setNegativeButton("No",
-						new DialogInterface.OnClickListener() {
-
-							public void onClick(DialogInterface dialog,
-									int id) {
-								// if this button is clicked, just close
-								// the dialog box and do nothing
-								dialog.cancel();
-							}
-						});
-
-		// create alert dialog
-		AlertDialog alertDialog = alertDialogBuilder.create();
-
-		// show it
-		alertDialog.show();
-	}
-	}
-
-
-	@Override
-	protected void onRestart() {
-		super.onRestart();
-		list.removeAllViews();
-		buttonHolder.removeAllViews();
-		update();
-		Log.w("Resume", "Activity Resumed");
-	}
-
-	@Override
-	public void onPause() 
-	{
-		super.onPause(); //always call the superclass method first		
-		list.removeAllViews();
-		buttonHolder.removeAllViews();		
-		Log.w("Pause", "Activity Paused");
-	}
-
-	@Override
-	public void onResume() 
-	{
-		super.onResume(); //always call the superclass method first
-		update();
-		Log.w("Resume", "Activity Resumed");
-	}
+	}	
 	
 	private class ProcessLocation extends AsyncTask<String, String, Boolean> 
 	{
 	    private ProgressDialog progress;
-	
-	    String email, password;
 	
 	    @Override
 	    protected void onPreExecute() 
@@ -241,16 +199,29 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	    {
 	    	//check location against tescos
 	    	
-	    	return false;
+	    	return true;
 	    }
 	
 	    @Override
 	    protected void onPostExecute(Boolean nearTesco) 
 	    {
-	        //if near tesco
-	    		//ask if they want to start shopping
-	    	//if not
-	    		//show map
-	    }
+	        if (nearTesco)
+	        {
+	        	Intent shopIntent = new Intent(getApplicationContext(), ShopActivity.class);
+	        	shopIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    		startActivity(shopIntent);
+	        }
+	        else
+	        {
+	        	Intent mapIntent = new Intent(getApplicationContext(), MapActivity.class);
+	    		mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    		startActivity(mapIntent);
+	        }
+	    } 
 	}
+	
+	public void LocationAsync(View view)
+    {
+        new ProcessLocation().execute();
+    }   
 }
