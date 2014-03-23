@@ -7,10 +7,12 @@ import com.FourTheFlat.*;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -214,5 +216,41 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		super.onResume(); //always call the superclass method first
 		update();
 		Log.w("Resume", "Activity Resumed");
+	}
+	
+	private class ProcessLocation extends AsyncTask<String, String, Boolean> 
+	{
+	    private ProgressDialog progress;
+	
+	    String email, password;
+	
+	    @Override
+	    protected void onPreExecute() 
+	    {
+	        super.onPreExecute();
+	        progress = new ProgressDialog(ShoppingListActivity.this);
+	        progress.setTitle("Contacting GPS");
+	        progress.setMessage("Checking location...");
+	        progress.setIndeterminate(false);
+	        progress.setCancelable(true);
+	        progress.show();
+	    }
+	
+	    @Override
+	    protected Boolean doInBackground(String... args) 
+	    {
+	    	//check location against tescos
+	    	
+	    	return false;
+	    }
+	
+	    @Override
+	    protected void onPostExecute(Boolean nearTesco) 
+	    {
+	        //if near tesco
+	    		//ask if they want to start shopping
+	    	//if not
+	    		//show map
+	    }
 	}
 }
