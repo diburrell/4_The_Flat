@@ -50,6 +50,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		}
 		else
 		{
+			Log.w("hello","hello");
 			emptyDisplay(this);		
 		}
 	}
@@ -59,14 +60,20 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	{
 		super.onPause();
 		buttonLayout.removeAllViews();
-		listLayout.removeAllViews();		
+		if(ActiveUser.getActiveUser().getGroupID() != null)
+		{
+			listLayout.removeAllViews();	
+		}
 	}
 
 	@Override
 	public void onResume() 
 	{
 		super.onResume();
-		createDisplay(this);
+		if(ActiveUser.getActiveUser().getGroupID() != null)
+		{
+			createDisplay(this);
+		}
 	}
 
 	public void createDisplay(Activity contextActivity) 
@@ -128,7 +135,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		buttonLayout.removeAllViews();
 
 		TextView error = new TextView(contextActivity);
-		error.setText("You are not the member of any group");
+		error.setText("You are not a member of any group");
 		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		error.setTextColor(Color.BLACK);
 		error.setTextSize(25f);
@@ -209,7 +216,8 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	    @Override
 	    protected Boolean doInBackground(String... args) 
 	    {
-	    	return nearTesco();
+	    	return false;
+	    	//return nearTesco();
 	    }
 	
 	    @Override
