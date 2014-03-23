@@ -74,6 +74,10 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		{
 			createDisplay(this);
 		}
+		else
+		{
+			emptyDisplay(this);
+		}
 	}
 
 	public void createDisplay(Activity contextActivity) 
@@ -135,7 +139,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		buttonLayout.removeAllViews();
 
 		TextView error = new TextView(contextActivity);
-		error.setText("You are not a member of any group");
+		error.setText("You are not in a group");
 		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		error.setTextColor(Color.BLACK);
 		error.setTextSize(25f);
