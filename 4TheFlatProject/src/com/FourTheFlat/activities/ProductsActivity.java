@@ -169,6 +169,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 				moreProducts.setText("Go back to your allowed products");
 			} else {
 				allProds = false;
+				allowedProducts = getAllowedProducts();
 				moreProducts.setText("See more products you can add!");
 			}
 
@@ -188,11 +189,11 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 				// set title
 				alertDialogBuilder.setTitle("Do you want to add "
 						+ child.getText().toString()
-						+ " product to the shopping list?");
+						+ " to the shopping list?");
 			} else {
 				alertDialogBuilder.setTitle("Do you want to suggest "
 						+ child.getText().toString()
-						+ " be added to allowed products?");
+						+ " to be added to allowed products?");
 			}
 
 			// set dialog message
@@ -207,7 +208,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 
 									if (!allProds) {
 										Toast.makeText(ProductsActivity.this,
-												"ITEM ADDED TO SHOPPING LIST!",
+												"Item added to shopping list.",
 												Toast.LENGTH_LONG).show();
 
 										try {
@@ -234,7 +235,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 										try {
 											String completed = new HttpRequest()
 													.execute(
-															"http://group1.cloudapp.net:8080/ServerSide/newsuggestion/test1/0/"+ product,
+															"http://group1.cloudapp.net:8080/ServerSide/newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/0/"+ product,
 															"post").get();
 											Log.w("POST COMPLETE", completed);
 

@@ -481,8 +481,6 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			case 3:
 				//log out of the app
 				layout.removeAllViews();
-				Toast toast3 = Toast.makeText(getApplicationContext(), "TO DO: LOGOUT", Toast.LENGTH_SHORT);
-				toast3.show();
 				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
                 editor.putBoolean("hasLoggedIn", false);
                 editor.putString("user", "");
