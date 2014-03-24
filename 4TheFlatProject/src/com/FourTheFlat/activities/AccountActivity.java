@@ -690,7 +690,10 @@ public class AccountActivity extends Activity implements View.OnClickListener
 					try {
 						String result = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/money/"+ActiveUser.getActiveUser().getUsername()+"/"+username, "post").get();
 						Toast.makeText(AccountActivity.this, username+"'s debt cleared", Toast.LENGTH_LONG).show();
-						//TODO: Refresh screen
+						
+						layout.removeAllViews();
+						AccountActivity ac = AccountActivity.this;	
+						ac.createAccountInformation(ac);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						Toast.makeText(AccountActivity.this, "Something went wrong, unable to clear debt", Toast.LENGTH_LONG).show();
