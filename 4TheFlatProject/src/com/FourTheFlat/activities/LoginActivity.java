@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.FourTheFlat.ActiveUser;
+import com.FourTheFlat.Alarm;
 import com.FourTheFlat.ConnectionManager;
 import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
@@ -203,6 +204,8 @@ public class LoginActivity extends Activity {
 					editor.putString("user", httpResponse);
 					editor.putString("hashedPassword", password);
 					editor.commit();
+					LoginActivity lA = LoginActivity.this;
+					Alarm.startRepeatingTimer(lA);
 			}
 			catch(Exception e)
 			{

@@ -46,22 +46,51 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.messages);
-
+		loadMessageList(this);
+	}
+	
+	public void loadMessageList(Activity contextActivity)
+	{
+		buttonHolder = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout1);
+		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+		list.removeAllViews();
+		buttonHolder.removeAllViews();
 		goBack = new Button(this);
 		goBack.setText("Go back!");
-
+		goBack.setOnClickListener(this);
+		buttonHolder.addView(goBack);
+		
 		messages = getMessages();
-		displayMessages(this);
-
+		if(messages != null)
+		{
+			displayMessages(this);
+			return;
+		}
+		else
+		{
+			noConnectionDisplay(this);
+			return;
+		}
 	}
-
-	private void displayMessages(Activity contextActivity) {
+	
+	private void noConnectionDisplay(Activity contextActivity)
+	{
 		buttonHolder = (TableLayout) contextActivity
 				.findViewById(R.id.tableLayout1);
 		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
 
-		goBack.setOnClickListener(this);
-		buttonHolder.addView(goBack);
+		TextView noMessages = new TextView(this);
+		noMessages.setText("You don't have an internet connection");
+		noMessages.setGravity(Gravity.CENTER);
+		noMessages.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+		noMessages.setTextColor(Color.BLACK);
+		noMessages.setTextSize(24f);
+		list.addView((View)noMessages);
+	}
+
+	private void displayMessages(Activity contextActivity) {
+		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
 
 		LinkedList[] messageGroups = new LinkedList[4];
 
@@ -162,11 +191,16 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
-
+		if(allMessages == null)
+		{
+			return null;
+		}
 		String[] messageStrings = allMessages.split(Pattern.quote("}"));
 		Message[] messages = new Message[messageStrings.length - 1];
 
@@ -193,19 +227,10 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 	}
 
 
-	public void update() {
-		list = (TableLayout) this.findViewById(R.id.tableLayout2);
-		displayMessages(this);
-	}
-
 	@Override
 	protected void onRestart() {
 		super.onRestart();
-		list.removeAllViews();
-		buttonHolder.removeAllViews();
-		update();
-		Log.w("Resume", "Activity Resumed");
-
+		loadMessageList(this);
 	}
 
 

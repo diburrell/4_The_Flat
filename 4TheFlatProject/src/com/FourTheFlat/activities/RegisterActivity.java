@@ -23,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import com.FourTheFlat.activities.LoginActivity;
 import com.FourTheFlat.stores.User;
 import com.FourTheFlat.ActiveUser;
+import com.FourTheFlat.Alarm;
 import com.FourTheFlat.ConnectionManager;
 import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
@@ -194,6 +195,8 @@ public class RegisterActivity extends Activity {
 						editor.putBoolean("hasLoggedIn", true);
 						editor.putString("hashedPassword", Cryptography.computeSHAHash(inputPassword.getText().toString()));
 						editor.commit();
+						RegisterActivity rA = RegisterActivity.this;
+						Alarm.startRepeatingTimer(rA);
 						try{
 			            	json.put(KEY_SUCCESS, "1");
 			            }

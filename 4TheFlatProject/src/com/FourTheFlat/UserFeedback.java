@@ -18,7 +18,7 @@ public final class UserFeedback {
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 				context).setSmallIcon(R.drawable.account_on)
-				.setContentTitle("Shares")
+				.setContentTitle("4TheFlat")
 				.setContentText(message);
 		mBuilder.setContentIntent(contentIntent);
 		mBuilder.setDefaults(Notification.DEFAULT_SOUND);

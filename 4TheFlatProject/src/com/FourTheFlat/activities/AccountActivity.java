@@ -9,6 +9,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
 import com.FourTheFlat.ActiveUser;
+import com.FourTheFlat.Alarm;
 import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
 import com.FourTheFlat.PojoMapper;
@@ -25,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -87,7 +89,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		if(ActiveUser.getActiveUser().getGroupID() != null)
 		{
 			Button accountInfo = new Button(contextActivity);
-			accountInfo.setText("Account Information");
+			accountInfo.setText("Money Management");
 			accountInfo.setId(0);
 			accountInfo.setOnClickListener(this);
 			TableLayout.LayoutParams params0 = new TableLayout.LayoutParams();
@@ -110,6 +112,9 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			Button createGroup = new Button(contextActivity);
 			createGroup.setText("Create Group");
 			createGroup.setId(9);
+			TableLayout.LayoutParams params0 = new TableLayout.LayoutParams();
+			params0.setMargins(0, 50, 0, 0);
+			createGroup.setLayoutParams(params0);
 			createGroup.setOnClickListener(this);
 			layout.addView(createGroup);
 		}
@@ -170,6 +175,18 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		TextView[] name = new TextView[books.size()];
 		TextView[] owe = new TextView[books.size()];
 
+		Log.w("size",Integer.toString(books.size()));
+		if(ms == null)
+		{
+			TextView noInfo = new TextView(contextActivity);
+			noInfo.setText("No info!!!");
+			noInfo.setGravity(Gravity.CENTER);
+			noInfo.setTextSize(20f);
+			noInfo.setTextColor(Color.BLACK);
+			noInfo.setPadding(0, 30, 0, 30);
+			layout.addView(noInfo);
+			return;
+		}
 		
 		//USER ROWS
 		int i =0;
@@ -501,8 +518,6 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			case 3:
 				//log out of the app
 				layout.removeAllViews();
-				Toast toast3 = Toast.makeText(getApplicationContext(), "TO DO: LOGOUT", Toast.LENGTH_SHORT);
-				toast3.show();
 				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
                 editor.putBoolean("hasLoggedIn", false);
                 editor.putString("user", "");
@@ -520,8 +535,12 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				break;
 
 			case 5:
-				//save new address
-				
+				//request new address
+				if(modifyFlatAddressEdit.getText().toString().equals(""))
+				{
+					Toast.makeText(this, "You must enter an address first", Toast.LENGTH_LONG).show();
+					return;
+				}
 				requestChangeAddress(modifyFlatAddressEdit.getText().toString());
 				layout.removeAllViews();
 				createMainMenu(this);
@@ -579,9 +598,14 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			}
 			case 11:
 			{
+				if(userToAddEdit.getText().toString().equals(""))
+				{
+					Toast.makeText(this, "You must enter the name of a user!", Toast.LENGTH_LONG).show();
+					return;
+				}
 				if(!requestAddUser(userToAddEdit.getText().toString()))
 				{
-					Toast.makeText(this, "Unable to request this user to add", Toast.LENGTH_LONG).show();
+					return;
 				}
 				layout.removeAllViews();
 				createMainMenu(this);
@@ -612,14 +636,27 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				Toast.makeText(this, "User does not exist.", Toast.LENGTH_LONG).show();
 				return false;
 			}
-			if(response.equals("User is already in a group."))
+			else if(response.equals("User is already in a group."))
 			{
-				
+				Toast.makeText(this, "User is already in a group.", Toast.LENGTH_LONG).show();
+				return false;
+			}
+			else if(response.equals("User added."))
+			{
+				Toast.makeText(this, "User has been added to the group.", Toast.LENGTH_LONG).show();
+				return true;
+			}
+			else if(response.equals("User suggested."))
+			{
+				Toast.makeText(this, "User has been suggested.", Toast.LENGTH_LONG).show();
+				return true;
 			}
 		} catch (Exception e)
 		{
+			Toast.makeText(this, "You do not have an active connection.", Toast.LENGTH_LONG).show();
 			return false;
 		}
+		Toast.makeText(this, "Something went wrong.", Toast.LENGTH_LONG).show();
 		return true;
 	}
 	
@@ -669,6 +706,8 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(this);
 				editor.putString("hashedPassword", newPassword);
 				editor.commit();
+				AccountActivity aA = AccountActivity.this;
+				Alarm.cancelRepeatingTimer(aA);
 				return true;
 			}
 			else
