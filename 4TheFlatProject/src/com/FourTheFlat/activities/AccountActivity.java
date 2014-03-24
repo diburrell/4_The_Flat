@@ -1,7 +1,12 @@
 package com.FourTheFlat.activities;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 
 import com.FourTheFlat.ActiveUser;
 import com.FourTheFlat.Cryptography;
@@ -10,6 +15,7 @@ import com.FourTheFlat.PojoMapper;
 import com.FourTheFlat.R;
 import com.FourTheFlat.Settings;
 import com.FourTheFlat.stores.Group;
+import com.FourTheFlat.stores.MapStore;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -138,52 +144,60 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		ruler.setBackgroundColor(Color.WHITE);
 		layout.addView(ruler, LayoutParams.FILL_PARENT, 5);
 
-		int USERS = 5;
+		MapStore ms = new MapStore();
+		try {
+			ms = (MapStore)PojoMapper.fromJson(new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/money/"+ActiveUser.getActiveUser().getUsername()).get(), MapStore.class);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		String[] users = new String[USERS];
-		users[0] = "Adam";
-		users[1] = "Brian";
-		users[2] = "Claire";
-		users[3] = "Denise";
-		users[4] = "Eddie";
+		Map<String, Integer> books = ms.getMap();
+		
+		TableRow[] row = new TableRow[books.size()];
+		TextView[] name = new TextView[books.size()];
+		TextView[] owe = new TextView[books.size()];
 
-		double[] money = new double[USERS];
-		money[0] = -14.59;
-		money[1] = -0.01;
-		money[2] = 0.00;
-		money[3] = 0.01;
-		money[4] = 19.31;
-
-		TableRow[] row = new TableRow[USERS];
-		TextView[] name = new TextView[USERS];
-		TextView[] owe = new TextView[USERS];
-
+		
 		//USER ROWS
-		for (int i=0; i<USERS; i++)
+		int i =0;
+		for (Map.Entry<String, Integer> m : books.entrySet())
 		{
 			row[i] = new TableRow(contextActivity);
 
 			name[i] = new TextView(contextActivity);
-			name[i].setText(users[i]);
+			name[i].setText(m.getKey());
 			name[i].setTextSize(24f);
 			name[i].setTextColor(Color.BLACK);
 			if (i == 0)
 				name[i].setPadding(0, 60, 0, 0);				
 
 			owe[i] = new TextView(contextActivity);		
-			if (money[i] < 0.00)
+			if (m.getValue() < 0)
 			{
-				owe[i].setText(String.format("-£%.2f", Math.abs(money[i])));
+				owe[i].setText(String.format("-£%.2f", ((float)Math.abs(m.getValue()))/100.0));
 				owe[i].setTextColor(Color.RED);
 			}
-			else if (money[i] == 0.00)
+			else if (m.getValue() == 0.00)
 			{
-				owe[i].setText(String.format("£%.2f", money[i]));
+				owe[i].setText(String.format("£%.2f",((float) m.getValue())/100.0));
 				owe[i].setTextColor(Color.BLACK);
 			}
 			else
 			{
-				owe[i].setText(String.format("£%.2f", money[i]));
+				owe[i].setText(String.format("£%.2f", ((float) m.getValue())/100.0));
 				owe[i].setTextColor(Color.GREEN);
 				name[i].setOnClickListener(this);
 			}
@@ -195,7 +209,13 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			row[i].addView(name[i]);
 			row[i].addView(owe[i]);
 
+			if(m.getValue() < 0)
+			{
+				row[i].setOnClickListener(this);
+			}
+			
 			layout.addView(row[i]);
+			i++;
 		}
 
 		Button back = new Button(contextActivity);
@@ -449,7 +469,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		{		
 			buttonClick(view);
 		}
-		else if (view instanceof TextView)
+		else if (view instanceof TableRow)
 		{
 			textViewClick(view);
 		}
@@ -651,10 +671,13 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		}
 	}
 
-	private void textViewClick(View view)
+	private void textViewClick(View v)
 	{
-		String username = ((TextView)view).getText().toString();
+		TableRow tR = (TableRow)v;
+		TextView child = (TextView) tR.getChildAt(0); 
 
+		final String username = child.getText().toString();
+		
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
 		alertDialogBuilder.setTitle("Do you want to clear " + username + "'s debt?");
@@ -664,7 +687,20 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			{
 				public void onClick(DialogInterface dialog,int id) 
 				{					
-					Toast.makeText(AccountActivity.this, "TO DO: CLEAR DEBT", Toast.LENGTH_LONG).show();
+					try {
+						String result = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/money/"+ActiveUser.getActiveUser().getUsername()+"/"+username, "post").get();
+						Toast.makeText(AccountActivity.this, username+"'s debt cleared", Toast.LENGTH_LONG).show();
+						//TODO: Refresh screen
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						Toast.makeText(AccountActivity.this, "Something went wrong, unable to clear debt", Toast.LENGTH_LONG).show();
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						Toast.makeText(AccountActivity.this, "Something went wrong, unable to clear debt", Toast.LENGTH_LONG).show();
+						e.printStackTrace();
+					}
+					
 				}
 			})
 			.setNegativeButton("No", new DialogInterface.OnClickListener() 
