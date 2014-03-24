@@ -27,9 +27,6 @@ public class Alarm {
 					AlarmManagerBroadcastReceiver.class);
 			PendingIntent pi = PendingIntent.getBroadcast(context, 50,
 					intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			// If the alarm should have already gone off today then schedule it
-			// starting from tomorrow.
-			//Set the alarm to go off 15 minutes before the end of the trading day at 4:15
 			Calendar c = Calendar.getInstance();
 			c.set(c.HOUR_OF_DAY, 0);
 			c.set(c.MINUTE, 0);
