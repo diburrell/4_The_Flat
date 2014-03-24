@@ -45,14 +45,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.shoppinglist);
 		
-		if(ActiveUser.getActiveUser().getGroupID() != null)
-		{
-			createDisplay(this);
-		}
-		else
-		{
-			emptyDisplay(this);		
-		}
+		loadShoppingList(this);
 		
 		//http://stackoverflow.com/questions/7157927/how-to-get-gps-location-android
 		//http://www.androidsnippets.com/get-the-phones-last-known-location-using-locationmanager
@@ -60,6 +53,60 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		LocationListener listener = new locationListener();
 		manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, listener);
+	}
+	
+	public void loadShoppingList(Activity contextActivity)
+	{
+		buttonLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
+		buttonLayout.removeAllViews();
+		
+		listLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+		listLayout.removeAllViews();
+		if(ActiveUser.getActiveUser().getGroupID() != null)
+		{
+			shoppingList = getShoppingList();
+			if(shoppingList != null)
+			{
+				createDisplay(this);
+			}
+			else
+			{
+				noConnectionDisplay(this);
+			}
+		}
+		else
+		{
+			Log.w("hello","hello");
+			noGroupDisplay(this);		
+		}
+	}
+	
+	private void noConnectionDisplay(Activity contextActivity)
+	{
+		buttonLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
+		buttonLayout.removeAllViews();
+
+		TextView error = new TextView(contextActivity);
+		error.setText("You do not have an active connection");
+		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+		error.setTextColor(Color.BLACK);
+		error.setTextSize(25f);
+		error.setGravity(Gravity.CENTER);
+		buttonLayout.addView(error);
+	}
+	
+	private void noGroupDisplay(Activity contextActivity)
+	{
+		buttonLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
+		buttonLayout.removeAllViews();
+
+		TextView error = new TextView(contextActivity);
+		error.setText("You are not in a group");
+		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+		error.setTextColor(Color.BLACK);
+		error.setTextSize(25f);
+		error.setGravity(Gravity.CENTER);
+		buttonLayout.addView(error);
 	}
 		
 	private class locationListener implements LocationListener
@@ -86,32 +133,24 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	{
 		current = new LatLng(lat, lng);
 	}
-	
+
+
 	@Override
 	public void onPause() 
 	{
 		super.onPause();
-		buttonLayout.removeAllViews();
-		listLayout.removeAllViews();		
+		loadShoppingList(this);
 	}
 
 	@Override
 	public void onResume() 
 	{
 		super.onResume();
-		if(ActiveUser.getActiveUser().getGroupID() != null)
-		{
-			createDisplay(this);
-		}
-		else
-		{
-			emptyDisplay(this);		
-		}
+		loadShoppingList(this);
 	}
 
 	public void createDisplay(Activity contextActivity) 
 	{
-		shoppingList = getShoppingList();
 		
 		buttonLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
 		buttonLayout.removeAllViews();
@@ -160,20 +199,6 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 			Log.w("ALL_PROD", "FAILED TO GET shopping list");
 			return null;
 		}
-	}
-	
-	private void emptyDisplay(Activity contextActivity)
-	{
-		buttonLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
-		buttonLayout.removeAllViews();
-
-		TextView error = new TextView(contextActivity);
-		error.setText("You are not the member of any group");
-		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-		error.setTextColor(Color.BLACK);
-		error.setTextSize(25f);
-		error.setGravity(Gravity.CENTER);
-		buttonLayout.addView(error);
 	}
 
 	@Override

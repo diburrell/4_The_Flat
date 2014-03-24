@@ -36,22 +36,11 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.shoppinglist);
-
-		if(ActiveUser.getActiveUser().getGroupID() != null)
-		{
-			moreProducts = new Button(this);
-			moreProducts.setText("See more products you can add!");
-		}
-
-
-
-		allowedProducts = getAllowedProducts();
-
-		productTable(this);
+		
+		loadProductsList(this);
 	}
 
-	public void productTable(Activity contextActivity) 
-	{
+	public void productTable(Activity contextActivity) {
 
 		buttonHolder = (TableLayout) contextActivity
 				.findViewById(R.id.tableLayout1);
@@ -131,12 +120,38 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 		}
 
 	}
+	
+	private void noConnectionDisplay(Activity contextActivity)
+	{
+		buttonHolder = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout1);
+		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+
+		TextView error = new TextView(contextActivity);
+		error.setText("You do not have an active connection.");
+		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+		error.setTextColor(Color.BLACK);
+		error.setTextSize(25f);
+		error.setGravity(Gravity.CENTER);
+		list.addView(error);
+	}
+	
+	private void noGroupDisplay(Activity contextActivity)
+	{
+		buttonHolder = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout1);
+		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+
+		TextView error = new TextView(contextActivity);
+		error.setText("You are not in a group");
+		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+		error.setTextColor(Color.BLACK);
+		error.setTextSize(25f);
+		error.setGravity(Gravity.CENTER);
+		list.addView(error);
+	}
 
 	private String[] getAllowedProducts() {
-		if(ActiveUser.getActiveUser().getGroupID() == null)
-		{
-			return new String[] { "You are not in a group."};
-		}
 		try {
 			String allowed = new HttpRequest()
 					.execute(
@@ -153,19 +168,72 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
+	public void loadProductsList(Activity contextActivity) {
+		buttonHolder = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout1);
+		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+		buttonHolder.removeAllViews();
+		list.removeAllViews();
+		if(ActiveUser.getActiveUser().getGroupID() != null)
+		{
+			allowedProducts = getAllowedProducts();
+			if(allowedProducts == null)
+			{
+				noConnectionDisplay(this);
+				return;
+			}
+			moreProducts = new Button(this);
+			moreProducts.setText("See more products you can add!");
+			productTable(this);
+		}
+		else
+		{
+			noGroupDisplay(this);
+		}
+		
+	}
+	
 	public void update() {
-		list = (TableLayout) this.findViewById(R.id.tableLayout2);
-		productTable(this);
+		buttonHolder.removeAllViews();
+		list.removeAllViews();
+		if(ActiveUser.getActiveUser().getGroupID() != null)
+		{
+			allowedProducts = getAllowedProducts();
+			if(allowedProducts == null)
+			{
+				noConnectionDisplay(this);
+				return;
+			}
+			productTable(this);
+		}
+		else
+		{
+			noGroupDisplay(this);
+		}
+		
+	}
+
+	
+	@Override
+	public void onPause() 
+	{
+		super.onPause();
+		loadProductsList(this);
 	}
 
 	@Override
-	protected void onRestart() {
-		super.onRestart();
+	public void onResume() 
+	{
+		super.onResume();
+		loadProductsList(this);
+	}
+	
+	public void updateTable()
+	{
 		list.removeAllViews();
 		buttonHolder.removeAllViews();
 		update();
 		Log.w("Resume", "Activity Resumed");
-
 	}
 
 	@Override
@@ -179,7 +247,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 				moreProducts.setText("See more products you can add!");
 			}
 
-			onRestart();
+			updateTable();
 
 			// if a table row passed in
 		} else if (v instanceof TableRow) {

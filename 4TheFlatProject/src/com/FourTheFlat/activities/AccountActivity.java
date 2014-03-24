@@ -560,9 +560,21 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			case 10:
 			{
 				//Click create group
-				ActiveUser.createGroup(this,createGroupAddressEdit.getText().toString());
-				layout.removeAllViews();
-				createMainMenu(this);
+				if(createGroupAddressEdit.getText().toString().equals(""))
+				{
+					Toast.makeText(this, "You must enter an address!", Toast.LENGTH_LONG).show();
+					return;
+				}
+				if(ActiveUser.createGroup(this,createGroupAddressEdit.getText().toString()))
+				{
+					layout.removeAllViews();
+					createMainMenu(this);
+				}
+				else
+				{
+					Toast.makeText(this, "Cannot access the server.", Toast.LENGTH_LONG).show();
+					return;
+				}
 				break;
 			}
 			case 11:
