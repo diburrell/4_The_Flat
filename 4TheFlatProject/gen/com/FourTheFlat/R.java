@@ -228,6 +228,7 @@ containing a value of this type.
         public static final int headerView=0x7f050012;
         public static final int hybrid=0x7f050004;
         public static final int layout=0x7f050005;
+        public static final int ll=0x7f05001e;
         public static final int login=0x7f050008;
         public static final int loginErrorMsg=0x7f05000b;
         public static final int map=0x7f05000f;
@@ -243,7 +244,7 @@ containing a value of this type.
         public static final int register_error=0x7f05001a;
         public static final int registerbtn=0x7f050009;
         public static final int satellite=0x7f050002;
-        public static final int scroll=0x7f05001e;
+        public static final int scroll=0x7f05001f;
         public static final int tableLayout1=0x7f050010;
         public static final int tableLayout10=0x7f05001c;
         public static final int tableLayout2=0x7f050011;
