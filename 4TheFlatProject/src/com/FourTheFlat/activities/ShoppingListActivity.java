@@ -4,9 +4,6 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import com.FourTheFlat.*;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.model.LatLng;
 
 import android.app.Activity;
@@ -37,6 +34,10 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	TableLayout listLayout;
 
 	String[] shoppingList;
+	
+	Boolean temp = false;
+	LatLng current;
+	int counter = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
@@ -50,9 +51,40 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		}
 		else
 		{
-			Log.w("hello","hello");
 			emptyDisplay(this);		
 		}
+		
+		//http://stackoverflow.com/questions/7157927/how-to-get-gps-location-android
+		//http://www.androidsnippets.com/get-the-phones-last-known-location-using-locationmanager
+		//http://android-er.blogspot.co.uk/2013/02/get-user-last-know-location.html
+		LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		LocationListener listener = new locationListener();
+		manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, listener);
+	}
+		
+	private class locationListener implements LocationListener
+	{
+		@Override
+		public void onLocationChanged(Location location) 
+		{ 
+			Log.w("UPDATINGCHANGE", "INTO");
+			setCurrent(location.getLatitude(), location.getLongitude());	
+			temp = nearTesco();		
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) { }
+
+		@Override
+		public void onProviderEnabled(String provider) { }
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) { }
+	}	
+	
+	private void setCurrent(double lat, double lng)
+	{
+		current = new LatLng(lat, lng);
 	}
 	
 	@Override
@@ -60,10 +92,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	{
 		super.onPause();
 		buttonLayout.removeAllViews();
-		if(ActiveUser.getActiveUser().getGroupID() != null)
-		{
-			listLayout.removeAllViews();	
-		}
+		listLayout.removeAllViews();		
 	}
 
 	@Override
@@ -76,7 +105,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		}
 		else
 		{
-			emptyDisplay(this);
+			emptyDisplay(this);		
 		}
 	}
 
@@ -139,7 +168,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		buttonLayout.removeAllViews();
 
 		TextView error = new TextView(contextActivity);
-		error.setText("You are not in a group");
+		error.setText("You are not the member of any group");
 		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		error.setTextColor(Color.BLACK);
 		error.setTextSize(25f);
@@ -220,8 +249,13 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	    @Override
 	    protected Boolean doInBackground(String... args) 
 	    {
-	    	return false;
-	    	//return nearTesco();
+	    	do
+	    	{
+	    		counter++;
+	    	}
+	    	while (current == null);
+	    	
+	    	return temp;
 	    }
 	
 	    @Override
@@ -247,27 +281,36 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
         new ProcessLocation().execute();
     }   
 	
-	public boolean nearTesco()
+	public Boolean nearTesco()
 	{			
 	    double earthRadius = 3958.75;
 	    int meterConversion = 1609;
 	    
-	    LatLng current = new LatLng(56.459782,-2.979114); //point near hawkhill tesco
+	    //LatLng current = new LatLng(56.459782,-2.979114); //point near hawkhill tesco
 	    
-	    for (int i=0; i<Main.STORES; i++)
+	    if (current != null)
 	    {
-		    double dLat = Math.toRadians(current.latitude - Main.locations[0][i]);
-		    double dLng = Math.toRadians(current.longitude - Main.locations[1][i]);
-		    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-		               Math.cos(Math.toRadians(Main.locations[0][i])) * Math.cos(Math.toRadians(current.latitude)) *
-		               Math.sin(dLng/2) * Math.sin(dLng/2);
-		    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-		    double dist = earthRadius * c;
-	
-		    Log.w("DISTANCE", i + ": " + dist * meterConversion + "m");
-		    
-		    if ((dist * meterConversion) <= 250) //if within 250m of a tesco
-		    	return true;
+	    	Log.w("curr", current.latitude + "," + current.longitude);
+	    	
+		    for (int i=0; i<Main.STORES; i++)
+		    {
+			    double dLat = Math.toRadians(current.latitude - Main.locations[0][i]);
+			    double dLng = Math.toRadians(current.longitude - Main.locations[1][i]);
+			    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+			               Math.cos(Math.toRadians(Main.locations[0][i])) * Math.cos(Math.toRadians(current.latitude)) *
+			               Math.sin(dLng/2) * Math.sin(dLng/2);
+			    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+			    double dist = earthRadius * c;
+		
+			    Log.w("DISTANCE", i + ": " + dist * meterConversion + "m");
+			    
+			    if ((dist * meterConversion) <= 250) //if within 250m of a tesco
+			    	return true;
+		    }
+	    }
+	    else
+	    {
+	    	Log.w("curr", "null");
 	    }
 		
 		return false;

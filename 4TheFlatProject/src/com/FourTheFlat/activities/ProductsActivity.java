@@ -50,7 +50,8 @@ public class ProductsActivity extends Activity implements View.OnClickListener {
 		productTable(this);
 	}
 
-	public void productTable(Activity contextActivity) {
+	public void productTable(Activity contextActivity) 
+	{
 
 		buttonHolder = (TableLayout) contextActivity
 				.findViewById(R.id.tableLayout1);
