@@ -1,20 +1,13 @@
 package com.FourTheFlat.activities;
 
-
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,47 +19,30 @@ import com.FourTheFlat.ActiveUser;
 import com.FourTheFlat.ConnectionManager;
 import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
-import com.FourTheFlat.Main;
 import com.FourTheFlat.PojoMapper;
 import com.FourTheFlat.R;
 import com.FourTheFlat.Settings;
-import com.FourTheFlat.TabCreator;
-import com.FourTheFlat.R.id;
-import com.FourTheFlat.R.layout;
 import com.FourTheFlat.stores.User;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutionException;
 
-public class LoginActivity extends Activity {
-
+public class LoginActivity extends Activity 
+{
     Button btnLogin;
     Button Btnregister;
     Button passreset;
-    EditText inputEmail;
+    EditText inputUsername;
     EditText inputPassword;
     private TextView loginErrorMsg;
-    /**
-     * Called when the activity is first created.
-     */
-    private static String SUCCESS = "success";
-    private static String KEY_UID = "uid";
-    private static String KEY_USERNAME = "uname";
-    private static String KEY_CREATED_AT = "created_at";
-    private Boolean loggedIn=false;
-
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) 
+    {
         super.onCreate(savedInstanceState);
+        
         //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         boolean hasLoggedIn = Settings.getSharedPreferences(this.getApplicationContext()).getBoolean("hasLoggedIn", false);
         ActiveUser.initialise(getApplicationContext());
+        
         if(hasLoggedIn && ActiveUser.getActiveUser() != null)
         {
         	Intent registered = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
@@ -74,50 +50,52 @@ public class LoginActivity extends Activity {
             startActivity(registered);
             finish();
         }
+        
         setContentView(R.layout.login);
-        inputEmail = (EditText) findViewById(R.id.email);
+        inputUsername = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.pword);
         Btnregister = (Button) findViewById(R.id.registerbtn);
         btnLogin = (Button) findViewById(R.id.login);
         passreset = (Button)findViewById(R.id.passres);
         loginErrorMsg = (TextView) findViewById(R.id.loginErrorMsg);
 
-        passreset.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View view) {
-        	Toast.makeText(getApplicationContext(), "Ain't no functionality for this yet!", Toast.LENGTH_LONG).show();
-        }});
+        passreset.setOnClickListener(new View.OnClickListener() 
+        {
+        	public void onClick(View view) 
+        	{
+        		Toast.makeText(getApplicationContext(), "Ain't no functionality for this yet!", Toast.LENGTH_LONG).show();
+        	}
+        });
 
-
-        Btnregister.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        Btnregister.setOnClickListener(new View.OnClickListener() 
+        {
+            public void onClick(View view) 
+            {
                 Intent myIntent = new Intent(view.getContext(), RegisterActivity.class);
                 startActivityForResult(myIntent, 0);
                 finish();
-             }});
+             }
+        });
         
-        
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-
-                if (  ( !inputEmail.getText().toString().equals("")) && ( !inputPassword.getText().toString().equals("")) )
+        btnLogin.setOnClickListener(new View.OnClickListener() 
+        {
+            public void onClick(View view) 
+            {
+                if ((!inputUsername.getText().toString().equals("")) && (!inputPassword.getText().toString().equals("")))
                 {
                 	NetAsync(view);
                 }
-                else if ( ( !inputEmail.getText().toString().equals("")) )
+                else if ((!inputUsername.getText().toString().equals("")))
                 {
-                    Toast.makeText(getApplicationContext(),
-                            "Password field empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Password field empty", Toast.LENGTH_SHORT).show();
                 }
-                else if ( ( !inputPassword.getText().toString().equals("")) )
+                else if ((!inputPassword.getText().toString().equals("")))
                 {
-                    Toast.makeText(getApplicationContext(),
-                            "Email field empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Username field empty", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(),
-                            "Email and Password field are empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Username and password field are empty", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -128,7 +106,8 @@ public class LoginActivity extends Activity {
         private ProgressDialog nDialog;
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute()
+        {
             super.onPreExecute();
             nDialog = new ProgressDialog(LoginActivity.this);
             nDialog.setTitle("Checking Network");
@@ -137,41 +116,43 @@ public class LoginActivity extends Activity {
             nDialog.setCancelable(true);
             nDialog.show();
         }
-
         
         @Override
-        protected Boolean doInBackground(String... args){
-        	
-            return ConnectionManager.checkInternetConnection(getApplicationContext());
-
+        protected Boolean doInBackground(String... args)
+        {
+        	return ConnectionManager.checkInternetConnection(getApplicationContext());
         }
+        
         @Override
-        protected void onPostExecute(Boolean th){
-
-            if(th == true){
+        protected void onPostExecute(Boolean th)
+        {
+            if(th == true)
+            {
                 nDialog.dismiss();
                 new ProcessLogin().execute();
             }
-            else{
+            else
+            {
                 nDialog.dismiss();
                 loginErrorMsg.setText("Error in Network Connection");
             }
         }
     }
-
     
     //Async Task to get and send data to cassandra database.
-    private class ProcessLogin extends AsyncTask<String, String, Boolean> {
+    private class ProcessLogin extends AsyncTask<String, String, Boolean> 
+    {
         private ProgressDialog pDialog;
         String email,password;
 
         @Override
-        protected void onPreExecute() {
+        protected void onPreExecute() 
+        {
             super.onPreExecute();
 
-            inputEmail = (EditText) findViewById(R.id.email);
+            inputUsername = (EditText) findViewById(R.id.email);
             inputPassword = (EditText) findViewById(R.id.pword);
-            email = inputEmail.getText().toString();
+            email = inputUsername.getText().toString();
             password = inputPassword.getText().toString();
             pDialog = new ProgressDialog(LoginActivity.this);
             pDialog.setTitle("Contacting Servers");
@@ -182,65 +163,77 @@ public class LoginActivity extends Activity {
         }
 
         @Override
-        protected Boolean doInBackground(String... args) {
-        	//TODO: LOGIN LOGIC HERE
+        protected Boolean doInBackground(String... args) 
+        {
         	String httpResponse = "";
-        	password=Cryptography.computeSHAHash(password);
+        	password = Cryptography.computeSHAHash(password);
         	Boolean test;
         	User user = new User();
-			try {
+        	
+			try 
+			{
 				httpResponse = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+email+"/"+password+"/").get();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
+			} 
+			catch (InterruptedException e1) 
+			{
 				e1.printStackTrace();
-			} catch (ExecutionException e1) {
-				// TODO Auto-generated catch block
+			} 
+			catch (ExecutionException e1) 
+			{
 				e1.printStackTrace();
 			}
-			try{
-					user = (User) PojoMapper.fromJson(httpResponse, User.class);
-					SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
-					editor.putString("user", httpResponse);
-					editor.putString("hashedPassword", password);
-					editor.commit();
+			try
+			{
+				user = (User) PojoMapper.fromJson(httpResponse, User.class);
+				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
+				editor.putString("user", httpResponse);
+				editor.putString("hashedPassword", password);
+				editor.commit();
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Log.d("Error", e.toString());
 			}
-			if(user.getUsername()!=null)
+			
+			if (user.getUsername() != null)
 			{
-				test=true;
+				test = true;
 			}
-			else{
-					test=false;			
+			else
+			{
+				test = false;			
 			}
+			
 			return test;
         }
 
         @Override
-        protected void onPostExecute(Boolean test) {
-                    if(test)
-                    {
-                        pDialog.setMessage("Loading User Space");
-                        pDialog.setTitle("Getting Data");
-                        Intent mainScreen = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
-                        SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
-                        ActiveUser.initialise(getApplicationContext());
-                        editor.putBoolean("hasLoggedIn", true);
-                        // Commit the edits!	
-                        editor.commit();
-                        pDialog.dismiss();
-                        startActivity(mainScreen);
-                        finish();
-                    }else{
-                        pDialog.dismiss();
-                        loginErrorMsg.setText("Incorrect username/password");
-                    }
-    }
+        protected void onPostExecute(Boolean test) 
+        {
+	        if(test)
+	        {
+	            pDialog.setMessage("Loading User Space");
+	            pDialog.setTitle("Getting Data");
+	            Intent mainScreen = new Intent(getApplicationContext(), com.FourTheFlat.TabCreator.class);
+	            SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
+	            ActiveUser.initialise(getApplicationContext());
+	            editor.putBoolean("hasLoggedIn", true);
+	            // Commit the edits!	
+	            editor.commit();
+	            pDialog.dismiss();
+	            startActivity(mainScreen);
+	            finish();
+	        }
+	        else
+	        {
+	            pDialog.dismiss();
+	            loginErrorMsg.setText("Incorrect username/password");
+	        }
+        }
     }
     
-    public void NetAsync(View view){
+    public void NetAsync(View view)
+    {
         new NetCheck().execute();
     }    
 }

@@ -17,7 +17,7 @@ public final class UserFeedback {
 				new Intent(context, TabCreator.class), 0);
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				context).setSmallIcon(R.drawable.account_on)
+				context)
 				.setContentTitle("Shares")
 				.setContentText(message);
 		mBuilder.setContentIntent(contentIntent);
