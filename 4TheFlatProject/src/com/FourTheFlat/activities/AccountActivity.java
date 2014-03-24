@@ -518,8 +518,6 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			case 3:
 				//log out of the app
 				layout.removeAllViews();
-				Toast toast3 = Toast.makeText(getApplicationContext(), "TO DO: LOGOUT", Toast.LENGTH_SHORT);
-				toast3.show();
 				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
                 editor.putBoolean("hasLoggedIn", false);
                 editor.putString("user", "");
@@ -607,7 +605,6 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				}
 				if(!requestAddUser(userToAddEdit.getText().toString()))
 				{
-					Toast.makeText(this, "Unable to request this user to add", Toast.LENGTH_LONG).show();
 					return;
 				}
 				layout.removeAllViews();
@@ -639,14 +636,27 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				Toast.makeText(this, "User does not exist.", Toast.LENGTH_LONG).show();
 				return false;
 			}
-			if(response.equals("User is already in a group."))
+			else if(response.equals("User is already in a group."))
 			{
-				
+				Toast.makeText(this, "User is already in a group.", Toast.LENGTH_LONG).show();
+				return false;
+			}
+			else if(response.equals("User added."))
+			{
+				Toast.makeText(this, "User has been added to the group.", Toast.LENGTH_LONG).show();
+				return true;
+			}
+			else if(response.equals("User suggested."))
+			{
+				Toast.makeText(this, "User has been suggested.", Toast.LENGTH_LONG).show();
+				return true;
 			}
 		} catch (Exception e)
 		{
+			Toast.makeText(this, "You do not have an active connection.", Toast.LENGTH_LONG).show();
 			return false;
 		}
+		Toast.makeText(this, "Something went wrong.", Toast.LENGTH_LONG).show();
 		return true;
 	}
 	
