@@ -35,7 +35,8 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 
 	String[] shoppingList;
 	
-	Boolean temp = false;
+	//TODO: SET THIS BACK TO FALSE
+	Boolean temp = true;
 	LatLng current;
 	int counter = 0;
 
@@ -274,11 +275,12 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	    @Override
 	    protected Boolean doInBackground(String... args) 
 	    {
-	    	do
-	    	{
-	    		counter++;
-	    	}
-	    	while (current == null);
+	    	//TODO: REINSTATE THIS
+	    	//do
+	    	//{
+	    	//	counter++;
+	    	//}
+	    	//while (current == null);
 	    	
 	    	return temp;
 	    }
@@ -291,11 +293,14 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	        	Intent shopIntent = new Intent(getApplicationContext(), ShopActivity.class);
 	        	shopIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	    		startActivity(shopIntent);
+	    		progress.dismiss();
+	    		finish();
 	        }
 	        else
 	        {
 	        	Intent mapIntent = new Intent(getApplicationContext(), MapActivity.class);
 	    		mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    		progress.dismiss();
 	    		startActivity(mapIntent);
 	        }
 	    } 
