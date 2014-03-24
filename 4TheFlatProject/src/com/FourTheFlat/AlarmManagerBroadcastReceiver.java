@@ -11,11 +11,13 @@ import com.FourTheFlat.stores.Group;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 
-	
+	static boolean userShoppingNotificationSent = false;
 	
 	@Override
 	/** This method is triggered when an alarm goes off. */
@@ -43,9 +45,15 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 			g = (Group)PojoMapper.fromJson(response, Group.class);
 			if(!g.getuserShopping().equals(null))
 			{
-				UserFeedback.showNotification(context, "Someone is shopping, make sure to add any last minute items you need!");
+				if(!userShoppingNotificationSent)
+				{
+					UserFeedback.showNotification(context, "Someone is shopping, make sure to add any last minute items you need!");
+				}
+				userShoppingNotificationSent = true;
 				return;
 			}
+			userShoppingNotificationSent = false;
+			
 		}
 		catch(Exception e)
 		{
@@ -60,10 +68,21 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 		try
 		{
 			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword,"get").get();
+			Log.w("activeUser",response);
+			if(response.equals("Invalid username or password."))
+			{
+				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(context.getApplicationContext());
+                editor.putBoolean("hasLoggedIn", false);
+                editor.putString("user", "");
+                // Commit the edits!	
+                editor.commit();
+				return;
+			}
 			Settings.getSharedPreferencesEditor(context).putString("user", response);
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			return;
 		}
 	}
