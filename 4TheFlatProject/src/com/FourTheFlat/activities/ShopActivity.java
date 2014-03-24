@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ShopActivity extends Activity implements View.OnClickListener
 {
@@ -124,7 +125,7 @@ public class ShopActivity extends Activity implements View.OnClickListener
 	    	    // Maximum 2 characters.
 	    	    new InputFilter.LengthFilter(5),
 	    	    // Digits only.
-	    	    DigitsKeyListener.getInstance(),  // Not strictly needed, IMHO.
+	    	    DigitsKeyListener.getInstance(),
 	    	});
 	    	// Digits only & use numeric soft-keyboard.
 	    	pence.setKeyListener(DigitsKeyListener.getInstance());
@@ -206,5 +207,39 @@ public class ShopActivity extends Activity implements View.OnClickListener
 		}
 		
 		return store.getMap();
+	}
+	
+	@Override
+	public void onBackPressed()
+	{
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					this);
+			alertDialogBuilder.setTitle("Do you want to cancel shopping?");
+			alertDialogBuilder.setCancelable(false).setPositiveButton("Yes",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									try {
+										new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/usershopping/"+ActiveUser.getActiveUser().getUsername()+"/Test Shop","delete").get();
+										Intent resetIntent = new Intent(getApplicationContext(), TabCreator.class);
+										resetIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										startActivity(resetIntent);
+										finish();
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									} catch (ExecutionException e) {
+										e.printStackTrace();
+									}
+								}
+							})
+					.setNegativeButton("No",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			alertDialog.show();
 	}
 }

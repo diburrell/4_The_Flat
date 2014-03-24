@@ -104,5 +104,24 @@ public class ActiveUser {
 		initialise(context);
 		return true;
 	}
-
+	
+	public static boolean isGroupMemberShopping()
+	{
+		String response;
+		Group g;
+		try
+		{
+			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
+			g = (Group)PojoMapper.fromJson(response, Group.class);
+			if(!g.getuserShopping().equals(null))
+			{
+				return true;
+			}
+			return false;			
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
 }
