@@ -9,6 +9,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 
 import com.FourTheFlat.ActiveUser;
+import com.FourTheFlat.Alarm;
 import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
 import com.FourTheFlat.PojoMapper;
@@ -695,6 +696,8 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(this);
 				editor.putString("hashedPassword", newPassword);
 				editor.commit();
+				AccountActivity aA = AccountActivity.this;
+				Alarm.cancelRepeatingTimer(aA);
 				return true;
 			}
 			else
