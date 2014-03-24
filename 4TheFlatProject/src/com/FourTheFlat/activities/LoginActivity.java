@@ -161,11 +161,8 @@ public class LoginActivity extends Activity {
 
     
     //Async Task to get and send data to cassandra database.
-    private class ProcessLogin extends AsyncTask<String, String, JSONObject> {
-
-
+    private class ProcessLogin extends AsyncTask<String, String, Boolean> {
         private ProgressDialog pDialog;
-
         String email,password;
 
         @Override
@@ -185,10 +182,11 @@ public class LoginActivity extends Activity {
         }
 
         @Override
-        protected JSONObject doInBackground(String... args) {
+        protected Boolean doInBackground(String... args) {
         	//TODO: LOGIN LOGIC HERE
         	String httpResponse = "";
         	password=Cryptography.computeSHAHash(password);
+        	Boolean test;
         	User user = new User();
 			try {
 				httpResponse = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+email+"/"+password+"/").get();
@@ -210,33 +208,19 @@ public class LoginActivity extends Activity {
 			{
 				Log.d("Error", e.toString());
 			}
-			JSONObject json = new JSONObject();
 			if(user.getUsername()!=null)
-			{            
-				try{
-					json.put(SUCCESS, "1");
-				}
-				catch(JSONException e){            	
-				}
+			{
+				test=true;
 			}
 			else{
-				try {
-					json.put(SUCCESS, "0");
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}				
+					test=false;			
 			}
-			return json;
+			return test;
         }
 
         @Override
-        protected void onPostExecute(JSONObject json) {
-            try {
-            	Log.w("test",json.toString());
-               if (json.getString(SUCCESS) != null) {
-                    String res = json.getString(SUCCESS);
-                    if(Integer.parseInt(res) == 1)
+        protected void onPostExecute(Boolean test) {
+                    if(test)
                     {
                         pDialog.setMessage("Loading User Space");
                         pDialog.setTitle("Getting Data");
@@ -253,11 +237,7 @@ public class LoginActivity extends Activity {
                         pDialog.dismiss();
                         loginErrorMsg.setText("Incorrect username/password");
                     }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-       }
+    }
     }
     
     public void NetAsync(View view){
