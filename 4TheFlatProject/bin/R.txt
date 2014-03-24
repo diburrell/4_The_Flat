@@ -88,6 +88,7 @@ int id register 0x7f050018
 int id register_error 0x7f05001a
 int id registerbtn 0x7f050009
 int id satellite 0x7f050002
+int id scroll 0x7f05001e
 int id tableLayout1 0x7f050010
 int id tableLayout10 0x7f05001c
 int id tableLayout2 0x7f050011
