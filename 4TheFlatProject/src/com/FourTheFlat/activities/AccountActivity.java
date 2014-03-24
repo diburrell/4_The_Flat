@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -87,7 +88,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		if(ActiveUser.getActiveUser().getGroupID() != null)
 		{
 			Button accountInfo = new Button(contextActivity);
-			accountInfo.setText("Account Information");
+			accountInfo.setText("Money Management");
 			accountInfo.setId(0);
 			accountInfo.setOnClickListener(this);
 			TableLayout.LayoutParams params0 = new TableLayout.LayoutParams();
@@ -110,6 +111,9 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			Button createGroup = new Button(contextActivity);
 			createGroup.setText("Create Group");
 			createGroup.setId(9);
+			TableLayout.LayoutParams params0 = new TableLayout.LayoutParams();
+			params0.setMargins(0, 50, 0, 0);
+			createGroup.setLayoutParams(params0);
 			createGroup.setOnClickListener(this);
 			layout.addView(createGroup);
 		}
@@ -170,6 +174,18 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		TextView[] name = new TextView[books.size()];
 		TextView[] owe = new TextView[books.size()];
 
+		Log.w("size",Integer.toString(books.size()));
+		if(ms == null)
+		{
+			TextView noInfo = new TextView(contextActivity);
+			noInfo.setText("No info!!!");
+			noInfo.setGravity(Gravity.CENTER);
+			noInfo.setTextSize(20f);
+			noInfo.setTextColor(Color.BLACK);
+			noInfo.setPadding(0, 30, 0, 30);
+			layout.addView(noInfo);
+			return;
+		}
 		
 		//USER ROWS
 		int i =0;
@@ -520,8 +536,12 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				break;
 
 			case 5:
-				//save new address
-				
+				//request new address
+				if(modifyFlatAddressEdit.getText().toString().equals(""))
+				{
+					Toast.makeText(this, "You must enter an address first", Toast.LENGTH_LONG).show();
+					return;
+				}
 				requestChangeAddress(modifyFlatAddressEdit.getText().toString());
 				layout.removeAllViews();
 				createMainMenu(this);
@@ -579,9 +599,15 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			}
 			case 11:
 			{
+				if(userToAddEdit.getText().toString().equals(""))
+				{
+					Toast.makeText(this, "You must enter the name of a user!", Toast.LENGTH_LONG).show();
+					return;
+				}
 				if(!requestAddUser(userToAddEdit.getText().toString()))
 				{
 					Toast.makeText(this, "Unable to request this user to add", Toast.LENGTH_LONG).show();
+					return;
 				}
 				layout.removeAllViews();
 				createMainMenu(this);

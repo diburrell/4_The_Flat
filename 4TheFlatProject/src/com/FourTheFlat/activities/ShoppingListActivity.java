@@ -227,9 +227,9 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 							
 							Log.w("DELETE COMPLETE", completed);
 
-							Toast.makeText(ShoppingListActivity.this, product + "removed from shopping list", Toast.LENGTH_LONG).show();
+							Toast.makeText(ShoppingListActivity.this, product + " removed from shopping list", Toast.LENGTH_LONG).show();
 
-							onRestart();
+							onResume();
 						} 
 						catch (InterruptedException e) 
 						{
