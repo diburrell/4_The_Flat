@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -144,8 +145,13 @@ public class LoginActivity extends Activity
         registerParams.setMargins(30, 30, 30, 0);
         rows[3].addView(register, registerParams);
                 
-	    error = new TextView(this);    
-        rows[4].addView(error);        
+	    error = new TextView(this);  
+	    error.setTextSize(16f);
+	    error.setTextColor(Color.RED);
+	    error.setGravity(Gravity.CENTER);
+	    TableRow.LayoutParams errorParams = new TableRow.LayoutParams();
+	    errorParams.span = 2;
+        rows[4].addView(error, errorParams);        
         
         for (int i=0; i<rows.length; i++)
         {

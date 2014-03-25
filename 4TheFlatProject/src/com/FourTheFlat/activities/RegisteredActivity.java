@@ -22,6 +22,8 @@ public class RegisteredActivity extends Activity
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        
+        getActionBar().setTitle("4TheFlat: Registered"); 
                 
         setContentView(R.layout.registered);
                 

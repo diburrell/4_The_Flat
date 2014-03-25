@@ -46,6 +46,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 	EditText createGroupAddressEdit;
 	EditText userToAddEdit;
 	EditText modifyFlatAddressEdit;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{

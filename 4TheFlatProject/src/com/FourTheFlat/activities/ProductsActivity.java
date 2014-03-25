@@ -63,7 +63,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 		lowerLayout.removeAllViews();
 
 		if (state == 0) 
-		{
+		{			
 			Button moreProducts = new Button(contextActivity);
 			moreProducts.setText("Add more products");
 			moreProducts.setOnClickListener(this);
@@ -102,7 +102,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 			}
 		} 
 		else if (state == 1) 
-		{
+		{			
 			Button moreProducts = new Button(contextActivity);
 			moreProducts.setText("Go back");
 			moreProducts.setOnClickListener(this);
