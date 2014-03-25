@@ -107,7 +107,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		lowerLayout.removeAllViews();
 
 		TextView error = new TextView(contextActivity);
-		error.setText("You do not have an active connection");
+		error.setText("You do not have an active connection.");
 		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		error.setTextColor(Color.BLACK);
 		error.setTextSize(25f);

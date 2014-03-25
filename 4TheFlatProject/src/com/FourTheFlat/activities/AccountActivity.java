@@ -145,6 +145,8 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		} catch (Exception e)
 		{
 			Toast.makeText(this, "Unable to retrieve money information from the server.", Toast.LENGTH_LONG).show();
+			layout.removeAllViews();
+			createMainMenu(this);
 			return;
 		}
 		
