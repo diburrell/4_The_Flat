@@ -305,6 +305,11 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 							{
 								String completed = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/0/" + product, "post").get();
 								Toast.makeText(ProductsActivity.this, product + " will be added if all other users agree", Toast.LENGTH_LONG).show();
+								if(completed.equals("Product request already pending."))
+								{
+									Toast.makeText(ProductsActivity.this, "A request to add " + product + " is already pending.", Toast.LENGTH_LONG).show();
+									return;
+								}
 								ProductsActivity pA = ProductsActivity.this;
 								loadProductsList(pA);
 							} 

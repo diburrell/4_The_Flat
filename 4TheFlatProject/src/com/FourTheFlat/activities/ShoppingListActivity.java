@@ -78,9 +78,13 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		if(ActiveUser.getActiveUser().getGroupID() != null)
 		{
 			shoppingList = getShoppingList();
-			
 			if (shoppingList != null)
 			{
+				if(shoppingList.length == 0)
+				{
+					emptyDisplay(this);
+					return;
+				}
 				createDisplay(this);
 			}
 			else
@@ -104,6 +108,40 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 
 		TextView error = new TextView(contextActivity);
 		error.setText("You do not have an active connection");
+		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+		error.setTextColor(Color.BLACK);
+		error.setTextSize(25f);
+		error.setGravity(Gravity.CENTER);
+		upperLayout.addView(error);
+	}
+	
+	private void emptyDisplay(Activity contextActivity)
+	{
+		upperLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
+		upperLayout.removeAllViews();
+		
+		lowerLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+		lowerLayout.removeAllViews();
+		
+		Button shop = new Button(this);
+		shop.setText("Start Shopping");
+		shop.setOnClickListener(this);
+		upperLayout.addView(shop);
+		
+		TextView header = new TextView(contextActivity);
+		header.setText("Shopping List");
+		header.setGravity(Gravity.CENTER);
+		header.setTextSize(20f);
+		header.setTextColor(Color.BLACK);
+		header.setPadding(0, 30, 0, 30);
+		upperLayout.addView(header);
+		
+		View ruler = new View(contextActivity); 
+		ruler.setBackgroundColor(Color.WHITE);
+		upperLayout.addView(ruler, LayoutParams.FILL_PARENT, 5);
+
+		TextView error = new TextView(contextActivity);
+		error.setText("Your shopping list is currently empty.");
 		error.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		error.setTextColor(Color.BLACK);
 		error.setTextSize(25f);
@@ -204,14 +242,16 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		try 
 		{
 			String list = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/shoppinglist/" + ActiveUser.getActiveUser().getGroupID()).get();
-
+			if(list.length() == 0)
+			{
+				return new String[] { };
+			}
 			String[] shoppingList = list.split("\n");
 			Arrays.sort(shoppingList);
 			return shoppingList;
 		} 
 		catch (Exception e) 
 		{
-			Log.w("ALL_PROD", "FAILED TO GET shopping list");
 			return null;
 		}
 	}
@@ -239,20 +279,20 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 						try 
 						{
 							String completed = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/shoppinglist/"+ActiveUser.getActiveUser().getGroupID()+"/" + product, "delete").get();
-							
-							Log.w("DELETE COMPLETE", completed);
-
 							Toast.makeText(ShoppingListActivity.this, product + " removed from shopping list", Toast.LENGTH_LONG).show();
-
 							onResume();
 						} 
 						catch (InterruptedException e) 
 						{
 							e.printStackTrace();
+							Toast.makeText(ShoppingListActivity.this, "Unable to delete "+product+ " from the shopping list.  Check your internet connection.", Toast.LENGTH_LONG).show();
+							return;
 						}
 						catch (ExecutionException e) 
 						{
 							e.printStackTrace();
+							Toast.makeText(ShoppingListActivity.this, "Unable to delete "+product+ " from the shopping list.  Check your internet connection.", Toast.LENGTH_LONG).show();
+							return;
 						}								
 					}
 				})

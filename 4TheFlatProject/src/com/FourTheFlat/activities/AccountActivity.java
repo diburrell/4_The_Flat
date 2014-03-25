@@ -138,6 +138,16 @@ public class AccountActivity extends Activity implements View.OnClickListener
 
 	private void createAccountInformation(Activity contextActivity)
 	{
+		MapStore ms = new MapStore();
+		try {
+			ms = (MapStore)PojoMapper.fromJson(new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/money/"+ActiveUser.getActiveUser().getUsername()).get(), MapStore.class);
+		
+		} catch (Exception e)
+		{
+			Toast.makeText(this, "Unable to retrieve money information from the server.", Toast.LENGTH_LONG).show();
+			return;
+		}
+		
 		TextView header = new TextView(contextActivity);
 		header.setText("Account Information");
 		header.setGravity(Gravity.CENTER);
@@ -150,26 +160,6 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		ruler.setBackgroundColor(Color.WHITE);
 		layout.addView(ruler, LayoutParams.FILL_PARENT, 5);
 
-		MapStore ms = new MapStore();
-		try {
-			ms = (MapStore)PojoMapper.fromJson(new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/money/"+ActiveUser.getActiveUser().getUsername()).get(), MapStore.class);
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		Map<String, Integer> books = ms.getMap();
 		
 		TableRow[] row = new TableRow[books.size()];
@@ -177,15 +167,24 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		TextView[] owe = new TextView[books.size()];
 
 		Log.w("size",Integer.toString(books.size()));
-		if(ms == null)
+		Log.w("size",Integer.toString(books.entrySet().size()));
+		if(books.entrySet().size() == 0)
 		{
 			TextView noInfo = new TextView(contextActivity);
-			noInfo.setText("No info!!!");
+			noInfo.setText("There is no information to display.");
 			noInfo.setGravity(Gravity.CENTER);
 			noInfo.setTextSize(20f);
 			noInfo.setTextColor(Color.BLACK);
 			noInfo.setPadding(0, 30, 0, 30);
 			layout.addView(noInfo);
+			Button back = new Button(contextActivity);
+			back.setText("Back to menu");
+			back.setId(4);
+			back.setOnClickListener(this);
+			TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+			params.setMargins(0, 50, 0, 50);
+			back.setLayoutParams(params);
+			layout.addView(back);
 			return;
 		}
 		
@@ -649,6 +648,11 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			{
 				Toast.makeText(this, "User has been added to the group.", Toast.LENGTH_LONG).show();
 				return true;
+			}
+			else if(response.equals("User request already pending."))
+			{
+				Toast.makeText(this, "A request to add this user is already pending.", Toast.LENGTH_LONG).show();
+				return false;
 			}
 			else if(response.equals("User suggested."))
 			{
