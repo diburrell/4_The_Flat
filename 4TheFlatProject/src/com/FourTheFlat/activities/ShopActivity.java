@@ -50,7 +50,11 @@ public class ShopActivity extends Activity implements View.OnClickListener
 	private void createDisplay(Activity contextActivity, Map<String, Integer> currList)
 	{	
 		
-		list = currList;
+		list = getList();
+			
+		Map<String, Integer> newList = currList; 
+		
+		list.putAll(newList);
 		
 		layout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
 		buttonHolder = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
