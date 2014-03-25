@@ -14,9 +14,10 @@ import com.FourTheFlat.stores.Group;
 import com.FourTheFlat.stores.User;
 
 public class ActiveUser {
-	
+
 	private static User user;
-	
+	private static String shop="";
+
 	public static boolean initialise(Context context)
 	{
 		SharedPreferences settings = Settings.getSharedPreferences(context);
@@ -36,18 +37,28 @@ public class ActiveUser {
 		}
 		return false;
 	}
-	
+
 	public static User getActiveUser()
 	{
 		return user;
 	}
-	
+
+	public static String getShop()
+	{
+		return shop;
+	}
+
+	public static void setShop(String shopName)
+	{
+		shop = shopName;
+	}
+
 	public static boolean leaveGroup(Context context)
 	{
 		String response;
 		UUID groupID = ActiveUser.getActiveUser().getGroupID();
 		String username = ActiveUser.getActiveUser().getUsername();
-		
+
 		try {
 			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+groupID+"/"+username,"delete").get();
 		} catch (Exception e)
@@ -72,7 +83,7 @@ public class ActiveUser {
 		ActiveUser.getActiveUser().setGroupID(null);
 		return true;
 	}
-	
+
 	public static boolean createGroup(Context context, String address)
 	{
 		String response;
@@ -105,4 +116,23 @@ public class ActiveUser {
 		return true;
 	}
 
+	public static boolean isGroupMemberShopping()
+	{
+		String response;
+		Group g;
+		try
+		{
+			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
+			g = (Group)PojoMapper.fromJson(response, Group.class);
+			if(!g.getuserShopping().equals(null))
+			{
+				return true;
+			}
+			return false;			
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
 }

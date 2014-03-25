@@ -269,14 +269,10 @@ public class RegisterActivity extends Activity
 						editor.putBoolean("hasLoggedIn", true);
 						editor.putString("hashedPassword", Cryptography.computeSHAHash(inputPassword.getText().toString()));
 						editor.commit();
-<<<<<<< HEAD
 						RegisterActivity rA = RegisterActivity.this;
 						Alarm.startRepeatingTimer(rA);
-						try{
-=======
 						try
 						{
->>>>>>> origin/refactor
 			            	json.put(KEY_SUCCESS, "1");
 			            }
 			            catch(JSONException e){            	

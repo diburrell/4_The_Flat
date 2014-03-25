@@ -240,7 +240,6 @@ public class LoginActivity extends Activity
 			{
 				e1.printStackTrace();
 			}
-<<<<<<< HEAD
 			try{
 					user = (User) PojoMapper.fromJson(httpResponse, User.class);
 					SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
@@ -249,15 +248,6 @@ public class LoginActivity extends Activity
 					editor.commit();
 					LoginActivity lA = LoginActivity.this;
 					Alarm.startRepeatingTimer(lA);
-=======
-			try
-			{
-				user = (User) PojoMapper.fromJson(httpResponse, User.class);
-				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(getApplicationContext());
-				editor.putString("user", httpResponse);
-				editor.putString("hashedPassword", password);
-				editor.commit();
->>>>>>> origin/refactor
 			}
 			catch (Exception e)
 			{

@@ -17,13 +17,8 @@ public final class UserFeedback {
 				new Intent(context, TabCreator.class), 0);
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-<<<<<<< HEAD
-				context).setSmallIcon(R.drawable.account_on)
-				.setContentTitle("4TheFlat")
-=======
 				context)
-				.setContentTitle("Shares")
->>>>>>> origin/refactor
+				.setContentTitle("4TheFlat")
 				.setContentText(message);
 		mBuilder.setContentIntent(contentIntent);
 		mBuilder.setDefaults(Notification.DEFAULT_SOUND);
@@ -32,5 +27,5 @@ public final class UserFeedback {
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.notify(1, mBuilder.build());
 	}
-	
+
 }

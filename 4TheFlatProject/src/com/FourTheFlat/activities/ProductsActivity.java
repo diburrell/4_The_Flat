@@ -286,33 +286,37 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 							try 
 							{
 								String completed = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/shoppinglist/"+ActiveUser.getActiveUser().getGroupID() + "/" + product, "put").get();
-								Log.w("PUT COMPLETE", completed);
+								Toast.makeText(ProductsActivity.this, product + " added to shopping list.",	Toast.LENGTH_LONG).show();		
 							} 
 							catch (InterruptedException e) 
 							{
 								e.printStackTrace();
+								Toast.makeText(ProductsActivity.this, "Unable to add " +product + ". Please check your internet connection", Toast.LENGTH_LONG).show();
 							} 
 							catch (ExecutionException e) 
 							{
 								e.printStackTrace();
+								Toast.makeText(ProductsActivity.this, "Unable to add " +product + ". Please check your internet connection", Toast.LENGTH_LONG).show();
 							}
 						} 
 						else 
 						{
-							Toast.makeText(ProductsActivity.this, product + " will be added if all other users agree", Toast.LENGTH_LONG).show();
-
 							try 
 							{
 								String completed = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/0/" + product, "post").get();
-								Log.w("POST COMPLETE", completed);
+								Toast.makeText(ProductsActivity.this, product + " will be added if all other users agree", Toast.LENGTH_LONG).show();
+								ProductsActivity pA = ProductsActivity.this;
+								loadProductsList(pA);
 							} 
 							catch (InterruptedException e) 
 							{
 								e.printStackTrace();
+								Toast.makeText(ProductsActivity.this, "Unable to add " +product + ". Please check your internet connection", Toast.LENGTH_LONG).show();
 							} 
 							catch (ExecutionException e) 
 							{
 								e.printStackTrace();
+								Toast.makeText(ProductsActivity.this, "Unable to add " +product + ". Please check your internet connection", Toast.LENGTH_LONG).show();
 							}
 						}
 					}
