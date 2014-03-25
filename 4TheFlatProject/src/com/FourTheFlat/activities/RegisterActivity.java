@@ -89,7 +89,6 @@ public class RegisterActivity extends Activity
         
         rows[1].setPadding(20, 60, 20, 60);
         
-        
         TextView confirm = new TextView(this);
         confirm.setText("Confirm Password: ");
         confirm.setTextSize(18f);
