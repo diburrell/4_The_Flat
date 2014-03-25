@@ -45,7 +45,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 			g = (Group)PojoMapper.fromJson(response, Group.class);
 			if(!g.getuserShopping().equals(null))
 			{
-				if(!userShoppingNotificationSent)
+				if(!userShoppingNotificationSent && g.getuserShopping().equals(ActiveUser.getActiveUser().getUsername()))
 				{
 					UserFeedback.showNotification(context, "Someone is shopping, make sure to add any last minute items you need!");
 				}
