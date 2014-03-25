@@ -18,7 +18,7 @@ import android.widget.Toast;
 public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 
 	static boolean userShoppingNotificationSent = false;
-	
+
 	@Override
 	/** This method is triggered when an alarm goes off. */
 	public void onReceive(Context context, Intent intent)
@@ -34,7 +34,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 			refreshActiveUser(context);
 		}
 	}
-	
+
 	public void checkUserShopping(Context context)
 	{
 		String response;
@@ -45,7 +45,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 			g = (Group)PojoMapper.fromJson(response, Group.class);
 			if(!g.getuserShopping().equals(null))
 			{
-				if(!userShoppingNotificationSent)
+				if(!userShoppingNotificationSent && !g.getuserShopping().equals(ActiveUser.getActiveUser().getUsername()))
 				{
 					UserFeedback.showNotification(context, "Someone is shopping, make sure to add any last minute items you need!");
 				}
@@ -53,14 +53,14 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 				return;
 			}
 			userShoppingNotificationSent = false;
-			
+
 		}
 		catch(Exception e)
 		{
 			return;
 		}
 	}
-	
+
 	public void refreshActiveUser(Context context)
 	{
 		String response;
@@ -86,5 +86,5 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 			return;
 		}
 	}
-	
+
 }
