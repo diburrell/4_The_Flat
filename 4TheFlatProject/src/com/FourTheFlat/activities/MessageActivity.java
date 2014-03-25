@@ -43,7 +43,8 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 	Message[] messages;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.messages);
 		messages = getMessages();

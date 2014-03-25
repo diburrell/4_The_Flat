@@ -17,8 +17,13 @@ public final class UserFeedback {
 				new Intent(context, TabCreator.class), 0);
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+<<<<<<< HEAD
 				context).setSmallIcon(R.drawable.account_on)
 				.setContentTitle("4TheFlat")
+=======
+				context)
+				.setContentTitle("Shares")
+>>>>>>> origin/refactor
 				.setContentText(message);
 		mBuilder.setContentIntent(contentIntent);
 		mBuilder.setDefaults(Notification.DEFAULT_SOUND);
