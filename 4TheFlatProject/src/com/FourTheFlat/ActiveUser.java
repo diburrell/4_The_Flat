@@ -16,6 +16,7 @@ import com.FourTheFlat.stores.User;
 public class ActiveUser {
 	
 	private static User user;
+	private static String shop="";
 	
 	public static boolean initialise(Context context)
 	{
@@ -40,6 +41,16 @@ public class ActiveUser {
 	public static User getActiveUser()
 	{
 		return user;
+	}
+	
+	public static String getShop()
+	{
+		return shop;
+	}
+	
+	public static void setShop(String shopName)
+	{
+		shop = shopName;
 	}
 	
 	public static boolean leaveGroup(Context context)

@@ -332,8 +332,11 @@ public class ShoppingListActivity extends Activity implements
 				Log.w("DISTANCE", i + ": " + dist * meterConversion + "m");
 
 				if ((dist * meterConversion) <= 250) // if within 250m of a
-														// tesco
+				{										// tesco
+					String shopName = Main.names[i];
+					ActiveUser.setShop(shopName);
 					return true;
+				}
 			}
 		} else {
 			Log.w("curr", "null");

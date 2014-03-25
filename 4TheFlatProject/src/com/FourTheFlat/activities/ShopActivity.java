@@ -167,8 +167,7 @@ public class ShopActivity extends Activity implements View.OnClickListener
 		}
 		
 		try {
-			new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/usershopping/"+ActiveUser.getActiveUser().getUsername()+"/Test Shop","delete").get();
-		
+			new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/usershopping/"+ActiveUser.getActiveUser().getUsername()+"/"+ActiveUser.getShop(),"delete").get();	
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
