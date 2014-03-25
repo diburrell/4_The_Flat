@@ -1,5 +1,6 @@
 package com.FourTheFlat.activities;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -56,6 +57,8 @@ public class LoginActivity extends Activity
             startActivity(registered);
             finish();
         }
+        
+        getActionBar().setTitle("4TheFlat: Login"); 
         
         setContentView(R.layout.login);
         
@@ -125,7 +128,7 @@ public class LoginActivity extends Activity
 		rows[2].addView(login, loginParams);
         
         Button register = new Button(this);
-        register.setText("Register");
+        register.setText("Go to Register");
         register.setTextSize(22f);
         register.setOnClickListener(new View.OnClickListener() 
         {
@@ -138,7 +141,7 @@ public class LoginActivity extends Activity
         });
         TableRow.LayoutParams registerParams = new TableRow.LayoutParams();
         registerParams.span = 2;
-        registerParams.setMargins(30, 50, 30, 0);
+        registerParams.setMargins(30, 30, 30, 0);
         rows[3].addView(register, registerParams);
                 
 	    error = new TextView(this);    
@@ -160,7 +163,7 @@ public class LoginActivity extends Activity
             super.onPreExecute();
             nDialog = new ProgressDialog(LoginActivity.this);
             nDialog.setTitle("Checking Network");
-            nDialog.setMessage("Loading..");
+            nDialog.setMessage("Loading...");
             nDialog.setIndeterminate(false);
             nDialog.setCancelable(true);
             nDialog.show();
