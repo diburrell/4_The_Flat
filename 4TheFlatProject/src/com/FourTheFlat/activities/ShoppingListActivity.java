@@ -162,7 +162,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		lowerLayout.removeAllViews();
 
 		Button shop = new Button(this);
-		shop.setText("Go Shop");
+		shop.setText("Start Shopping");
 		shop.setOnClickListener(this);
 		upperLayout.addView(shop);
 		
@@ -279,7 +279,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	    {
 	        super.onPreExecute();
 	        progress = new ProgressDialog(ShoppingListActivity.this);
-	        progress.setTitle("Contacting GPS");
+	        progress.setTitle("Please wait");
 	        progress.setMessage("Checking location...");
 	        progress.setIndeterminate(false);
 	        progress.setCancelable(true);

@@ -1,17 +1,23 @@
 package com.FourTheFlat.activities;
 
 import android.app.ProgressDialog;
-
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableLayout.LayoutParams;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,16 +29,16 @@ import com.FourTheFlat.PojoMapper;
 import com.FourTheFlat.R;
 import com.FourTheFlat.Settings;
 import com.FourTheFlat.stores.User;
+
 import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends Activity 
 {
-    Button btnLogin;
-    Button Btnregister;
-    Button passreset;
+	TableLayout layout;
+	
     EditText inputUsername;
     EditText inputPassword;
-    private TextView loginErrorMsg;
+    TextView error;
 
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -52,32 +58,46 @@ public class LoginActivity extends Activity
         }
         
         setContentView(R.layout.login);
-        inputUsername = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.pword);
-        Btnregister = (Button) findViewById(R.id.registerbtn);
-        btnLogin = (Button) findViewById(R.id.login);
-        passreset = (Button)findViewById(R.id.passres);
-        loginErrorMsg = (TextView) findViewById(R.id.loginErrorMsg);
-
-        passreset.setOnClickListener(new View.OnClickListener() 
-        {
-        	public void onClick(View view) 
-        	{
-        		Toast.makeText(getApplicationContext(), "Ain't no functionality for this yet!", Toast.LENGTH_LONG).show();
-        	}
-        });
-
-        Btnregister.setOnClickListener(new View.OnClickListener() 
-        {
-            public void onClick(View view) 
-            {
-                Intent myIntent = new Intent(view.getContext(), RegisterActivity.class);
-                startActivityForResult(myIntent, 0);
-                finish();
-             }
-        });
         
-        btnLogin.setOnClickListener(new View.OnClickListener() 
+        layout = (TableLayout)this.findViewById(R.id.layout);
+        
+        TableRow[] rows = new TableRow[5];  
+        for (int i=0; i<rows.length; i++)
+        {
+        	rows[i] = new TableRow(this);
+        }
+        
+        TextView username = new TextView(this);
+        username.setText("Username: ");
+        username.setTextSize(22f);
+        rows[0].addView(username);
+        
+        inputUsername = new EditText(this);
+        inputUsername.setHint("Username");
+        inputUsername.setBackgroundColor(Color.rgb(248,248,248));
+        inputUsername.setTypeface(Typeface.MONOSPACE);
+        rows[0].addView(inputUsername);
+        
+        rows[0].setPadding(20, 60, 20, 0);
+        
+        TextView password = new TextView(this);
+        password.setText("Password: ");
+        password.setTextSize(22f);
+        rows[1].addView(password);
+        
+	    inputPassword = new EditText(this);
+	    inputPassword.setHint("Password");
+	    inputPassword.setBackgroundColor(Color.rgb(248,248,248));
+	    inputPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+	    inputPassword.setTypeface(Typeface.MONOSPACE);
+        rows[1].addView(inputPassword);
+        
+        rows[1].setPadding(20, 60, 20, 60);
+        
+        Button login = new Button(this);
+        login.setText("Login");
+        login.setTextSize(22f);
+        login.setOnClickListener(new View.OnClickListener() 
         {
             public void onClick(View view) 
             {
@@ -98,10 +118,39 @@ public class LoginActivity extends Activity
                     Toast.makeText(getApplicationContext(), "Username and password field are empty", Toast.LENGTH_SHORT).show();
                 }
             }
+        });        
+        TableRow.LayoutParams loginParams = new TableRow.LayoutParams();
+        loginParams.span = 2;
+        loginParams.setMargins(30, 0, 30, 0);
+		rows[2].addView(login, loginParams);
+        
+        Button register = new Button(this);
+        register.setText("Register");
+        register.setTextSize(22f);
+        register.setOnClickListener(new View.OnClickListener() 
+        {
+            public void onClick(View view) 
+            {
+                Intent myIntent = new Intent(view.getContext(), RegisterActivity.class);
+                startActivityForResult(myIntent, 0);
+                finish();
+             }
         });
+        TableRow.LayoutParams registerParams = new TableRow.LayoutParams();
+        registerParams.span = 2;
+        registerParams.setMargins(30, 50, 30, 0);
+        rows[3].addView(register, registerParams);
+                
+	    error = new TextView(this);    
+        rows[4].addView(error);        
+        
+        for (int i=0; i<rows.length; i++)
+        {
+        	layout.addView(rows[i]);
+        }
     }
 
-    private class NetCheck extends AsyncTask<String,String,Boolean>
+    private class NetCheck extends AsyncTask<String, String, Boolean>
     {
         private ProgressDialog nDialog;
 
@@ -134,7 +183,7 @@ public class LoginActivity extends Activity
             else
             {
                 nDialog.dismiss();
-                loginErrorMsg.setText("Error in Network Connection");
+                error.setText("Error in Network Connection");
             }
         }
     }
@@ -143,17 +192,16 @@ public class LoginActivity extends Activity
     private class ProcessLogin extends AsyncTask<String, String, Boolean> 
     {
         private ProgressDialog pDialog;
-        String email,password;
+        String username, password;
 
         @Override
         protected void onPreExecute() 
         {
             super.onPreExecute();
 
-            inputUsername = (EditText) findViewById(R.id.email);
-            inputPassword = (EditText) findViewById(R.id.pword);
-            email = inputUsername.getText().toString();
+            username = inputUsername.getText().toString();
             password = inputPassword.getText().toString();
+            
             pDialog = new ProgressDialog(LoginActivity.this);
             pDialog.setTitle("Contacting Servers");
             pDialog.setMessage("Logging in ...");
@@ -172,7 +220,7 @@ public class LoginActivity extends Activity
         	
 			try 
 			{
-				httpResponse = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+email+"/"+password+"/").get();
+				httpResponse = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+username+"/"+password+"/").get();
 			} 
 			catch (InterruptedException e1) 
 			{
@@ -227,7 +275,7 @@ public class LoginActivity extends Activity
 	        else
 	        {
 	            pDialog.dismiss();
-	            loginErrorMsg.setText("Incorrect username/password");
+	            error.setText("Incorrect username/password");
 	        }
         }
     }
