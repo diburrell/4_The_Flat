@@ -277,7 +277,7 @@ public class ShoppingListActivity extends Activity implements
 			// TODO: REINSTATE THIS
 			 do
 			 {
-			 counter++;
+				 counter++;
 			 }
 			 while (current == null);
 
@@ -286,7 +286,7 @@ public class ShoppingListActivity extends Activity implements
 
 		@Override
 		protected void onPostExecute(Boolean nearTesco) {
-			if (nearTesco) {
+			if (nearTesco()) {
 				Intent shopIntent = new Intent(getApplicationContext(),
 						ShopActivity.class);
 				shopIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

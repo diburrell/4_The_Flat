@@ -728,6 +728,11 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		TextView child = (TextView) tR.getChildAt(0); 
 
 		final String username = child.getText().toString();
+		if (ActiveUser.isGroupMemberShopping()) 
+		{
+			Toast.makeText(getApplicationContext(), "You can't do that! Someone in your flat is currently shopping!", Toast.LENGTH_SHORT).show();
+		} 
+		else {
 		
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -768,5 +773,6 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			AlertDialog alertDialog = alertDialogBuilder.create();
 
 			alertDialog.show();
+		}
 	}
 }
