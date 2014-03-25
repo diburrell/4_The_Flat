@@ -541,7 +541,10 @@ public class AccountActivity extends Activity implements View.OnClickListener
 					Toast.makeText(this, "You must enter an address first", Toast.LENGTH_LONG).show();
 					return;
 				}
-				requestChangeAddress(modifyFlatAddressEdit.getText().toString());
+				if(!requestChangeAddress(modifyFlatAddressEdit.getText().toString()))
+				{
+					return;
+				}
 				layout.removeAllViews();
 				createMainMenu(this);
 				break;			
@@ -665,6 +668,15 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		String response;
 		try {
 			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/2/"+newAddress,"post").get();
+			if(response.equals("Address changed."))
+			{
+				return true;
+			}
+			else if(response.equals("Address change already pending."))
+			{
+				Toast.makeText(this, "An address change is already pending.", Toast.LENGTH_SHORT).show();
+				return false;
+			}
 		} catch (Exception e)
 		{
 			return false;
@@ -728,6 +740,11 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		TextView child = (TextView) tR.getChildAt(0); 
 
 		final String username = child.getText().toString();
+		if (ActiveUser.isGroupMemberShopping()) 
+		{
+			Toast.makeText(getApplicationContext(), "You can't do that! Someone in your flat is currently shopping!", Toast.LENGTH_SHORT).show();
+		} 
+		else {
 		
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
@@ -768,5 +785,6 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			AlertDialog alertDialog = alertDialogBuilder.create();
 
 			alertDialog.show();
+		}
 	}
 }

@@ -46,9 +46,10 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.messages);
+		messages = getMessages();
 		loadMessageList(this);
 	}
-	
+
 	public void loadMessageList(Activity contextActivity)
 	{
 		buttonHolder = (TableLayout) contextActivity
@@ -60,8 +61,7 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 		goBack.setText("Go back!");
 		goBack.setOnClickListener(this);
 		buttonHolder.addView(goBack);
-		
-		messages = getMessages();
+
 		if(messages != null)
 		{
 			displayMessages(this);
@@ -73,7 +73,7 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 			return;
 		}
 	}
-	
+
 	private void noConnectionDisplay(Activity contextActivity)
 	{
 		buttonHolder = (TableLayout) contextActivity
