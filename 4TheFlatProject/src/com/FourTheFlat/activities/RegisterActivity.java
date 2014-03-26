@@ -123,18 +123,18 @@ public class RegisterActivity extends Activity
                     	}
                     	else
                     	{
-                    		Toast.makeText(getApplicationContext(), "Password and password confirmation do not match", Toast.LENGTH_SHORT).show();
+                    		Toast.makeText(getApplicationContext(), "The passwords you entered do not match.", Toast.LENGTH_SHORT).show();
                     	}
 
                     }
                     else
                     {
-                        Toast.makeText(getApplicationContext(), "Password should be minimum 6 characters", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Password should be minimum 6 characters.", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(), "One or more fields are empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "One or more fields are empty.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

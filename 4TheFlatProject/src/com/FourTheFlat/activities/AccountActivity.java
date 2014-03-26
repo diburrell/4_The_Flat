@@ -146,7 +146,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		{
 			Toast.makeText(this, "Unable to retrieve money information from the server.", Toast.LENGTH_LONG).show();
 			layout.removeAllViews();
-			createMainMenu(this);
+			createMainMenu(this); 
 			return;
 		}
 		
@@ -736,7 +736,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			}
 		} catch (Exception e)
 		{
-			Toast.makeText(getApplicationContext(), "An unknown error has occurred.", Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Could not change password.  You do not have an active internet connection.", Toast.LENGTH_LONG).show();
 			return false;
 		}
 	}
