@@ -41,7 +41,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 		Group g;
 		try
 		{
-			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
+			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
 			g = (Group)PojoMapper.fromJson(response, Group.class);
 			if(!g.getuserShopping().equals(null))
 			{
@@ -67,7 +67,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 		String hashedPassword = Settings.getSharedPreferences(context).getString("hashedPassword", "");
 		try
 		{
-			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword,"get").get();
+			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword,"get").get();
 			Log.w("activeUser",response);
 			if(response.equals("Invalid username or password."))
 			{

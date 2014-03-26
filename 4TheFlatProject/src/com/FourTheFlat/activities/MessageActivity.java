@@ -187,7 +187,7 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 
 		try {
 			allMessages = new HttpRequest().execute(
-					"http://group1.cloudapp.net:8080/ServerSide/messages/"
+					"http://group1b.cloudapp.net:8080/ServerSide/messages/"
 							+ ActiveUser.getActiveUser().getUsername()).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -311,10 +311,10 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 
 										String completed = null;
 										try {
-						Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/yes");
+						Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/yes");
 											completed = new HttpRequest()
 											.execute(
-											"http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/yes",
+											"http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/yes",
 											"post").get();
 										}
 											catch (ExecutionException e) {
@@ -336,10 +336,10 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 								//NEGITIVE INPUT!
 										String completed = null;
 										try {
-						Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/no");
+						Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/no");
 											completed = new HttpRequest()
 											.execute(
-											"http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/no",
+											"http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/no",
 											"post").get();
 										}
 											catch (ExecutionException e) {
@@ -365,10 +365,10 @@ public class MessageActivity extends Activity implements View.OnClickListener {
 										int id) {
 											String completed = null;
 											try {
-							Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID());
+							Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID());
 												completed = new HttpRequest()
 												.execute(
-												"http://group1.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID(),
+												"http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID(),
 												"delete").get();
 											}
 												catch (ExecutionException e) {

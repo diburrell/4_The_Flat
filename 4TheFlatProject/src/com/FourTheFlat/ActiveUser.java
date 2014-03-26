@@ -60,7 +60,7 @@ public class ActiveUser {
 		String username = ActiveUser.getActiveUser().getUsername();
 
 		try {
-			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+groupID+"/"+username,"delete").get();
+			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/group/"+groupID+"/"+username,"delete").get();
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -71,7 +71,7 @@ public class ActiveUser {
 		SharedPreferences sp = Settings.getSharedPreferences(context);
 		String hashedPassword = sp.getString("hashedPassword", "");
 		try {
-			userJSON = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword).get();
+			userJSON = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword).get();
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -91,7 +91,7 @@ public class ActiveUser {
 		String username = ActiveUser.getActiveUser().getUsername();
 		Group g;
 		try {
-			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+username+"/"+address,"post").get();
+			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/group/"+username+"/"+address,"post").get();
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -103,7 +103,7 @@ public class ActiveUser {
 		String hashedPassword = sp.getString("hashedPassword", "");
 		User u;
 		try {
-			userJSON = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword).get();
+			userJSON = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword).get();
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -122,7 +122,7 @@ public class ActiveUser {
 		Group g;
 		try
 		{
-			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
+			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
 			g = (Group)PojoMapper.fromJson(response, Group.class);
 			if(!g.getuserShopping().equals(null))
 			{

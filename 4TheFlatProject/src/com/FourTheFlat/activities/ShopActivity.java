@@ -42,7 +42,7 @@ public class ShopActivity extends Activity implements View.OnClickListener
 		//Send signal to start shop (LOCK EVERY ONE ELSE OUT!) 
 		MapStore store = new MapStore();
 		try {
-			store = (MapStore) PojoMapper.fromJson(new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/usershopping/"+ActiveUser.getActiveUser().getUsername()).get(), MapStore.class);
+			store = (MapStore) PojoMapper.fromJson(new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/usershopping/"+ActiveUser.getActiveUser().getUsername()).get(), MapStore.class);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

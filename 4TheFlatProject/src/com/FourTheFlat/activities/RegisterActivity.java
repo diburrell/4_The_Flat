@@ -239,7 +239,7 @@ public class RegisterActivity extends Activity
         	User user = new User();
 			try 
 			{
-				httpResponse = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+username+"/"+password+"/", "put").get();
+				httpResponse = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/user/"+username+"/"+password+"/", "put").get();
 				
 				try
 				{
