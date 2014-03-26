@@ -104,7 +104,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 		else if (state == 1) 
 		{			
 			Button moreProducts = new Button(contextActivity);
-			moreProducts.setText("Go back");
+			moreProducts.setText("Allowed Products");
 			moreProducts.setOnClickListener(this);
 			upperLayout.addView(moreProducts);
 			
@@ -310,6 +310,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 									Toast.makeText(ProductsActivity.this, "A request to add " + product + " is already pending.", Toast.LENGTH_LONG).show();
 									return;
 								}
+								
 								ProductsActivity pA = ProductsActivity.this;
 								loadProductsList(pA);
 							} 
