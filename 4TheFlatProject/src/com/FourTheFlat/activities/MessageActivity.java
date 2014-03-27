@@ -55,17 +55,9 @@ public class MessageActivity extends Activity implements View.OnClickListener
 	}
 
 	public void loadMessageList(Activity contextActivity)
-	{
-		upperLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
-		upperLayout.removeAllViews();
-		
+	{	
 		lowerLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
 		lowerLayout.removeAllViews();
-		
-		Button back = new Button(this);
-		back.setText("Back to Account");
-		back.setOnClickListener(this);
-		upperLayout.addView(back);
 
 		if (messages != null)
 		{
