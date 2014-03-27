@@ -14,10 +14,14 @@ import com.FourTheFlat.stores.Group;
 import com.FourTheFlat.stores.User;
 
 public class ActiveUser {
-	
+
 	private static User user;
 	private static String shop="";
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> origin/error
 	public static boolean initialise(Context context)
 	{
 		SharedPreferences settings = Settings.getSharedPreferences(context);
@@ -37,30 +41,42 @@ public class ActiveUser {
 		}
 		return false;
 	}
-	
+
 	public static User getActiveUser()
 	{
 		return user;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> origin/error
 	public static String getShop()
 	{
 		return shop;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> origin/error
 	public static void setShop(String shopName)
 	{
 		shop = shopName;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> origin/error
 	public static boolean leaveGroup(Context context)
 	{
 		String response;
 		UUID groupID = ActiveUser.getActiveUser().getGroupID();
 		String username = ActiveUser.getActiveUser().getUsername();
-		
+
 		try {
-			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+groupID+"/"+username,"delete").get();
+			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/group/"+groupID+"/"+username,"delete").get();
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -71,7 +87,7 @@ public class ActiveUser {
 		SharedPreferences sp = Settings.getSharedPreferences(context);
 		String hashedPassword = sp.getString("hashedPassword", "");
 		try {
-			userJSON = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword).get();
+			userJSON = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword).get();
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -83,7 +99,7 @@ public class ActiveUser {
 		ActiveUser.getActiveUser().setGroupID(null);
 		return true;
 	}
-	
+
 	public static boolean createGroup(Context context, String address)
 	{
 		String response;
@@ -91,7 +107,7 @@ public class ActiveUser {
 		String username = ActiveUser.getActiveUser().getUsername();
 		Group g;
 		try {
-			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+username+"/"+address,"post").get();
+			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/group/"+username+"/"+address,"post").get();
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -103,7 +119,7 @@ public class ActiveUser {
 		String hashedPassword = sp.getString("hashedPassword", "");
 		User u;
 		try {
-			userJSON = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword).get();
+			userJSON = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword).get();
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -115,14 +131,22 @@ public class ActiveUser {
 		initialise(context);
 		return true;
 	}
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> origin/error
 	public static boolean isGroupMemberShopping()
 	{
 		String response;
 		Group g;
 		try
 		{
+<<<<<<< HEAD
 			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
+=======
+			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
+>>>>>>> origin/error
 			g = (Group)PojoMapper.fromJson(response, Group.class);
 			if(!g.getuserShopping().equals(null))
 			{
@@ -135,4 +159,8 @@ public class ActiveUser {
 			return false;
 		}
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/error

@@ -33,25 +33,19 @@ public class TabCreator extends TabActivity
 	    // Create an Intent to launch an Activity for the tab (to be reused)
 	    intent = new Intent().setClass(this, ShoppingListActivity.class);
 	    // Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("Shopping List").setIndicator("List",
-	                      res.getDrawable(R.drawable.shoppinglist_tab))
-	                  .setContent(intent);
+	    spec = tabHost.newTabSpec("Shopping List").setIndicator("List").setContent(intent);
 	    tabHost.addTab(spec);
 	    
 	    // Create an Intent to launch an Activity for the tab (to be reused)
 	    intent = new Intent().setClass(this, ProductsActivity.class);
 	    // Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("Products").setIndicator("Products",
-	                      res.getDrawable(R.drawable.products_tab))
-	                  .setContent(intent);
+	    spec = tabHost.newTabSpec("Products").setIndicator("Products").setContent(intent);
 	    tabHost.addTab(spec);
 	    
 		 // Create an Intent to launch an Activity for the tab (to be reused)
 	    intent = new Intent().setClass(this, AccountActivity.class);
 	    // Initialize a TabSpec for each tab and add it to the TabHost
-	    spec = tabHost.newTabSpec("Account").setIndicator("Account",
-	                      res.getDrawable(R.drawable.account_tab))
-	                  .setContent(intent);
+	    spec = tabHost.newTabSpec("Account").setIndicator("Account").setContent(intent);
 	    tabHost.addTab(spec);
 	    
 	    tabHost.setOnTabChangedListener(new OnTabChangeListener() 
@@ -87,7 +81,7 @@ public class TabCreator extends TabActivity
 		for (int i=0; i<tabHost.getTabWidget().getTabCount(); i++)
     	{
 			TextView tv = (TextView)tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
-	        tv.setTextSize(20f);
+	        tv.setTextSize(16f);
 			
     		if (tabHost.getTabWidget().getChildAt(i).isSelected()) //if this tab is currently selected
     		{
@@ -102,5 +96,3 @@ public class TabCreator extends TabActivity
     	}
 	}
 }
-
-

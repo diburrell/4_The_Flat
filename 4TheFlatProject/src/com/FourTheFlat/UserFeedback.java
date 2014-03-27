@@ -17,7 +17,11 @@ public final class UserFeedback {
 				new Intent(context, TabCreator.class), 0);
 
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+<<<<<<< HEAD
 				context).setSmallIcon(R.drawable.account_on)
+=======
+				context)
+>>>>>>> origin/error
 				.setContentTitle("4TheFlat")
 				.setContentText(message);
 		mBuilder.setContentIntent(contentIntent);
@@ -27,5 +31,5 @@ public final class UserFeedback {
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.notify(1, mBuilder.build());
 	}
-	
+
 }

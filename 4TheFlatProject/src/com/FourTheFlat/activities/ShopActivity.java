@@ -9,6 +9,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 
 import com.FourTheFlat.ActiveUser;
 import com.FourTheFlat.HttpRequest;
+import com.FourTheFlat.Main;
 import com.FourTheFlat.PojoMapper;
 import com.FourTheFlat.R;
 import com.FourTheFlat.TabCreator;
@@ -47,6 +48,7 @@ public class ShopActivity extends Activity implements View.OnClickListener
 		createDisplay(this, getList());
 	}
 	
+<<<<<<< HEAD
 	private void createDisplay(Activity contextActivity, Map<String, Integer> currList)
 	{	
 		
@@ -62,6 +64,36 @@ public class ShopActivity extends Activity implements View.OnClickListener
 		TableRow[] row = new TableRow[currList.size()];
 		TextView[] product = new TextView[currList.size()];
 		TextView[] cost = new TextView[currList.size()];
+=======
+	private void createDisplay(Activity contextActivity)
+	{		
+		layout = (TableLayout) contextActivity.findViewById(R.id.layout);
+	
+		//Send signal to start shop (LOCK EVERY ONE ELSE OUT!) 
+		MapStore store = new MapStore();
+		try {
+			store = (MapStore) PojoMapper.fromJson(new HttpRequest().execute(Main.URL + "usershopping/"+ActiveUser.getActiveUser().getUsername()).get(), MapStore.class);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Map<String, Integer> list = store.getMap();
+		TableRow[] row = new TableRow[list.size()];
+		TextView[] product = new TextView[list.size()];
+		TextView[] cost = new TextView[list.size()];
+>>>>>>> origin/error
 		
 		int i =0;
 		for (Map.Entry<String, Integer> m : currList.entrySet())
