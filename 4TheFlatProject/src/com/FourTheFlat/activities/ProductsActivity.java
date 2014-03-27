@@ -12,10 +12,13 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -28,6 +31,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 
 	String[] allowedProducts;
 	
+	EditText searchEdit;
 	int state = 0;
 
 	@Override
@@ -116,6 +120,26 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 			header.setPadding(0, 30, 0, 30);
 			upperLayout.addView(header);
 			
+	        searchEdit = new EditText(this);
+	        searchEdit.setHint("Search");
+	        searchEdit.setBackgroundColor(Color.rgb(248,248,248));
+	        searchEdit.setTypeface(Typeface.MONOSPACE);
+	        searchEdit.addTextChangedListener(new TextWatcher() {
+
+	        	   public void afterTextChanged(Editable s) {}
+
+	        	   public void beforeTextChanged(CharSequence s, int start,
+	        	     int count, int after) {
+	        	   }
+
+	        	   public void onTextChanged(CharSequence s, int start,
+	        	     int before, int count) {
+	        		   lowerLayout.removeAllViews();
+	        		   loadLowerProductLayout(ProductsActivity.this);
+	        	   }
+	        	  });
+	        upperLayout.addView(searchEdit);
+			
 			View ruler = new View(contextActivity); 
 			ruler.setBackgroundColor(Color.WHITE);
 			upperLayout.addView(ruler, LayoutParams.FILL_PARENT, 5);
@@ -148,6 +172,11 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 					}
 				}
 				
+				if(filterProducts(searchEdit.getText().toString(),allProducts[i]))
+				{
+					continue outerloop;
+				}
+				
 				rowProduct[i] = new TableRow(contextActivity);
 				productName[i] = new TextView(contextActivity);
 
@@ -163,6 +192,73 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 				lowerLayout.addView(rowProduct[i]);
 			}
 		}
+	}
+	
+	public void loadLowerProductLayout(Activity contextActivity)
+	{
+		String[] allProducts = null;
+
+		try 
+		{
+			String products = new HttpRequest().execute(Main.URL + "allproducts").get();
+			allProducts = products.split("\n");
+		} 
+		catch (Exception e) 
+		{
+			Log.w("ALL_PROD", "FAILED TO GET all products");
+		}
+
+		Arrays.sort(allProducts);
+		
+		TableRow[] rowProduct = new TableRow[allProducts.length];
+		TextView[] productName = new TextView[allProducts.length];
+
+		outerloop:
+		for (int i = 0; i < allProducts.length; i++) 
+		{
+			for(int j = 0; j < allowedProducts.length; j++)
+			{
+				if(allProducts[i].equals(allowedProducts[j]))
+				{
+					continue outerloop;
+				}
+			}
+			
+			if(filterProducts(searchEdit.getText().toString(),allProducts[i]))
+			{
+				continue outerloop;
+			}
+			
+			rowProduct[i] = new TableRow(contextActivity);
+			productName[i] = new TextView(contextActivity);
+
+			productName[i].setText(allProducts[i]);
+			productName[i].setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+			productName[i].setTextColor(Color.BLACK);
+			productName[i].setTextSize(25f);
+			productName[i].setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+			productName[i].setOnClickListener(this);
+
+			rowProduct[i].addView(productName[i]);
+
+			lowerLayout.addView(rowProduct[i]);
+		}
+	}
+	
+	public boolean filterProducts(String searchTerm, String product)
+	{
+		
+		Log.w("product",searchTerm + " - " + product);
+		if(searchTerm.equals(""))
+		{
+			Log.w("product", "searchTerm.equals()");
+			return false;
+		}
+		if(product.toLowerCase().startsWith(searchTerm.toLowerCase()))
+		{
+			return false;
+		}
+		return true;
 	}
 	
 	private void noConnectionDisplay(Activity contextActivity)
