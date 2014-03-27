@@ -560,9 +560,39 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 			break;
 		case 6:
 			// leave the flat
-			layout.removeAllViews();
-			ActiveUser.leaveGroup(this);
-			createMainMenu(this);
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					this);
+
+			alertDialogBuilder
+					.setTitle("Are you sure you want to leave the group?");
+
+			alertDialogBuilder
+					.setCancelable(false)
+					.setPositiveButton("Yes",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									layout.removeAllViews();
+									ActiveUser.leaveGroup(AccountActivity.this);
+									AccountActivity.this
+											.createMainMenu(AccountActivity.this);
+									Toast.makeText(AccountActivity.this,
+											"You have left the group!",
+											Toast.LENGTH_LONG).show();
+								}
+							})
+					.setNegativeButton("No",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									dialog.cancel();
+								}
+							});
+
+			AlertDialog alertDialog = alertDialogBuilder.create();
+
+			alertDialog.show();
+
 			break;
 
 		case 7:
@@ -605,8 +635,52 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 
 		case 9:
 			// Create group layout
-			layout.removeAllViews();
-			createGroupLayout(this);
+			// layout.removeAllViews();
+			// createGroupLayout(this);
+
+			// Load add user to flat layout
+			AlertDialog.Builder groupAlert = new AlertDialog.Builder(this);
+			groupAlert.setTitle("Enter new group name");
+			// Set an EditText view to get user input
+			final EditText newGroup = new EditText(this);
+
+			groupAlert.setView(newGroup);
+
+			// Digits only & use numeric soft-keyboard.
+			newGroup.setKeyListener(TextKeyListener.getInstance());
+			groupAlert.setPositiveButton("Confirm",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							Log.w("NAME CHANGE", "SUGGESTED: "
+									+ newGroup.getText().toString());
+							if (newGroup.getText().toString().equals("")) {
+								Toast.makeText(AccountActivity.this,
+										"You must enter an address!",
+										Toast.LENGTH_LONG).show();
+								return;
+							}
+							if (ActiveUser.createGroup(AccountActivity.this,
+									newGroup.getText().toString())) {
+								layout.removeAllViews();
+								createModifyFlatDetails(AccountActivity.this);
+							} else {
+								Toast.makeText(AccountActivity.this,
+										"Cannot access the server.",
+										Toast.LENGTH_LONG).show();
+								return;
+							}
+						}
+					});
+			groupAlert.setNegativeButton("Cancel",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							// do nothing
+						}
+					});
+			groupAlert.show();
+
 			break;
 
 		case 10:
@@ -696,7 +770,12 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 		String response;
 
 		try {
-			response = new HttpRequest().execute(
+Log.w("NAME CHANGE", "newsuggestion/"
+		+ ActiveUser.getActiveUser().getUsername() + "/2/"
+		+ newAddress);
+			
+
+response = new HttpRequest().execute(
 					Main.URL + "newsuggestion/"
 							+ ActiveUser.getActiveUser().getUsername() + "/2/"
 							+ newAddress, "post").get();
