@@ -28,8 +28,10 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.SpannableString;
 import android.text.method.DigitsKeyListener;
 import android.text.method.TextKeyListener;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -263,10 +265,19 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 
 		String currentAddress = grp.getAddress();
 
-		TextView address = new TextView(contextActivity);
-		address.setText("Address: " + currentAddress);
-		address.setTextSize(18f);
+		TextView addHeader = new TextView(contextActivity);
+		SpannableString span0 = new SpannableString("Address");
+		span0.setSpan(new UnderlineSpan(), 0, span0.length(), 0);
+		addHeader.setText(span0);
+		addHeader.setTextSize(20f);
+		addHeader.setTextColor(Color.BLACK);
+		layout.addView(addHeader);
+		
+		TextView address = new TextView(contextActivity);		
+		address.setText(currentAddress);
+		address.setTextSize(20f);
 		address.setTextColor(Color.BLACK);
+		address.setPadding(0, 0, 0, 40);
 		layout.addView(address);
 
 		/*
@@ -278,19 +289,22 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 		 * modifyFlatAddressEdit.setBackgroundColor(Color.rgb(248,248,248));
 		 * layout.addView(modifyFlatAddressEdit);
 		 */
-		TextView members = new TextView(contextActivity);
-		members.setText("Members");
-		members.setGravity(Gravity.CENTER);
-		members.setTextSize(20f);
-		members.setTextColor(Color.BLACK);
-		layout.addView(members);
+		
+		TextView memHeader = new TextView(contextActivity);
+		SpannableString span1 = new SpannableString("Members");
+		span1.setSpan(new UnderlineSpan(), 0, span1.length(), 0);
+		memHeader.setText(span1);
+		memHeader.setTextSize(20f);
+		memHeader.setTextColor(Color.BLACK);
+		layout.addView(memHeader);
 
 		Set<String> users = grp.getUsers();
 
-		for (String u : users) {
+		for (String u : users) 
+		{
 			TextView user = new TextView(contextActivity);
-			user.setText(u);
-			user.setTextSize(18f);
+			user.setText("- " + u);
+			user.setTextSize(20f);
 			user.setTextColor(Color.BLACK);
 			layout.addView(user);
 		}
