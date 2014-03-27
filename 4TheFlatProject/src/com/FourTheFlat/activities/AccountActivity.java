@@ -532,7 +532,7 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 		// SUGGEST FLAT NAME CHANGE
 		case 5:
 			AlertDialog.Builder addressAlert = new AlertDialog.Builder(this);
-			addressAlert.setTitle("Enter new flat name");
+			addressAlert.setTitle("Enter new flat address");
 			// Set an EditText view to get user input
 			final EditText address = new EditText(this);
 
@@ -642,7 +642,7 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 		case 9:
 			// Load add user to flat layout
 			AlertDialog.Builder groupAlert = new AlertDialog.Builder(this);
-			groupAlert.setTitle("Enter new group name");
+			groupAlert.setTitle("Enter the new group's address");
 			// Set an EditText view to get user input
 			final EditText newGroup = new EditText(this);
 
