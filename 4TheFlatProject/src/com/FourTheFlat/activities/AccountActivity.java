@@ -547,6 +547,9 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 							Log.w("NAME CHANGE", "SUGGESTED: "
 									+ address.getText().toString());
 							requestChangeAddress(address.getText().toString());
+							Toast.makeText(AccountActivity.this,
+									"Suggestion sent to other users",
+									Toast.LENGTH_LONG).show();
 						}
 					});
 			addressAlert.setNegativeButton("Cancel",
@@ -606,7 +609,7 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 		case 8:
 			// Load add user to flat layout
 			AlertDialog.Builder userAlert = new AlertDialog.Builder(this);
-			userAlert.setTitle("Enter new flat name");
+			userAlert.setTitle("Enter new user's name");
 			// Set an EditText view to get user input
 			final EditText user = new EditText(this);
 
@@ -621,6 +624,9 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 							Log.w("NAME CHANGE", "SUGGESTED: "
 									+ user.getText().toString());
 							requestAddUser(user.getText().toString());
+							Toast.makeText(AccountActivity.this,
+									"Suggestion sent to other users",
+									Toast.LENGTH_LONG).show();
 						}
 					});
 			userAlert.setNegativeButton("Cancel",
@@ -634,10 +640,6 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 			break;
 
 		case 9:
-			// Create group layout
-			// layout.removeAllViews();
-			// createGroupLayout(this);
-
 			// Load add user to flat layout
 			AlertDialog.Builder groupAlert = new AlertDialog.Builder(this);
 			groupAlert.setTitle("Enter new group name");
