@@ -1,10 +1,6 @@
 package com.FourTheFlat;
 
-import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
-
-import org.json.JSONException;
 
 import com.FourTheFlat.stores.Group;
 
@@ -13,10 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
-public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
-
+public class AlarmManagerBroadcastReceiver extends BroadcastReceiver 
+{
 	static boolean userShoppingNotificationSent = false;
 
 	@Override
@@ -39,6 +34,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 	{
 		String response;
 		Group g;
+		
 		try
 		{
 			response = new HttpRequest().execute(Main.URL + "group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
@@ -67,10 +63,12 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 	{
 		String response;
 		String hashedPassword = Settings.getSharedPreferences(context).getString("hashedPassword", "");
+		
 		try
 		{
 			response = new HttpRequest().execute(Main.URL + "user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword,"get").get();
 			Log.w("activeUser",response);
+			
 			if(response.equals("Invalid username or password."))
 			{
 				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(context.getApplicationContext());
@@ -80,6 +78,7 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
                 editor.commit();
 				return;
 			}
+			
 			Settings.getSharedPreferencesEditor(context).putString("user", response);
 		}
 		catch(Exception e)
@@ -88,5 +87,4 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 			return;
 		}
 	}
-
 }

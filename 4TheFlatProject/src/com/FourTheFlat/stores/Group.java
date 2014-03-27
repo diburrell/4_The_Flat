@@ -1,12 +1,11 @@
 package com.FourTheFlat.stores;
 
-
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public class Group {
-
+public class Group 
+{
 	private UUID groupID;
 	Set<String> users;
 	private String address;
@@ -40,7 +39,6 @@ public class Group {
 	  return address;
 	}
 
-
 	public void setAddress(String address)
 	{
 		this.address = address;
@@ -56,7 +54,6 @@ public class Group {
 		return allowedProducts;
 	}
 
-
 	public void setUserShopping(String userShopping)
 	{
 		this.userShopping = userShopping;
@@ -67,14 +64,13 @@ public class Group {
 		return userShopping;
 	}
 
-	public Map<String, Integer> getShoppingList() {
+	public Map<String, Integer> getShoppingList() 
+	{
 		return shoppingList;
 	}
 
-	public void setShoppingList(Map<String, Integer> shoppingList) {
+	public void setShoppingList(Map<String, Integer> shoppingList) 
+	{
 		this.shoppingList = shoppingList;
 	}
-
-
-
 }

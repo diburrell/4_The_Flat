@@ -6,8 +6,8 @@ import java.security.NoSuchAlgorithmException;
 import android.util.Base64;
 import android.util.Log;
 
-public class Cryptography {
-	
+public class Cryptography 
+{	
     public static String convertToHex(byte[] data) throws java.io.IOException
     {
     	StringBuffer sb = new StringBuffer();
@@ -21,23 +21,28 @@ public class Cryptography {
     {
     	StringBuffer output = new StringBuffer();
     	MessageDigest mdSha256 = null;
-        try{
+    	
+        try
+        {
         	mdSha256 = MessageDigest.getInstance("SHA-256");
         }
-        catch(NoSuchAlgorithmException e){
+        catch (NoSuchAlgorithmException e)
+        {
         	Log.e("myapp", "SHA-256 ERROR!");
         }
-        try{
+        
+        try
+        {
         	mdSha256.update(input.getBytes("ASCII"));
         }
         catch(Exception e)
         {
-        	
+        	e.printStackTrace();
         }
+        
         byte[] data = mdSha256.digest();
         output.append(byteArrayToString(data));
-        return output.toString();
-    	
+        return output.toString();    	
     }
     
     /**
@@ -55,5 +60,4 @@ public class Cryptography {
 
 		return result;
 	}
-
 }

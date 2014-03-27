@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TabHost.OnTabChangeListener;
 
 /*
@@ -51,22 +50,7 @@ public class TabCreator extends TabActivity
 	    tabHost.setOnTabChangedListener(new OnTabChangeListener() 
 	    {
 	        public void onTabChanged(String tabId) 
-	        {
-	        	switch (tabHost.getCurrentTab()) 
-	        	{
-		            case 0:
-		            	//click on tab 0
-		                break;
-		            case 1:
-		            	//click on tab 1
-		                break;
-		            case 2:
-		            	//click on tab 2
-		                break;
-		            default:
-		                break;
-	            }
-	        	
+	        {	        	
 	        	setTabColors(tabHost);
 	        }
 	    });

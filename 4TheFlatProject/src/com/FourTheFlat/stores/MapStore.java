@@ -2,8 +2,8 @@ package com.FourTheFlat.stores;
 
 import java.util.Map;
 
-public class MapStore {
-
+public class MapStore 
+{
 	Map<String, Integer> map;
 
 	public Map<String, Integer> getMap()

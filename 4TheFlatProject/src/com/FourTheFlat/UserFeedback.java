@@ -7,8 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
-public final class UserFeedback {
-
+public final class UserFeedback 
+{
 	public static void showNotification(Context context, String message) 
 	{
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,	new Intent(context, TabCreator.class), 0);

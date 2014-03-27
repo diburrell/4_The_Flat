@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.FourTheFlat.stores.Group;
 import com.FourTheFlat.stores.User;
 
-public class ActiveUser {
-
+public class ActiveUser 
+{
 	private static User user;
 	private static String shop="";
 
