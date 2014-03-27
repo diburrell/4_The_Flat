@@ -280,7 +280,8 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 		 */
 		TextView members = new TextView(contextActivity);
 		members.setText("Members");
-		members.setTextSize(18f);
+		members.setGravity(Gravity.CENTER);
+		members.setTextSize(20f);
 		members.setTextColor(Color.BLACK);
 		layout.addView(members);
 

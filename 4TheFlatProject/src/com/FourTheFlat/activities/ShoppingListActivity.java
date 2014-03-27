@@ -284,7 +284,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 										try {
 											String completed = new HttpRequest()
 													.execute(
-															"http://group1.cloudapp.net:8080/ServerSide/shoppinglist/"
+															"http://group1d.net:8080/ServerSide/shoppinglist/"
 																	+ ActiveUser
 																			.getActiveUser()
 																			.getGroupID()
