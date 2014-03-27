@@ -14,7 +14,6 @@
         android:stretchColumns="0" >
     </TableLayout>
 
-
         <ScrollView
             android:id="@+id/scroll"
             android:layout_width="fill_parent"

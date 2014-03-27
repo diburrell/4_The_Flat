@@ -18,11 +18,7 @@ import android.widget.Toast;
 public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 
 	static boolean userShoppingNotificationSent = false;
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> origin/error
 	@Override
 	/** This method is triggered when an alarm goes off. */
 	public void onReceive(Context context, Intent intent)
@@ -38,61 +34,42 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 			refreshActiveUser(context);
 		}
 	}
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> origin/error
 	public void checkUserShopping(Context context)
 	{
 		String response;
 		Group g;
 		try
 		{
-<<<<<<< HEAD
-			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
+			response = new HttpRequest().execute(Main.URL + "group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
 			g = (Group)PojoMapper.fromJson(response, Group.class);
-			if(!g.getuserShopping().equals(null))
-			{
-				if(!userShoppingNotificationSent && g.getuserShopping().equals(ActiveUser.getActiveUser().getUsername()))
-=======
-			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername(),"get").get();
-			g = (Group)PojoMapper.fromJson(response, Group.class);
+			
 			if(!g.getuserShopping().equals(null))
 			{
 				if(!userShoppingNotificationSent && !g.getuserShopping().equals(ActiveUser.getActiveUser().getUsername()))
->>>>>>> origin/error
 				{
 					UserFeedback.showNotification(context, "Someone is shopping, make sure to add any last minute items you need!");
 				}
+				
 				userShoppingNotificationSent = true;
 				return;
 			}
-			userShoppingNotificationSent = false;
-<<<<<<< HEAD
 			
-=======
-
->>>>>>> origin/error
+			userShoppingNotificationSent = false;
 		}
 		catch(Exception e)
 		{
 			return;
 		}
 	}
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> origin/error
 	public void refreshActiveUser(Context context)
 	{
 		String response;
 		String hashedPassword = Settings.getSharedPreferences(context).getString("hashedPassword", "");
 		try
-<<<<<<< HEAD
 		{
-			response = new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword,"get").get();
+			response = new HttpRequest().execute(Main.URL + "user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword,"get").get();
 			Log.w("activeUser",response);
 			if(response.equals("Invalid username or password."))
 			{
@@ -107,24 +84,6 @@ public class AlarmManagerBroadcastReceiver extends BroadcastReceiver {
 		}
 		catch(Exception e)
 		{
-=======
-		{
-			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+hashedPassword,"get").get();
-			Log.w("activeUser",response);
-			if(response.equals("Invalid username or password."))
-			{
-				SharedPreferences.Editor editor = Settings.getSharedPreferencesEditor(context.getApplicationContext());
-                editor.putBoolean("hasLoggedIn", false);
-                editor.putString("user", "");
-                // Commit the edits!	
-                editor.commit();
-				return;
-			}
-			Settings.getSharedPreferencesEditor(context).putString("user", response);
-		}
-		catch(Exception e)
-		{
->>>>>>> origin/error
 			e.printStackTrace();
 			return;
 		}

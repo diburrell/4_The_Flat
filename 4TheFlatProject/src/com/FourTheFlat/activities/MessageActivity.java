@@ -43,42 +43,6 @@ public class MessageActivity extends Activity implements View.OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.messages);
-<<<<<<< HEAD
-		loadMessageList(this);
-	}
-	
-	public void loadMessageList(Activity contextActivity)
-	{
-		buttonHolder = (TableLayout) contextActivity
-				.findViewById(R.id.tableLayout1);
-		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
-		list.removeAllViews();
-		buttonHolder.removeAllViews();
-		goBack = new Button(this);
-		goBack.setText("Go back!");
-		goBack.setOnClickListener(this);
-		buttonHolder.addView(goBack);
-		
-		messages = getMessages();
-		if(messages != null)
-		{
-			displayMessages(this);
-			return;
-		}
-		else
-		{
-			noConnectionDisplay(this);
-			return;
-		}
-	}
-	
-	private void noConnectionDisplay(Activity contextActivity)
-	{
-		buttonHolder = (TableLayout) contextActivity
-				.findViewById(R.id.tableLayout1);
-		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
-
-=======
 		messages = getMessages();
 		loadMessageList(this);
 	}
@@ -120,23 +84,14 @@ public class MessageActivity extends Activity implements View.OnClickListener
 		lowerLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
 		lowerLayout.removeAllViews();
 
->>>>>>> origin/error
 		TextView noMessages = new TextView(this);
 		noMessages.setText("You don't have an internet connection");
 		noMessages.setGravity(Gravity.CENTER);
 		noMessages.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
 		noMessages.setTextColor(Color.BLACK);
 		noMessages.setTextSize(24f);
-<<<<<<< HEAD
-		list.addView((View)noMessages);
-	}
-
-	private void displayMessages(Activity contextActivity) {
-		list = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
-=======
 		lowerLayout.addView((View)noMessages);
 	}
->>>>>>> origin/error
 
 	private void displayMessages(Activity contextActivity) 
 	{		
@@ -248,17 +203,6 @@ public class MessageActivity extends Activity implements View.OnClickListener
 		{
 			e.printStackTrace();
 			return null;
-<<<<<<< HEAD
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-		if(allMessages == null)
-		{
-			return null;
-		}
-=======
 		} 
 		catch (ExecutionException e) 
 		{
@@ -271,7 +215,6 @@ public class MessageActivity extends Activity implements View.OnClickListener
 			return null;
 		}
 		
->>>>>>> origin/error
 		String[] messageStrings = allMessages.split(Pattern.quote("}"));
 		Message[] messages = new Message[messageStrings.length - 1];
 
@@ -299,29 +242,12 @@ public class MessageActivity extends Activity implements View.OnClickListener
 		}
 
 		return messages;
-<<<<<<< HEAD
-
-	}
-
-
-	@Override
-	protected void onRestart() {
-		super.onRestart();
-		loadMessageList(this);
-	}
-
-
-	@Override
-	public void onClick(View v) {
-		if(v instanceof Button)
-=======
 	}
 
 	@Override
 	public void onClick(View view) 
 	{
 		if(view instanceof Button)
->>>>>>> origin/error
 		{
 			MessageActivity.this.finish();
 		} 

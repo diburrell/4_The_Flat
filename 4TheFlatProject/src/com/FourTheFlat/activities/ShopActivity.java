@@ -1,5 +1,4 @@
 package com.FourTheFlat.activities;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -32,7 +31,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 public class ShopActivity extends Activity implements View.OnClickListener
 {
 	TableLayout layout;
@@ -48,7 +46,6 @@ public class ShopActivity extends Activity implements View.OnClickListener
 		createDisplay(this, getList());
 	}
 	
-<<<<<<< HEAD
 	private void createDisplay(Activity contextActivity, Map<String, Integer> currList)
 	{	
 		
@@ -60,40 +57,9 @@ public class ShopActivity extends Activity implements View.OnClickListener
 		
 		layout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
 		buttonHolder = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
-
 		TableRow[] row = new TableRow[currList.size()];
 		TextView[] product = new TextView[currList.size()];
 		TextView[] cost = new TextView[currList.size()];
-=======
-	private void createDisplay(Activity contextActivity)
-	{		
-		layout = (TableLayout) contextActivity.findViewById(R.id.layout);
-	
-		//Send signal to start shop (LOCK EVERY ONE ELSE OUT!) 
-		MapStore store = new MapStore();
-		try {
-			store = (MapStore) PojoMapper.fromJson(new HttpRequest().execute(Main.URL + "usershopping/"+ActiveUser.getActiveUser().getUsername()).get(), MapStore.class);
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Map<String, Integer> list = store.getMap();
-		TableRow[] row = new TableRow[list.size()];
-		TextView[] product = new TextView[list.size()];
-		TextView[] cost = new TextView[list.size()];
->>>>>>> origin/error
 		
 		int i =0;
 		for (Map.Entry<String, Integer> m : currList.entrySet())
@@ -105,7 +71,6 @@ public class ShopActivity extends Activity implements View.OnClickListener
 			product[i].setTextColor(Color.BLACK);
 			if (i == 0)
 				product[i].setPadding(0, 60, 0, 0);				
-
 			cost[i] = new TextView(contextActivity);	
 			if(m.getValue() > 0)
 			{
@@ -116,19 +81,16 @@ public class ShopActivity extends Activity implements View.OnClickListener
 			
 			row[i].addView(product[i]);
 			row[i].addView(cost[i]);
-
 			row[i].setOnClickListener(this);
 			
 			layout.addView(row[i]);
 			i++;
 		}
-
 		Button msg = new Button(contextActivity);
 		msg.setText("End shop!");
 		msg.setOnClickListener(this);
 		buttonHolder.addView(msg);
 	}
-
 	@Override
 	public void onClick(View view) {
 		// TODO Auto-generated method stub
@@ -141,7 +103,6 @@ public class ShopActivity extends Activity implements View.OnClickListener
 			tableRowClick(view);
 		}
 	}
-
 	private void tableRowClick(View view) {
 		TableRow tR = (TableRow) view;
 		TextView child = (TextView) tR.getChildAt(0);
@@ -151,7 +112,6 @@ public class ShopActivity extends Activity implements View.OnClickListener
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 	    alert.setTitle(product+"'s Price");
 	    alert.setMessage("Input the cost for "+product+" in pence:");
-
 	    // Set an EditText view to get user input
 	    final EditText pence = new EditText(this);
 	    
@@ -183,14 +143,13 @@ public class ShopActivity extends Activity implements View.OnClickListener
 	    alert.show();
 		
 	}
-
 	private void buttonClick(View view) {
 		for (Map.Entry<String, Integer> m : list.entrySet())
 		{
 			if(m.getValue() > 0)
 			{
 				try {
-					new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/usershopping/"+ActiveUser.getActiveUser().getGroupID()+"/"+m.getKey()+"/"
+					new HttpRequest().execute(Main.URL + "usershopping/"+ActiveUser.getActiveUser().getGroupID()+"/"+m.getKey()+"/"
 												+m.getValue(),"put").get();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -203,7 +162,7 @@ public class ShopActivity extends Activity implements View.OnClickListener
 		}
 		
 		try {
-			new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/usershopping/"+ActiveUser.getActiveUser().getUsername()+"/"+ActiveUser.getShop(),"delete").get();	
+			new HttpRequest().execute(Main.URL + "usershopping/"+ActiveUser.getActiveUser().getUsername()+"/"+ActiveUser.getShop(),"delete").get();	
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -220,10 +179,9 @@ public class ShopActivity extends Activity implements View.OnClickListener
 	
 	private Map<String, Integer> getList()
 	{
-
 		MapStore store = new MapStore();
 		try {
-			store = (MapStore) PojoMapper.fromJson(new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/usershopping/"+ActiveUser.getActiveUser().getUsername(),"post").get(), MapStore.class);
+			store = (MapStore) PojoMapper.fromJson(new HttpRequest().execute(Main.URL + "usershopping/"+ActiveUser.getActiveUser().getUsername(),"post").get(), MapStore.class);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -255,7 +213,7 @@ public class ShopActivity extends Activity implements View.OnClickListener
 								public void onClick(DialogInterface dialog,
 										int id) {
 									try {
-										new HttpRequest().execute("http://group1.cloudapp.net:8080/ServerSide/usershopping/"+ActiveUser.getActiveUser().getUsername()+"/Test Shop","delete").get();
+										new HttpRequest().execute(Main.URL + "usershopping/"+ActiveUser.getActiveUser().getUsername()+"/Test Shop","delete").get();
 										Intent resetIntent = new Intent(getApplicationContext(), TabCreator.class);
 										resetIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 										startActivity(resetIntent);

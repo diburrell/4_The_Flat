@@ -1,7 +1,5 @@
 package com.FourTheFlat;
 
-import com.FourTheFlat.R;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,23 +11,13 @@ public final class UserFeedback {
 
 	public static void showNotification(Context context, String message) 
 	{
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-				new Intent(context, TabCreator.class), 0);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,	new Intent(context, TabCreator.class), 0);
 
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-<<<<<<< HEAD
-				context).setSmallIcon(R.drawable.account_on)
-=======
-				context)
->>>>>>> origin/error
-				.setContentTitle("4TheFlat")
-				.setContentText(message);
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setContentTitle("4TheFlat").setContentText(message);
 		mBuilder.setContentIntent(contentIntent);
 		mBuilder.setDefaults(Notification.DEFAULT_SOUND);
 		mBuilder.setAutoCancel(true);
-		NotificationManager mNotificationManager = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
+		NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.notify(1, mBuilder.build());
 	}
-
 }

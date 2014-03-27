@@ -272,12 +272,9 @@ public class RegisterActivity extends Activity
 						editor.commit();
 						RegisterActivity rA = RegisterActivity.this;
 						Alarm.startRepeatingTimer(rA);
-<<<<<<< HEAD
-						try{
-=======
+						
 						try
 						{
->>>>>>> origin/error
 			            	json.put(KEY_SUCCESS, "1");
 			            }
 			            catch(JSONException e){            	
@@ -290,9 +287,10 @@ public class RegisterActivity extends Activity
 			}
             return json;
         }
-       @Override
+        
+        @Override
         protected void onPostExecute(JSONObject json) 
-       {
+        {
     	   //Checks for success message
             try 
             {

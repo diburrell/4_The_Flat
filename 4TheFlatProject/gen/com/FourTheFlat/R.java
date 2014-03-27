@@ -216,30 +216,16 @@ containing a value of this type.
     public static final class id {
         public static final int hybrid=0x7f050004;
         public static final int layout=0x7f050005;
-<<<<<<< HEAD
-        public static final int ll=0x7f05001e;
-        public static final int login=0x7f050008;
-        public static final int loginErrorMsg=0x7f05000b;
-        public static final int map=0x7f05000f;
-=======
+        public static final int ll=0x7f05000b;
         public static final int map=0x7f050006;
->>>>>>> origin/error
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
         public static final int satellite=0x7f050002;
-<<<<<<< HEAD
-        public static final int scroll=0x7f05001f;
-        public static final int tableLayout1=0x7f050010;
-        public static final int tableLayout10=0x7f05001c;
-        public static final int tableLayout2=0x7f050011;
-        public static final int tableRow1=0x7f05001d;
-=======
-        public static final int scroll=0x7f05000b;
+        public static final int scroll=0x7f05000c;
         public static final int tableLayout1=0x7f050007;
         public static final int tableLayout10=0x7f050009;
         public static final int tableLayout2=0x7f050008;
         public static final int tableRow1=0x7f05000a;
->>>>>>> origin/error
         public static final int terrain=0x7f050003;
     }
     public static final class integer {

@@ -23,10 +23,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-<<<<<<< HEAD
-=======
+
 import android.text.InputType;
->>>>>>> origin/error
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -166,26 +164,18 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		TextView[] owe = new TextView[books.size()];
 
 		Log.w("size",Integer.toString(books.size()));
-<<<<<<< HEAD
-		if(ms == null)
-		{
-			TextView noInfo = new TextView(contextActivity);
-			noInfo.setText("No info!!!");
-=======
 		Log.w("size",Integer.toString(books.entrySet().size()));
 		
 		if(books.entrySet().size() == 0)
 		{
 			TextView noInfo = new TextView(contextActivity);
 			noInfo.setText("There is no information to display");
->>>>>>> origin/error
 			noInfo.setGravity(Gravity.CENTER);
 			noInfo.setTextSize(20f);
 			noInfo.setTextColor(Color.BLACK);
 			noInfo.setPadding(0, 30, 0, 30);
 			layout.addView(noInfo);
-<<<<<<< HEAD
-=======
+
 			Button back = new Button(contextActivity);
 			back.setText("Back to Account");
 			back.setId(4);
@@ -194,7 +184,6 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			params.setMargins(0, 50, 0, 50);
 			back.setLayoutParams(params);
 			layout.addView(back);
->>>>>>> origin/error
 			return;
 		}
 		
@@ -272,7 +261,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		}
 		
 		TextView header = new TextView(contextActivity);
-		header.setText("Modify Flat Details");
+		header.setText("Flat Details");
 		header.setGravity(Gravity.CENTER);
 		header.setTextSize(20f);
 		header.setTextColor(Color.BLACK);
@@ -631,18 +620,14 @@ public class AccountActivity extends Activity implements View.OnClickListener
 					Toast.makeText(this, "You must enter an address first", Toast.LENGTH_LONG).show();
 					return;
 				}
-<<<<<<< HEAD
-				requestChangeAddress(modifyFlatAddressEdit.getText().toString());
-=======
 				if(!requestChangeAddress(modifyFlatAddressEdit.getText().toString()))
 				{
 					return;
 				}
-				
->>>>>>> origin/error
+
 				layout.removeAllViews();
 				createMainMenu(this);
-				break;			
+				break;		
 
 			case 6:
 				//leave the flat
@@ -692,10 +677,6 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				break;				
 				
 			case 11:
-<<<<<<< HEAD
-			{
-=======
->>>>>>> origin/error
 				if(userToAddEdit.getText().toString().equals(""))
 				{
 					Toast.makeText(this, "You must enter the name of a user!", Toast.LENGTH_LONG).show();
@@ -737,19 +718,6 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			{
 				Toast.makeText(this, "User is already in a group.", Toast.LENGTH_LONG).show();
 				return false;
-<<<<<<< HEAD
-			}
-			else if(response.equals("User added."))
-			{
-				Toast.makeText(this, "User has been added to the group.", Toast.LENGTH_LONG).show();
-				return true;
-			}
-			else if(response.equals("User suggested."))
-			{
-				Toast.makeText(this, "User has been suggested.", Toast.LENGTH_LONG).show();
-				return true;
-=======
->>>>>>> origin/error
 			}
 			else if(response.equals("User added."))
 			{
@@ -772,10 +740,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 			Toast.makeText(this, "You do not have an active connection.", Toast.LENGTH_LONG).show();
 			return false;
 		}
-<<<<<<< HEAD
-=======
-		
->>>>>>> origin/error
+
 		Toast.makeText(this, "Something went wrong.", Toast.LENGTH_LONG).show();
 		return true;
 	}
@@ -857,19 +822,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 
 	private void textViewClick(View view)
 	{
-<<<<<<< HEAD
-		TableRow tR = (TableRow)v;
-		TextView child = (TextView) tR.getChildAt(0); 
-
-		final String username = child.getText().toString();
-		if (ActiveUser.isGroupMemberShopping()) 
-		{
-			Toast.makeText(getApplicationContext(), "You can't do that! Someone in your flat is currently shopping!", Toast.LENGTH_SHORT).show();
-		} 
-		else {
-=======
 		final String username = ((TextView)view).getText().toString();
->>>>>>> origin/error
 		
 		if (ActiveUser.isGroupMemberShopping()) 
 		{
@@ -909,25 +862,15 @@ public class AccountActivity extends Activity implements View.OnClickListener
 				})
 				.setNegativeButton("No", new DialogInterface.OnClickListener() 
 				{
-<<<<<<< HEAD
-					dialog.cancel();
-				}
-			});
-
-			AlertDialog alertDialog = alertDialogBuilder.create();
-
-			alertDialog.show();
-=======
 					public void onClick(DialogInterface dialog,int id) 
 					{
 						dialog.cancel();
 					}
 				});
 	
-				AlertDialog alertDialog = alertDialogBuilder.create();
-	
-				alertDialog.show();
->>>>>>> origin/error
+			AlertDialog alertDialog = alertDialogBuilder.create();
+
+			alertDialog.show();
 		}
 	}
 }
