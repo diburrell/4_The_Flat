@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.FourTheFlat.ActiveUser;
 import com.FourTheFlat.HttpRequest;
+import com.FourTheFlat.Main;
 import com.FourTheFlat.PojoMapper;
 import com.FourTheFlat.R;
 import com.FourTheFlat.stores.Message;
@@ -196,7 +197,7 @@ public class MessageActivity extends Activity implements View.OnClickListener
 
 		try 
 		{
-			allMessages = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/messages/" + ActiveUser.getActiveUser().getUsername()).get();
+			allMessages = new HttpRequest().execute(Main.URL + "messages/" + ActiveUser.getActiveUser().getUsername()).get();
 		} 
 		catch (InterruptedException e) 
 		{
@@ -308,9 +309,9 @@ public class MessageActivity extends Activity implements View.OnClickListener
 							
 							try 
 							{
-								Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/yes");
+								Log.w("ACCOUNT_ACTIVITY","URL: "+ Main.URL + "messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/yes");
 								
-								completed = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/yes","post").get();
+								completed = new HttpRequest().execute(Main.URL + "messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/yes","post").get();
 							}
 							catch (ExecutionException e) 
 							{
@@ -332,9 +333,9 @@ public class MessageActivity extends Activity implements View.OnClickListener
 
 							try 
 							{
-								Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/no");
+								Log.w("ACCOUNT_ACTIVITY","URL: "+ Main.URL + "messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/no");
 								
-								completed = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/no", "post").get();
+								completed = new HttpRequest().execute(Main.URL + "messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID()+"/no", "post").get();
 							}
 							catch (ExecutionException e) 
 							{
@@ -360,9 +361,9 @@ public class MessageActivity extends Activity implements View.OnClickListener
 							
 							try 
 							{
-								Log.w("ACCOUNT_ACTIVITY","URL: "+ "http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID());
+								Log.w("ACCOUNT_ACTIVITY","URL: "+ Main.URL + "messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID());
 								
-								completed = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID(),"delete").get();
+								completed = new HttpRequest().execute(Main.URL + "messages/"+ActiveUser.getActiveUser().getUsername()+"/"+thisMessage.getMessageID(),"delete").get();
 							}
 							catch (ExecutionException e) 
 							{

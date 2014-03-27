@@ -124,7 +124,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 
 			try 
 			{
-				String products = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/allproducts").get();
+				String products = new HttpRequest().execute(Main.URL + "allproducts").get();
 				allProducts = products.split("\n");
 			} 
 			catch (Exception e) 
@@ -203,7 +203,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 	{
 		try 
 		{
-			String allowed = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/allowedproducts/"+ActiveUser.getActiveUser().getGroupID()).get();
+			String allowed = new HttpRequest().execute(Main.URL + "allowedproducts/"+ActiveUser.getActiveUser().getGroupID()).get();
 
 			String[] allowedProducts = allowed.split("\n");
 			Arrays.sort(allowedProducts);
@@ -285,7 +285,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 
 							try 
 							{
-								String completed = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/shoppinglist/"+ActiveUser.getActiveUser().getGroupID() + "/" + product, "put").get();
+								String completed = new HttpRequest().execute(Main.URL + "shoppinglist/"+ActiveUser.getActiveUser().getGroupID() + "/" + product, "put").get();
 								Toast.makeText(ProductsActivity.this, product + " added to shopping list.",	Toast.LENGTH_LONG).show();		
 							} 
 							catch (InterruptedException e) 
@@ -303,7 +303,7 @@ public class ProductsActivity extends Activity implements View.OnClickListener
 						{
 							try 
 							{
-								String completed = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/0/" + product, "post").get();
+								String completed = new HttpRequest().execute(Main.URL + "newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/0/" + product, "post").get();
 								Toast.makeText(ProductsActivity.this, product + " will be added if all other users agree", Toast.LENGTH_LONG).show();
 								if(completed.equals("Product request already pending."))
 								{

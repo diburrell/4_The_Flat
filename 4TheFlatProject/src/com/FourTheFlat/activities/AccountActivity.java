@@ -7,6 +7,7 @@ import com.FourTheFlat.ActiveUser;
 import com.FourTheFlat.Alarm;
 import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
+import com.FourTheFlat.Main;
 import com.FourTheFlat.PojoMapper;
 import com.FourTheFlat.R;
 import com.FourTheFlat.Settings;
@@ -133,7 +134,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		MapStore ms = new MapStore();
 		try 
 		{
-			ms = (MapStore)PojoMapper.fromJson(new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/money/"+ActiveUser.getActiveUser().getUsername()).get(), MapStore.class);
+			ms = (MapStore)PojoMapper.fromJson(new HttpRequest().execute(Main.URL + "money/"+ActiveUser.getActiveUser().getUsername()).get(), MapStore.class);
 		
 		} catch (Exception e)
 		{
@@ -246,7 +247,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		
 		try 
 		{
-			grp = (Group)PojoMapper.fromJson(new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername()).get(), Group.class);
+			grp = (Group)PojoMapper.fromJson(new HttpRequest().execute(Main.URL + "group/"+ActiveUser.getActiveUser().getUsername()).get(), Group.class);
 		} 
 		catch (Exception e) 
 		{
@@ -325,7 +326,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		
 		try 
 		{
-			grp = (Group)PojoMapper.fromJson(new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/group/"+ActiveUser.getActiveUser().getUsername()).get(), Group.class);
+			grp = (Group)PojoMapper.fromJson(new HttpRequest().execute(Main.URL + "group/"+ActiveUser.getActiveUser().getUsername()).get(), Group.class);
 		} 
 		catch (Exception e) 
 		{
@@ -704,7 +705,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		String response;
 		try 
 		{
-			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/1/"+newUser,"post").get();
+			response = new HttpRequest().execute(Main.URL + "newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/1/"+newUser,"post").get();
 			
 			if(response.equals("User does not exist."))
 			{
@@ -748,7 +749,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		
 		try 
 		{
-			response = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/2/"+newAddress,"post").get();
+			response = new HttpRequest().execute(Main.URL + "newsuggestion/"+ActiveUser.getActiveUser().getUsername()+"/2/"+newAddress,"post").get();
 			
 			if(response.equals("Address changed."))
 			{
@@ -782,7 +783,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 		String responseCode;
 		try 
 		{
-			responseCode = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/user/"+ActiveUser.getActiveUser().getUsername()+"/"+currentPassword+"/"+newPassword,"post").get();
+			responseCode = new HttpRequest().execute(Main.URL + "user/"+ActiveUser.getActiveUser().getUsername()+"/"+currentPassword+"/"+newPassword,"post").get();
 			
 			if(responseCode.equals("Incorrect username or password."))
 			{
@@ -839,7 +840,7 @@ public class AccountActivity extends Activity implements View.OnClickListener
 					{					
 						try 
 						{
-							String result = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/money/"+ActiveUser.getActiveUser().getUsername()+"/"+username, "post").get();
+							String result = new HttpRequest().execute(Main.URL + "money/"+ActiveUser.getActiveUser().getUsername()+"/"+username, "post").get();
 							Toast.makeText(AccountActivity.this, username+"'s debt cleared", Toast.LENGTH_LONG).show();
 							layout.removeAllViews();
 							AccountActivity ac = AccountActivity.this;	

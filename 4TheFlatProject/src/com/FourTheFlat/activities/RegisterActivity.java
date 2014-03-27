@@ -24,6 +24,7 @@ import com.FourTheFlat.Alarm;
 import com.FourTheFlat.ConnectionManager;
 import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
+import com.FourTheFlat.Main;
 import com.FourTheFlat.R;
 import com.FourTheFlat.Settings;
 
@@ -239,7 +240,7 @@ public class RegisterActivity extends Activity
         	User user = new User();
 			try 
 			{
-				httpResponse = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/user/"+username+"/"+password+"/", "put").get();
+				httpResponse = new HttpRequest().execute(Main.URL + "user/"+username+"/"+password+"/", "put").get();
 				
 				try
 				{

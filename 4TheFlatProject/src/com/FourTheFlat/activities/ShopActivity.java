@@ -9,6 +9,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 
 import com.FourTheFlat.ActiveUser;
 import com.FourTheFlat.HttpRequest;
+import com.FourTheFlat.Main;
 import com.FourTheFlat.PojoMapper;
 import com.FourTheFlat.R;
 import com.FourTheFlat.stores.MapStore;
@@ -42,7 +43,7 @@ public class ShopActivity extends Activity implements View.OnClickListener
 		//Send signal to start shop (LOCK EVERY ONE ELSE OUT!) 
 		MapStore store = new MapStore();
 		try {
-			store = (MapStore) PojoMapper.fromJson(new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/usershopping/"+ActiveUser.getActiveUser().getUsername()).get(), MapStore.class);
+			store = (MapStore) PojoMapper.fromJson(new HttpRequest().execute(Main.URL + "usershopping/"+ActiveUser.getActiveUser().getUsername()).get(), MapStore.class);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

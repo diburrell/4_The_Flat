@@ -28,6 +28,7 @@ import com.FourTheFlat.Alarm;
 import com.FourTheFlat.ConnectionManager;
 import com.FourTheFlat.Cryptography;
 import com.FourTheFlat.HttpRequest;
+import com.FourTheFlat.Main;
 import com.FourTheFlat.PojoMapper;
 import com.FourTheFlat.R;
 import com.FourTheFlat.Settings;
@@ -230,7 +231,7 @@ public class LoginActivity extends Activity
         	
 			try 
 			{
-				httpResponse = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/user/"+username+"/"+password+"/").get();
+				httpResponse = new HttpRequest().execute(Main.URL + "user/"+username+"/"+password+"/").get();
 			} 
 			catch (InterruptedException e1) 
 			{

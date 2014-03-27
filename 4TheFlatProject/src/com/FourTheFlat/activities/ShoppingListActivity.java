@@ -241,7 +241,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	{
 		try 
 		{
-			String list = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/shoppinglist/" + ActiveUser.getActiveUser().getGroupID()).get();
+			String list = new HttpRequest().execute(Main.URL + "shoppinglist/" + ActiveUser.getActiveUser().getGroupID()).get();
 			if(list.length() == 0)
 			{
 				return new String[] { };
@@ -278,7 +278,7 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 					{
 						try 
 						{
-							String completed = new HttpRequest().execute("http://group1b.cloudapp.net:8080/ServerSide/shoppinglist/"+ActiveUser.getActiveUser().getGroupID()+"/" + product, "delete").get();
+							String completed = new HttpRequest().execute(Main.URL + "shoppinglist/"+ActiveUser.getActiveUser().getGroupID()+"/" + product, "delete").get();
 							Toast.makeText(ShoppingListActivity.this, product + " removed from shopping list", Toast.LENGTH_LONG).show();
 							onResume();
 						} 
