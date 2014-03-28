@@ -10,8 +10,8 @@ public class Main extends Application
 	
 	static public double[][] locations =
 	{
-		{ 56.471517, 56.482722, 56.474530, 56.459811, 56.459032, 56.454624, 56.462902, 56.467256, 56.472329/*, 56.45843465*/ },
-		{ -3.042506, -2.992598, -2.980187, -2.978250, -2.972137, -2.975493, -2.968766, -2.874610, -2.848669/*, -2.98278818*/ }
+		{ 56.471517, 56.482722, 56.474530, 56.459811, 56.459032, 56.454624, 56.462902, 56.467256, 56.472329, 56.45843465 },
+		{ -3.042506, -2.992598, -2.980187, -2.978250, -2.972137, -2.975493, -2.968766, -2.874610, -2.848669, -2.98278818 }
 	};	
     
     static public String[] names = 
@@ -25,6 +25,6 @@ public class Main extends Application
     	"Dundee Metro", //60 Murraygate, Dundee, DD1 2BB
     	"Broughty Ferry Express", //229-231 Brook Street, Broughty Ferry, Dundee, Angus, DD5 2AG 
     	"Broughty Ferry Dalhousie Esso Express", //14a Dalhousie Road, Broughty Ferry, Dundee, DD5 2SQ
-    	//"QMB Tesco" //test data
+    	"QMB Tesco" //test data
     };
 }
