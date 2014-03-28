@@ -36,13 +36,13 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 
 	String[] shoppingList;
 
-	// TODO: SET THIS BACK TO FALSE
 	Boolean temp = false;
 	LatLng current;
 	int counter = 0;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.shoppinglist);
 
@@ -263,58 +263,52 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		{
 			Toast.makeText(getApplicationContext(), "You can't do that! Someone else in your flat is currently shopping!", Toast.LENGTH_SHORT).show();
 		} 
-		else {
-			if (view instanceof Button) {
+		else 
+		{
+			if (view instanceof Button) 
+			{
 				LocationAsync(view);
-			} else if (view instanceof TextView) {
+			} 
+			else if (view instanceof TextView) 
+			{
 				final String product = ((TextView) view).getText().toString();
 
-				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-						this);
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-				alertDialogBuilder.setTitle("Do you want to remove " + product
-						+ " from the shopping list?");
+				alertDialogBuilder.setTitle("Do you want to remove " + product + " from the shopping list?");
 
-				alertDialogBuilder
-						.setCancelable(false)
-						.setPositiveButton("Yes",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int id) {
-										try {
-											String completed = new HttpRequest()
-													.execute(
-															Main.URL + "shoppinglist/"
-																	+ ActiveUser
-																			.getActiveUser()
-																			.getGroupID()
-																	+ "/"
-																	+ product,
-															"delete").get();
+				alertDialogBuilder.setCancelable(false)
+					.setPositiveButton("Yes", new DialogInterface.OnClickListener() 
+					{
+						public void onClick(DialogInterface dialog,	int id) 
+						{
+							try 
+							{
+								String completed = new HttpRequest().execute(Main.URL + "shoppinglist/"	+ ActiveUser.getActiveUser().getGroupID() + "/"	+ product, "delete").get();
 
-											Log.w("DELETE COMPLETE", completed);
+								Log.w("DELETE COMPLETE", completed);
 
-											Toast.makeText(
-													ShoppingListActivity.this,
-													product
-															+ " removed from shopping list",
-													Toast.LENGTH_LONG).show();
+								Toast.makeText(ShoppingListActivity.this, product + " removed from shopping list", Toast.LENGTH_LONG).show();
 
-											onResume();
-										} catch (InterruptedException e) {
-											e.printStackTrace();
-										} catch (ExecutionException e) {
-											e.printStackTrace();
-										}
-									}
-								})
-						.setNegativeButton("No",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int id) {
-										dialog.cancel();
-									}
-								});
+								onResume();
+							} 
+							catch (InterruptedException e) 
+							{
+								e.printStackTrace();
+							} 
+							catch (ExecutionException e) 
+							{
+								e.printStackTrace();
+							}
+						}
+					})
+					.setNegativeButton("No", new DialogInterface.OnClickListener() 
+					{
+						public void onClick(DialogInterface dialog, int id) 
+						{
+							dialog.cancel();
+						}
+					});
 
 				AlertDialog alertDialog = alertDialogBuilder.create();
 
@@ -378,8 +372,6 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	{			
 	    double earthRadius = 3958.75;
 	    int meterConversion = 1609;
-
-	    //LatLng current = new LatLng(56.459782,-2.979114); //point near hawkhill tesco
 
 	    if (current != null)
 	    {
