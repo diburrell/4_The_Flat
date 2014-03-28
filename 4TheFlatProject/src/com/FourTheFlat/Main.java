@@ -6,7 +6,7 @@ public class Main extends Application
 {			
 	static public String URL = "http://group1d.cloudapp.net:8080/ServerSide/";
 	
-	static public int STORES = 9; //= 10; 
+	static public int STORES = 10; 
 	
 	static public double[][] locations =
 	{

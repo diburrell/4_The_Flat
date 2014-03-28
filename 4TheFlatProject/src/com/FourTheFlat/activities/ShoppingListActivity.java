@@ -29,8 +29,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ShoppingListActivity extends Activity implements View.OnClickListener
-{	
+public class ShoppingListActivity extends Activity implements
+		View.OnClickListener {
 	TableLayout upperLayout;
 	TableLayout lowerLayout;
 
@@ -41,70 +41,63 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 	int counter = 0;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) 
-	{
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.shoppinglist);
 
 		loadShoppingList(this);
-		
-		LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+		LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		LocationListener listener = new locationListener();
-		manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, listener);
+		manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1,
+				listener);
 	}
-	
+
 	@Override
-	public void onPause() 
-	{
+	public void onPause() {
 		super.onPause();
 		loadShoppingList(this);
 	}
 
 	@Override
-	public void onResume() 
-	{
+	public void onResume() {
 		super.onResume();
 		loadShoppingList(this);
 	}
-	
-	public void loadShoppingList(Activity contextActivity)
-	{
-		upperLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
+
+	public void loadShoppingList(Activity contextActivity) {
+		upperLayout = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout1);
 		upperLayout.removeAllViews();
-		
-		lowerLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+
+		lowerLayout = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout2);
 		lowerLayout.removeAllViews();
-		
-		if(ActiveUser.getActiveUser().getGroupID() != null)
-		{
+
+		if (ActiveUser.getActiveUser().getGroupID() != null) {
 			shoppingList = getShoppingList();
-			if (shoppingList != null)
-			{
-				if(shoppingList.length == 0)
-				{
+			if (shoppingList != null) {
+				if (shoppingList.length == 0) {
 					emptyDisplay(this);
 					return;
 				}
-				
+
 				createDisplay(this);
-			} 
-			else 
-			{
+			} else {
 				noConnectionDisplay(this);
 			}
-		}
-		else
-		{
-			noGroupDisplay(this);		
+		} else {
+			noGroupDisplay(this);
 		}
 	}
-	
-	private void noConnectionDisplay(Activity contextActivity)
-	{
-		upperLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
+
+	private void noConnectionDisplay(Activity contextActivity) {
+		upperLayout = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout1);
 		upperLayout.removeAllViews();
-		
-		lowerLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+
+		lowerLayout = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout2);
 		lowerLayout.removeAllViews();
 
 		TextView error = new TextView(contextActivity);
@@ -115,20 +108,21 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		error.setGravity(Gravity.CENTER);
 		upperLayout.addView(error);
 	}
-	
-	private void emptyDisplay(Activity contextActivity)
-	{
-		upperLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
+
+	private void emptyDisplay(Activity contextActivity) {
+		upperLayout = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout1);
 		upperLayout.removeAllViews();
-		
-		lowerLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+
+		lowerLayout = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout2);
 		lowerLayout.removeAllViews();
-		
+
 		Button shop = new Button(this);
 		shop.setText("Start Shopping");
 		shop.setOnClickListener(this);
 		upperLayout.addView(shop);
-		
+
 		TextView header = new TextView(contextActivity);
 		header.setText("Shopping List");
 		header.setGravity(Gravity.CENTER);
@@ -136,8 +130,8 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		header.setTextColor(Color.BLACK);
 		header.setPadding(0, 30, 0, 30);
 		upperLayout.addView(header);
-		
-		View ruler = new View(contextActivity); 
+
+		View ruler = new View(contextActivity);
 		ruler.setBackgroundColor(Color.WHITE);
 		upperLayout.addView(ruler, LayoutParams.FILL_PARENT, 5);
 
@@ -149,13 +143,14 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		error.setGravity(Gravity.CENTER);
 		upperLayout.addView(error);
 	}
-	
-	private void noGroupDisplay(Activity contextActivity)
-	{
-		upperLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
+
+	private void noGroupDisplay(Activity contextActivity) {
+		upperLayout = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout1);
 		upperLayout.removeAllViews();
-		
-		lowerLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+
+		lowerLayout = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout2);
 		lowerLayout.removeAllViews();
 
 		TextView error = new TextView(contextActivity);
@@ -167,43 +162,44 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		upperLayout.addView(error);
 	}
 
-	private class locationListener implements LocationListener
-	{
+	private class locationListener implements LocationListener {
 		@Override
-		public void onLocationChanged(Location location) 
-		{ 
-			setCurrent(location.getLatitude(), location.getLongitude());	
-			temp = nearTesco();		
+		public void onLocationChanged(Location location) {
+			setCurrent(location.getLatitude(), location.getLongitude());
+			temp = nearTesco();
 		}
 
 		@Override
-		public void onProviderDisabled(String provider) { }
+		public void onProviderDisabled(String provider) {
+		}
 
 		@Override
-		public void onProviderEnabled(String provider) { }
+		public void onProviderEnabled(String provider) {
+		}
 
 		@Override
-		public void onStatusChanged(String provider, int status, Bundle extras) { }
-	}	
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+		}
+	}
 
-	private void setCurrent(double lat, double lng)
-	{
+	private void setCurrent(double lat, double lng) {
 		current = new LatLng(lat, lng);
 	}
 
-	public void createDisplay(Activity contextActivity) 
-	{		
-		upperLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
+	public void createDisplay(Activity contextActivity) {
+		upperLayout = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout1);
 		upperLayout.removeAllViews();
-		
-		lowerLayout = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+
+		lowerLayout = (TableLayout) contextActivity
+				.findViewById(R.id.tableLayout2);
 		lowerLayout.removeAllViews();
 
 		Button shop = new Button(this);
 		shop.setText("Start Shopping");
 		shop.setOnClickListener(this);
 		upperLayout.addView(shop);
-		
+
 		TextView header = new TextView(contextActivity);
 		header.setText("Shopping List");
 		header.setGravity(Gravity.CENTER);
@@ -211,16 +207,15 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 		header.setTextColor(Color.BLACK);
 		header.setPadding(0, 30, 0, 30);
 		upperLayout.addView(header);
-		
-		View ruler = new View(contextActivity); 
+
+		View ruler = new View(contextActivity);
 		ruler.setBackgroundColor(Color.WHITE);
 		upperLayout.addView(ruler, LayoutParams.FILL_PARENT, 5);
 
 		TableRow[] rowProduct = new TableRow[shoppingList.length];
 		TextView[] productName = new TextView[shoppingList.length];
 
-		for (int i = 0; i < shoppingList.length; i++) 
-		{
+		for (int i = 0; i < shoppingList.length; i++) {
 			rowProduct[i] = new TableRow(contextActivity);
 			productName[i] = new TextView(contextActivity);
 
@@ -236,167 +231,166 @@ public class ShoppingListActivity extends Activity implements View.OnClickListen
 			lowerLayout.addView(rowProduct[i]);
 		}
 	}
-	
-	private String[] getShoppingList() 
-	{
-		try 
-		{
-			String list = new HttpRequest().execute(Main.URL + "shoppinglist/" + ActiveUser.getActiveUser().getGroupID()).get();
-			if(list.length() == 0)
-			{
-				return new String[] { };
+
+	private String[] getShoppingList() {
+		try {
+			String list = new HttpRequest().execute(
+					Main.URL + "shoppinglist/"
+							+ ActiveUser.getActiveUser().getGroupID()).get();
+			if (list.length() == 0) {
+				return new String[] {};
 			}
 			String[] shoppingList = list.split("\n");
 			Arrays.sort(shoppingList);
 			return shoppingList;
-		} 
-		catch (Exception e) 
-		{
+		} catch (Exception e) {
 			return null;
 		}
 	}
 
 	@Override
-	public void onClick(View view) 
-	{
-		if (ActiveUser.isGroupMemberShopping()) 
-		{
-			Toast.makeText(getApplicationContext(), "You can't do that! Someone else in your flat is currently shopping!", Toast.LENGTH_SHORT).show();
-		} 
-		else 
-		{
-			if (view instanceof Button) 
-			{
+	public void onClick(View view) {
+		if (ActiveUser.isGroupMemberShopping()) {
+			Toast.makeText(
+					getApplicationContext(),
+					"You can't do that! Someone else in your flat is currently shopping!",
+					Toast.LENGTH_SHORT).show();
+		} else {
+			if (view instanceof Button) {
 				LocationAsync(view);
-			} 
-			else if (view instanceof TextView) 
-			{
+			} else if (view instanceof TextView) {
 				final String product = ((TextView) view).getText().toString();
 
-				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+				AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+						this);
 
-				alertDialogBuilder.setTitle("Do you want to remove " + product + " from the shopping list?");
+				alertDialogBuilder.setTitle("Do you want to remove " + product
+						+ " from the shopping list?");
 
-				alertDialogBuilder.setCancelable(false)
-					.setPositiveButton("Yes", new DialogInterface.OnClickListener() 
-					{
-						public void onClick(DialogInterface dialog,	int id) 
-						{
-							try 
-							{
-								String completed = new HttpRequest().execute(Main.URL + "shoppinglist/"	+ ActiveUser.getActiveUser().getGroupID() + "/"	+ product, "delete").get();
+				alertDialogBuilder
+						.setCancelable(false)
+						.setPositiveButton("Yes",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										try {
+											String completed = new HttpRequest()
+													.execute(
+															Main.URL
+																	+ "shoppinglist/"
+																	+ ActiveUser
+																			.getActiveUser()
+																			.getGroupID()
+																	+ "/"
+																	+ product,
+															"delete").get();
 
-								Log.w("DELETE COMPLETE", completed);
+											Log.w("DELETE COMPLETE", completed);
 
-								Toast.makeText(ShoppingListActivity.this, product + " removed from shopping list", Toast.LENGTH_LONG).show();
+											Toast.makeText(
+													ShoppingListActivity.this,
+													product
+															+ " removed from shopping list",
+													Toast.LENGTH_LONG).show();
 
-								onResume();
-							} 
-							catch (InterruptedException e) 
-							{
-								e.printStackTrace();
-							} 
-							catch (ExecutionException e) 
-							{
-								e.printStackTrace();
-							}
-						}
-					})
-					.setNegativeButton("No", new DialogInterface.OnClickListener() 
-					{
-						public void onClick(DialogInterface dialog, int id) 
-						{
-							dialog.cancel();
-						}
-					});
+											onResume();
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										} catch (ExecutionException e) {
+											e.printStackTrace();
+										}
+									}
+								})
+						.setNegativeButton("No",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										dialog.cancel();
+									}
+								});
 
 				AlertDialog alertDialog = alertDialogBuilder.create();
 
 				alertDialog.show();
 			}
 		}
-	}	
-	
-	private class ProcessLocation extends AsyncTask<String, String, Boolean> 
-	{
-	    private ProgressDialog progress;
-
-	    @Override
-	    protected void onPreExecute() 
-	    {
-	        super.onPreExecute();
-	        progress = new ProgressDialog(ShoppingListActivity.this);
-	        progress.setTitle("Please wait");
-	        progress.setMessage("Checking location...");
-	        progress.setIndeterminate(false);
-	        progress.setCancelable(true);
-	        progress.show();
-	    }
-
-	    @Override
-	    protected Boolean doInBackground(String... args) 
-	    {
-	    	do
-	    	{
-	    		counter++;
-	    	}
-	    	while (current == null);
-
-	    	return temp;
-	    }
-
-	    @Override
-	    protected void onPostExecute(Boolean nearTesco) 
-	    {
-	        if (nearTesco())
-	        {
-	        	Intent shopIntent = new Intent(getApplicationContext(), ShopActivity.class);
-	        	shopIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	    		startActivity(shopIntent);
-	        }
-	        else
-	        {
-	        	Intent mapIntent = new Intent(getApplicationContext(), MapActivity.class);
-	    		mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	    		startActivity(mapIntent);
-	        }
-	    } 
 	}
 
-	public void LocationAsync(View view)
-    {
-        new ProcessLocation().execute();
-    }   
+	private class ProcessLocation extends AsyncTask<String, String, Boolean> {
+		private ProgressDialog progress;
 
-	public Boolean nearTesco()
-	{			
-	    double earthRadius = 3958.75;
-	    int meterConversion = 1609;
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			progress = new ProgressDialog(ShoppingListActivity.this);
+			progress.setTitle("Please wait");
+			progress.setMessage("Checking location...");
+			progress.setIndeterminate(false);
+			progress.setCancelable(true);
+			progress.show();
+		}
 
-	    if (current != null)
-	    {
-	    	Log.w("curr", current.latitude + "," + current.longitude);
+		@Override
+		protected Boolean doInBackground(String... args) {
+			do {
+				counter++;
+			} while (current == null);
 
-		    for (int i=0; i<Main.STORES; i++)
-		    {
-			    double dLat = Math.toRadians(current.latitude - Main.locations[0][i]);
-			    double dLng = Math.toRadians(current.longitude - Main.locations[1][i]);
-			    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-			               Math.cos(Math.toRadians(Main.locations[0][i])) * Math.cos(Math.toRadians(current.latitude)) *
-			               Math.sin(dLng/2) * Math.sin(dLng/2);
-			    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-			    double dist = earthRadius * c;
+			return temp;
+		}
 
-			    Log.w("DISTANCE", i + ": " + dist * meterConversion + "m");
+		@Override
+		protected void onPostExecute(Boolean nearTesco) {
+			if (nearTesco()) {
+				Intent shopIntent = new Intent(getApplicationContext(),
+						ShopActivity.class);
+				shopIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(shopIntent);
+			} else {
+				Intent mapIntent = new Intent(getApplicationContext(),
+						MapActivity.class);
+				mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(mapIntent);
+			}
+		}
+	}
 
-			    if ((dist * meterConversion) <= 250) //if within 250m of a tesco
-			    	return true;
-		    }
-	    }
-	    else
-	    {
-	    	Log.w("curr", "null");
-	    }
+	public void LocationAsync(View view) {
+		new ProcessLocation().execute();
+	}
+
+	public Boolean nearTesco() {
+		double earthRadius = 3958.75;
+		int meterConversion = 1609;
+
+		if (current != null) {
+			Log.w("curr", current.latitude + "," + current.longitude);
+
+			for (int i = 0; i < Main.STORES; i++) {
+				double dLat = Math.toRadians(current.latitude
+						- Main.locations[0][i]);
+				double dLng = Math.toRadians(current.longitude
+						- Main.locations[1][i]);
+				double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+						+ Math.cos(Math.toRadians(Main.locations[0][i]))
+						* Math.cos(Math.toRadians(current.latitude))
+						* Math.sin(dLng / 2) * Math.sin(dLng / 2);
+				double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+				double dist = earthRadius * c;
+
+				Log.w("DISTANCE", i + ": " + dist * meterConversion + "m");
+
+				if ((dist * meterConversion) <= 250) // if within 250m of a
+														// tesco
+				{
+					String shopName = Main.names[i];
+					ActiveUser.setShop(shopName);
+					return true;
+				}
+			}
+		} else {
+			Log.w("curr", "null");
+		}
 
 		return false;
 	}

@@ -198,7 +198,6 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 				owe[i].setText(String.format("-£%.2f",
 						((float) Math.abs(m.getValue())) / 100.0));
 				owe[i].setTextColor(Color.RED);
-				name[i].setOnClickListener(this);
 			} else if (m.getValue() == 0.00) {
 				owe[i].setText(String.format("£%.2f",
 						((float) m.getValue()) / 100.0));
@@ -218,6 +217,11 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 			row[i].addView(name[i]);
 			row[i].addView(owe[i]);
 
+			if(m.getValue() < 0)
+			{
+				row[i].setOnClickListener(this);
+			}
+			
 			layout.addView(row[i]);
 			i++;
 		}
@@ -498,7 +502,7 @@ public class AccountActivity extends Activity implements View.OnClickListener {
 	public void onClick(View view) {
 		if (view instanceof Button) {
 			buttonClick(view);
-		} else if (view instanceof TextView) {
+		} else if (view instanceof TableRow) {
 			textViewClick(view);
 		}
 	}
@@ -870,15 +874,16 @@ response = new HttpRequest().execute(
 	}
 
 	private void textViewClick(View view) {
-		final String username = ((TextView) view).getText().toString();
-
+		TableRow tR = (TableRow) view;
+		TextView child = (TextView) tR.getChildAt(0);
+		final String username = child.getText().toString();
+		
 		if (ActiveUser.isGroupMemberShopping()) {
 			Toast.makeText(
 					getApplicationContext(),
 					"You can't do that! Someone in your flat is currently shopping!",
 					Toast.LENGTH_SHORT).show();
 		} else {
-
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 					this);
 
