@@ -20,35 +20,34 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.method.DigitsKeyListener;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class ShopActivity extends Activity implements View.OnClickListener {
+public class ShopActivity extends Activity implements View.OnClickListener 
+{
 	TableLayout layout;
 	TableLayout buttonHolder;
 
 	Map<String, Integer> list;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.shop);
 		createDisplay(this, getList());
 	}
 
-	private void createDisplay(Activity contextActivity,
-			Map<String, Integer> currList) {
-
+	private void createDisplay(Activity contextActivity, Map<String, Integer> currList) 
+	{
 		list = getList();
 
 		Map<String, Integer> newList = currList;
@@ -56,23 +55,30 @@ public class ShopActivity extends Activity implements View.OnClickListener {
 		list.putAll(newList);
 
 		layout = (TableLayout) contextActivity.findViewById(R.id.tableLayout1);
-		buttonHolder = (TableLayout) contextActivity
-				.findViewById(R.id.tableLayout2);
+		buttonHolder = (TableLayout) contextActivity.findViewById(R.id.tableLayout2);
+		
 		TableRow[] row = new TableRow[currList.size()];
 		TextView[] product = new TextView[currList.size()];
 		TextView[] cost = new TextView[currList.size()];
 
 		int i = 0;
-		for (Map.Entry<String, Integer> m : currList.entrySet()) {
+		for (Map.Entry<String, Integer> m : currList.entrySet()) 
+		{
 			row[i] = new TableRow(contextActivity);
 			product[i] = new TextView(contextActivity);
 			product[i].setText(m.getKey());
+			product[i].setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+			product[i].setPadding(20, 0, 0, 0);
 			product[i].setTextSize(24f);
 			product[i].setTextColor(Color.BLACK);
+			
 			if (i == 0)
-				product[i].setPadding(0, 60, 0, 0);
+				product[i].setPadding(20, 60, 0, 0);
+			
 			cost[i] = new TextView(contextActivity);
-			if (m.getValue() > 0) {
+			
+			if (m.getValue() > 0) 
+			{
 				cost[i].setText(m.getValue().toString());
 				cost[i].setTextSize(24f);
 				cost[i].setTextColor(Color.BLACK);
@@ -85,23 +91,28 @@ public class ShopActivity extends Activity implements View.OnClickListener {
 			layout.addView(row[i]);
 			i++;
 		}
+		
 		Button msg = new Button(contextActivity);
-		msg.setText("End shop!");
+		msg.setText("End shop");
 		msg.setOnClickListener(this);
 		buttonHolder.addView(msg);
 	}
 
 	@Override
-	public void onClick(View view) {
-		// TODO Auto-generated method stub
-		if (view instanceof Button) {
+	public void onClick(View view) 
+	{
+		if (view instanceof Button) 
+		{
 			buttonClick(view);
-		} else if (view instanceof TableRow) {
+		} 
+		else if (view instanceof TableRow) 
+		{
 			tableRowClick(view);
 		}
 	}
 
-	private void tableRowClick(View view) {
+	private void tableRowClick(View view) 
+	{
 		TableRow tR = (TableRow) view;
 		TextView child = (TextView) tR.getChildAt(0);
 		TextView child2 = (TextView) tR.getChildAt(1);
@@ -115,95 +126,105 @@ public class ShopActivity extends Activity implements View.OnClickListener {
 
 		alert.setView(pence);
 		pence.setText(price);
-		pence.setFilters(new InputFilter[] {
-				// Maximum 2 characters.
-				new InputFilter.LengthFilter(5),
-				// Digits only.
-				DigitsKeyListener.getInstance(), });
+		pence.setFilters(new InputFilter[] 
+		{
+			// Maximum 2 characters.
+			new InputFilter.LengthFilter(5),
+			// Digits only.
+			DigitsKeyListener.getInstance(), 
+		});
+		
 		// Digits only & use numeric soft-keyboard.
 		pence.setKeyListener(DigitsKeyListener.getInstance());
-		alert.setPositiveButton("Confirm",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						String price = pence.getText().toString();
-						list.put(product, Integer.parseInt(price));
-						buttonHolder.removeAllViews();
-						layout.removeAllViews();
-						ShopActivity.this
-								.createDisplay(ShopActivity.this, list);
-					}
-				});
-		alert.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						// do nothing
-					}
-				});
+		alert.setPositiveButton("Confirm", new DialogInterface.OnClickListener() 
+		{
+			public void onClick(DialogInterface dialog, int whichButton) 
+			{
+				String price = pence.getText().toString();
+				list.put(product, Integer.parseInt(price));
+				buttonHolder.removeAllViews();
+				layout.removeAllViews();
+				ShopActivity.this.createDisplay(ShopActivity.this, list);
+			}
+		});
+		
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() 
+		{
+			public void onClick(DialogInterface dialog, int whichButton) 
+			{
+				// do nothing
+			}
+		});
+		
 		alert.show();
-
 	}
 
-	private void buttonClick(View view) {
-		for (Map.Entry<String, Integer> m : list.entrySet()) {
-			if (m.getValue() > 0) {
-				try {
-					new HttpRequest().execute(
-							Main.URL + "usershopping/"
-									+ ActiveUser.getActiveUser().getGroupID()
-									+ "/" + m.getKey() + "/" + m.getValue(),
-							"put").get();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+	private void buttonClick(View view) 
+	{
+		for (Map.Entry<String, Integer> m : list.entrySet()) 
+		{
+			if (m.getValue() > 0) 
+			{
+				try 
+				{
+					new HttpRequest().execute(Main.URL + "usershopping/" + ActiveUser.getActiveUser().getGroupID() + "/" + m.getKey() + "/" + m.getValue(),	"put").get();
+				} 
+				catch (InterruptedException e) 
+				{
 					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
+				} 
+				catch (ExecutionException e) 
+				{
 					e.printStackTrace();
 				}
 			}
 		}
 
-		try {
-			new HttpRequest().execute(
-					Main.URL + "usershopping/"
-							+ ActiveUser.getActiveUser().getUsername() + "/"
-							+ ActiveUser.getShop(), "delete").get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		try 
+		{
+			new HttpRequest().execute(Main.URL + "usershopping/" + ActiveUser.getActiveUser().getUsername() + "/" + ActiveUser.getShop(), "delete").get();
+		} 
+		catch (InterruptedException e) 
+		{
 			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (ExecutionException e) 
+		{
 			e.printStackTrace();
 		}
 
-		Intent resetIntent = new Intent(getApplicationContext(),
-				TabCreator.class);
+		Intent resetIntent = new Intent(getApplicationContext(), TabCreator.class);
 		resetIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(resetIntent);
 		finish();
 	}
 
-	private Map<String, Integer> getList() {
+	private Map<String, Integer> getList() 
+	{
 		MapStore store = new MapStore();
-		try {
-			store = (MapStore) PojoMapper.fromJson(
-					new HttpRequest().execute(
-							Main.URL + "usershopping/"
-									+ ActiveUser.getActiveUser().getUsername(),
-							"post").get(), MapStore.class);
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
+		
+		try 
+		{
+			store = (MapStore) PojoMapper.fromJson(new HttpRequest().execute(Main.URL + "usershopping/"	+ ActiveUser.getActiveUser().getUsername(),	"post").get(), MapStore.class);
+		} 
+		catch (JsonMappingException e) 
+		{
 			e.printStackTrace();
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (JsonParseException e) 
+		{
 			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (InterruptedException e) 
+		{
 			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (ExecutionException e) 
+		{
 			e.printStackTrace();
 		}
 
@@ -211,42 +232,41 @@ public class ShopActivity extends Activity implements View.OnClickListener {
 	}
 
 	@Override
-	public void onBackPressed() {
+	public void onBackPressed() 
+	{
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Do you want to cancel shopping?");
-		alertDialogBuilder
-				.setCancelable(false)
-				.setPositiveButton("Yes",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								try {
-									new HttpRequest().execute(
-											Main.URL
-													+ "usershopping/"
-													+ ActiveUser
-															.getActiveUser()
-															.getUsername()
-													+ "/Test Shop", "delete")
-											.get();
-									Intent resetIntent = new Intent(
-											getApplicationContext(),
-											TabCreator.class);
-									resetIntent
-											.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-									startActivity(resetIntent);
-									finish();
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								} catch (ExecutionException e) {
-									e.printStackTrace();
-								}
-							}
-						})
-				.setNegativeButton("No", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
+		alertDialogBuilder.setCancelable(false)
+			.setPositiveButton("Yes", new DialogInterface.OnClickListener() 
+			{
+				public void onClick(DialogInterface dialog, int id) 
+				{
+					try 
+					{
+						new HttpRequest().execute(Main.URL+ "usershopping/"	+ ActiveUser.getActiveUser().getUsername()+ "/Test Shop", "delete").get();
+						Intent resetIntent = new Intent(getApplicationContext(),TabCreator.class);
+						resetIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(resetIntent);
+						finish();
+					} 
+					catch (InterruptedException e) 
+					{
+						e.printStackTrace();
+					} 
+					catch (ExecutionException e) 
+					{
+						e.printStackTrace();
 					}
-				});
+				}
+			})
+			.setNegativeButton("No", new DialogInterface.OnClickListener() 
+			{
+				public void onClick(DialogInterface dialog, int id) 
+				{
+					dialog.cancel();
+				}
+			});
+		
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
 	}
